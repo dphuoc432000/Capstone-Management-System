@@ -1,4 +1,4 @@
-const userRoleService = require('../service/UserRoleServicel');
+const userRoleService = require('../service/UserRoleService');
 
 //api: /api/user_role/
 class UserRoleController {
