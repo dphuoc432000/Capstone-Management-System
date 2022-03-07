@@ -9,14 +9,14 @@ import { ThemeProvider } from "@mui/material/styles";
 import lightTheme from "./theme/LightTheme";
 
 ReactDOM.render(
-    <React.StrictMode>
-        <Provider store={store}>
-            <ThemeProvider theme={lightTheme}>
-                <App />
-            </ThemeProvider>
-        </Provider>
-    </React.StrictMode>,
-    document.getElementById("root")
+  <React.StrictMode>
+    <Provider store={store}>
+      <ThemeProvider theme={lightTheme}>
+        <App />
+      </ThemeProvider>
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

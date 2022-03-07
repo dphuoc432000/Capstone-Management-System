@@ -1,11 +1,12 @@
-export const reducer = function (state = { count: 0 }, action) {
+const defaultState = {
+  isLogedIn: false,
+};
+
+export const reducer = function (state = defaultState, action) {
   switch (action.type) {
-    case "INCREMENT":
-      state.count++;
-      state = {...state};
-      return state;
-    case "DECREMENT":   
-      return state;
+    case "UPDATE_SESSION":
+      state.isLogedIn = true;
+      return { ...state };
     default:
       return state;
   }

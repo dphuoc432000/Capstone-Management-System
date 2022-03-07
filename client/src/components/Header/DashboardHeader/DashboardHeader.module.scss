@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+.header{
+    width: 100%;
+    height: 150px;
+    padding: 20px;
+    background: #1e293bf1;
+    .header_logo
+    {
+        color: white;
+        font-size: 4rem;
+        font-weight: 900;
+        font-family: 'Permanent Marker', cursive;
+    }
+    .header_clock{
+        background: #f1f5f9;
+        border-radius: 10px;
+        height: 100%;
+        .header_clock_number-box
+        {
+            width: 40px;
+            height: 50px;
+            border-radius: 5px;
+            background: white;
+            box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.1);
+            margin: 0 5px;
+            font-size: 2rem;
+            font-weight: 900;
+        }
+    }
+}
