@@ -14,6 +14,10 @@ class UserService {
         return check?userdata[0]:"EMAIL DUPPLICATE";
     }
 
+    //Cập nhật user
+    updateUser = async (user, conditionObj) =>{
+        return await User.update(user, {where: conditionObj})
+    }
     
 }
 

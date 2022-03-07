@@ -52,7 +52,7 @@ const initAll = async () => {
         })
 }
 
-initAll();
+// initAll();
 
 module.exports = {
     Department,
