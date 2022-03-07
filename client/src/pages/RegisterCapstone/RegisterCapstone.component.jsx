@@ -13,6 +13,7 @@ import Filter1OutlinedIcon from '@mui/icons-material/Filter1Outlined';
 import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
 
 function RegisterCapstone() {
+
   return (
     <div className={styles["register"]}>
       <div className="row">
@@ -47,8 +48,8 @@ function RegisterCapstone() {
                 ></IconTextbox>
               </div>
               <div className={styles["register_right_textbox"]}>
-              <IconCombobox
-                  list={["Level 1 : Not Good","Level 2 : Medium","Level 3 : Good", "Level 4 : Very Good"]}
+                <IconCombobox
+                  list={["Level 1 : Not Good", "Level 2 : Medium", "Level 3 : Good", "Level 4 : Very Good"]}
                   defaultValues="2"
                   Icon={() => <SchoolOutlinedIcon sx={{ fontSize: "1.3rem" }} />}
                 ></IconCombobox>

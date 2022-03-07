@@ -5,7 +5,7 @@ import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import Task from "../Task/Task.component";
 import ItemButton from "../ItemButton/ItemButton.component";
 
-function ListTask({ title, tasks, openTaskDetail, addTask, listIndex,moveTask }) {
+function ListTask({ listId, title, tasks, openTaskDetail, addTask, listIndex, moveTask, removeList }) {
 
   return (
     <div className={styles["list-task"] + " js-list-task"}>
@@ -28,6 +28,7 @@ function ListTask({ title, tasks, openTaskDetail, addTask, listIndex,moveTask })
           />
           <DeleteOutlineOutlinedIcon
             sx={{ color: "#64748b", fontSize: "20px" }}
+            onClick={() => removeList(listId, listIndex)}
           />
         </div>
       </div>

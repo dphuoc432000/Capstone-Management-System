@@ -152,6 +152,11 @@ function TaskManagement() {
         setListsTask([...listsTask]);
     };
 
+    const removeList = (listId, listIndex) => {
+        listsTask.splice(listIndex, 1);
+        setListsTask([...listsTask]);
+    };
+
     const addTask = (title, listIndex) => {
         listsTask[listIndex].tasks.push({ title: title, members: [], comments: [] });
         setListsTask([...listsTask]);
@@ -166,20 +171,23 @@ function TaskManagement() {
     }
 
     return (
-        <div className={styles["task-management"] + " p-3 d-flex"}>
-            {listsTask.map((list, listIndex) => {
-                return (
+        <div className={styles["task-management"] + " d-flex"}>
+
+            {listsTask.map((list, listIndex) =>
+                <div className={styles["task-management_list"]}>
                     <ListTask
                         openTaskDetail={openTaskDetail}
                         key={listIndex}
                         listIndex={listIndex}
+                        listId={list.listId}
                         title={list.title}
                         tasks={list.tasks}
                         addTask={addTask}
+                        removeList={removeList}
                         moveTask={moveTask}
-                    ></ListTask>
-                );
-            })}
+                    />
+                </div>
+            )}
             <div style={{ width: "300px" }}><ItemButton addItem={addList} text={"Add another list"} /></div>
             {isOpenedTaskDetail ? (
                 <div

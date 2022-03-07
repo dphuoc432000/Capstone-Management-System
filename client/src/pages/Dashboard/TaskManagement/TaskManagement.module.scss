@@ -1,11 +1,27 @@
-.task-management
-{
-    .task-management_task-detail{
-        width: 100%;
-        height: 100%;
-        position: fixed;
-        background: rgba(0, 0, 0, 0.2);
-        top: 0;
-        left: 0;
-    }
+$mobile-width: 550px;
+$tablet-width: 900px;
+$desktop-width: 1024px;
+
+.task-management {
+  min-height: 100%;
+  padding: 100px 0;
+  @media screen and (max-width: $tablet-width) {
+    width: 100%;
+    overflow-x: scroll;
+  }
+
+  //   .task-management_list {
+  //     @media screen and (max-width: $tablet-width) {
+  //       margin-bottom: 30px;
+  //     }
+  //   }
+
+  .task-management_task-detail {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: rgba(0, 0, 0, 0.2);
+    top: 0;
+    left: 0;
+  }
 }

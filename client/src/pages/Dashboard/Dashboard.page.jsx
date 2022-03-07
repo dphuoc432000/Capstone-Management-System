@@ -1,23 +1,31 @@
-import React from "react";
-import DashboardHeader from "../../components/Header/DashboardHeader/DashboardHeader.component";
+import React, { useState } from "react";
 import Sidebar from "../../ui/Menu/Sidebar/Sidebar.component";
 import StudentRouter from "../../router/Student/StudentRouter";
-
+import Navbar from "../../ui/Menu/Navbar/Navbar.component";
+import styles from "./Dashboard.module.scss";
 
 function Dashboard() {
+  const [isShownSidebar, setIsShownSidebar] = useState(true);
+
   return (
-    <div style={{ background: "#f1f5f9" }} className="w-100">
-      <DashboardHeader></DashboardHeader>
-      <div className="row w-100 m-0">
-        <div className="col-xl-3 pl-0">
-          <Sidebar></Sidebar>
+    <div className={styles["dashboard"] + " w-100 h-100"}>
+      {
+        isShownSidebar ?
+          <>
+            <div onClick={() => setIsShownSidebar(false)} className={styles["dashboard_left_dark-bg"]} />
+            <div className={styles["dashboard_left"]}>
+              <Sidebar></Sidebar>
+            </div>
+          </>
+          : ""
+      }
+      <div className={styles["dashboard_right"] + " ml-auto"}>
+        <div className="w-100" style={{ position: "absolute" }}>
+          <Navbar></Navbar>
         </div>
-        <div className="col-xl-9">
-          <div style={{ minHeight: "800px" }}>
-            <div>Dashboard Introduction</div>
-            <StudentRouter></StudentRouter>
-            
-          </div>
+        <div style={{minHeight:"100%",background:"#f1f5f9"}} className="pb-5 px-4 w-100">
+          {/* <h5 className="py-2 mb-4">{"Dashboard > Task Management"}</h5> */}
+          <StudentRouter></StudentRouter>
         </div>
       </div>
     </div>

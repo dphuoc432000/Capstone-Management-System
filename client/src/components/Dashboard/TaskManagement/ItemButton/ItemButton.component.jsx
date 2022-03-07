@@ -24,17 +24,15 @@ function ItemButton({ text, addItem }) {
                         value={title}
                         onChange={(event) => setTitle(event.target.value)}
                     />
-                    <div>
+                    <div className="d-flex align-items-center">
                         <Button onClick={add} variant="contained">
                             Add Item
                         </Button>
-                        <span style={{ zIndex: 1 }} onClick={() => setIsActive(false)}>
-                            <CloseOutlinedIcon className="ml-2" />
-                        </span>
+                        <CloseOutlinedIcon onClick={() => setIsActive(false)} className="ml-2" />
                     </div>
                 </div>
             ) : (
-                <div onClick={() => setIsActive(true)}>
+                <div className="d-flex align-items-center" onClick={() => setIsActive(true)}>
                     <AddCircleOutlineOutlinedIcon />
                     <span className="ml-2">{text}</span>
                 </div>

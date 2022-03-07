@@ -1,0 +1,17 @@
+.item-button{
+    width: 224px;
+    height: 300px;
+    display: flex;
+    padding: 20px;
+    border: 2px dashed #cbd5e1;
+    border-radius: 10px;
+    svg{
+        font-size: 50px;
+        color: #64748b;
+    }
+}
+
+.item-button:hover{
+    background: #cbd5e159;
+    transition: .5s;
+}

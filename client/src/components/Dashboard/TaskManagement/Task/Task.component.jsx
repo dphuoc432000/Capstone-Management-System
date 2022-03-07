@@ -82,15 +82,15 @@ function Task({ taskId, taskIndex, title, tag, members, endDate, listIndex, move
                 )}
 
                 <div className={styles["task_count"] + " d-flex align-items-center justify-content-end pt-3"}>
-                    <div className="mr-3">
+                    <div className="mr-3 d-flex align-items-center">
                         <InsertCommentOutlinedIcon />
                         <span className="ml-1">3</span>
                     </div>
-                    <div className="mr-3">
+                    <div className="mr-3 d-flex align-items-center">
                         <RemoveRedEyeOutlinedIcon />
                         <span className="ml-1">3</span>
                     </div>
-                    <div>
+                    <div className="d-flex align-items-center">
                         <AttachmentOutlinedIcon />
                         <span className="ml-1">3</span>
                     </div>
