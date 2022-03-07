@@ -15,10 +15,24 @@ class UserService {
     }
 
     //Cập nhật user
+    //- update email, passwword
+    //- update thông tin bảng user
     updateUser = async (user, conditionObj) =>{
         return await User.update(user, {where: conditionObj})
     }
     
+    //Lấy user theo userId
+    getUserByUserId = async (userId) =>{
+        return await User.findByPk(userId);
+    }
+
+    //Xóa user theo user Id
+    removeUserById = async(userId) =>{
+        return await User.destroy({where: {userId: userId}})
+            .then(data => {
+                return data;
+            });
+    }
 }
 
 module.exports = new UserService();

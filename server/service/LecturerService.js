@@ -58,6 +58,51 @@ class LecturerService {
         }
         return null;
     }
+
+    //Cập nhật lecturer và user
+    /*
+    dataUpdate = {
+        userId,
+        firstName,
+        lastName,
+        email,
+        phone,
+        majorId,
+        academicLevel
+    } */
+    updateLecturerAndUser = async (dataUpdate) => {
+        if (checkObject(dataUpdate)) {
+            return await userService.getUserByUserId(dataUpdate.userId)
+                .then(async (data) => {
+                    if (data) {
+                        const userId = data.userId;
+                        if (userId) {
+                            const userInfor = {
+                                firstName: dataUpdate.firstName,
+                                lastName: dataUpdate.lastName,
+                                email: dataUpdate.email,
+                                phone: dataUpdate.phone,
+                                majorId: dataUpdate.majorId,
+                            }
+                            const lecturerInfor = {
+                                academicLevel: dataUpdate.academicLevel
+                            }
+                            //update data user table
+                            const updateUserData = await userService.updateUser(userInfor, { userId })
+                            //update data lecturer table
+                            const updateLecturerData = await Lecturer.update(lecturerInfor, { where: { userId } })
+                            return {
+                                user_row_updated: updateUserData[0],
+                                lecture_row_updated: updateLecturerData[0]
+                            }
+                        }
+                    }
+                    return "USER NOT FOUND";
+                });
+        }
+        return null;
+    }
+
 }
 
 module.exports = new LecturerService();
