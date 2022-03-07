@@ -53,3 +53,12 @@ body {
 .light-border{
   border: 1px solid #b3b3b3a1;
 }
+
+a{
+  color: inherit;
+  text-decoration: none !important;
+}
+
+a:hover{
+  color: inherit;
+}
