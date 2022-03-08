@@ -4,21 +4,25 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
+import ContactPageOutlinedIcon from "@mui/icons-material/ContactPageOutlined";
 import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import AccountCircle from "@mui/icons-material/AccountCircle";
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import GridViewOutlinedIcon from "@mui/icons-material/GridViewOutlined";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { Button } from "@mui/material";
 import { useSelector } from "react-redux";
 import RoundedAvatar from "../../Avatar/RoundedAvatar/RoundedAvatar.component";
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import MenuIcon from "@mui/icons-material/Menu";
 import styles from "./Navbar.module.scss";
+import { Link, NavLink } from "react-router-dom";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -60,7 +64,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function Navbar() {
+export default function Navbar({ isShownSidebarIcon, openSidebar }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -103,8 +107,36 @@ export default function Navbar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <div className={styles["navbar_info-bar"]}>
+        <div className="row m-0">
+          <div className="col-3">
+            {" "}
+            <RoundedAvatar
+              style={{ width: "45px", height: "45px" }}
+              src=""
+              name="Test Test"
+            />
+          </div>
+          <div className="col-9">
+            <h5 className="mb-1">Le Viet</h5>
+            <p className="m-0">leviet@gmail.com</p>
+          </div>
+        </div>
+        <div className="dropdown-divider" />
+        <MenuItem onClick={handleMenuClose}>
+          <GridViewOutlinedIcon></GridViewOutlinedIcon>
+          <span>Dashboard</span>
+        </MenuItem>
+        <MenuItem onClick={handleMenuClose}>
+          <ContactPageOutlinedIcon></ContactPageOutlinedIcon>
+          <span>Profile</span>
+        </MenuItem>
+        <div className="dropdown-divider" />
+        <MenuItem onClick={handleMenuClose}>
+          <LogoutOutlinedIcon></LogoutOutlinedIcon>
+          <span>Logout</span>
+        </MenuItem>
+      </div>
     </Menu>
   );
 
@@ -125,45 +157,39 @@ export default function Navbar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
+      <div className={styles["navbar_info-bar"]}>
+
+        <MenuItem onClick={handleMenuClose}>
+          <HomeOutlinedIcon />
+          <span>Home</span>
+        </MenuItem>
+        <MenuItem onClick={handleMenuClose}>
+          <InfoOutlinedIcon />
+          <span>About</span>
+        </MenuItem>
+      </div>
     </Menu>
   );
 
   return (
-    <Box className={styles["navbar"]} sx={{ flexGrow: 1 }}>
+    <Box className={styles["navbar"] + " main-navbar"} sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
+          {isShownSidebarIcon ? (
+            <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="menu"
+              sx={{ mr: 2 }}
+              onClick={openSidebar}
+            >
+              <MenuIcon />
+            </IconButton>
+          ) : (
+            ""
+          )}
+
           <h5 className={styles["navbar_logo"]}>CMS</h5>
           <Box sx={{ display: { xs: "none", md: "none" } }}>
             <Search>
@@ -178,9 +204,13 @@ export default function Navbar() {
           </Box>
           <Box sx={{ flexGrow: 1 }} />
 
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <span style={{ padding: "12px" }}>Home</span>
-            <span style={{ padding: "12px" }}>About</span>
+          <Box sx={{ display: "flex" }}>
+            <Box sx={{ display: { xs: "none", md: "flex" } }}>
+              <NavLink className="d-flex m-auto light-text" style={{padding:"12px"}} to="/home">Home</NavLink>
+              <NavLink className="d-flex m-auto light-text" style={{padding:"12px"}} to="/about">About</NavLink>
+              <NavLink className="d-flex m-auto light-text" style={{padding:"12px"}} to="/dashboard">Dashboard</NavLink>
+            </Box>
+
 
             {isLogedIn ? (
               <>

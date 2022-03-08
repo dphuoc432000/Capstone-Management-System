@@ -1,5 +1,5 @@
 const defaultState = {
-  isLogedIn: false,
+  isLogedIn: true,
 };
 
 export const reducer = function (state = defaultState, action) {

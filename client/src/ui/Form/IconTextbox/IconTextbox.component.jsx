@@ -7,7 +7,7 @@ const IconTextbox = ({ placeholder, Icon, type, onChange }) => {
       <span className={styles["icon-textbox_icon"]}>
         <Icon></Icon>
       </span>
-      <input onChange={onChange} type={type} placeholder={placeholder} />
+      <input className="w-100" onChange={onChange} type={type} placeholder={placeholder} />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import ItemButton from "../../../../components/Dashboard/TaskManagement/Stageboard/ItemButton/ItemButton.component";
-import Stage from "../../../../components/Dashboard/TaskManagement/Stageboard/Stage/Stage.component";
+import ItemButton from "../../../components/Dashboard/Stageboard/ItemButton/ItemButton.component";
+import Stage from "../../../components/Dashboard/Stageboard/Stage/Stage.component";
 import styles from "./Stageboard.module.scss";
 
 function Taskboard() {
@@ -19,6 +19,11 @@ function Taskboard() {
         },
     ]);
 
+    const addStage = (stage)=>{
+        stages.push({...stage,editedAt:"Don't edit anything"});
+        setStages([...stages]);
+    }
+
     return (
         <div className={styles["stage-board"] + " w-100 d-flex align-items-center"}>
             <div className="w-100 h-100">
@@ -36,7 +41,7 @@ function Taskboard() {
                         </div>
                     ))}
                     <div className={styles["stage-board_stage"]}>
-                        <ItemButton />
+                        <ItemButton addItem={addStage} />
                     </div>
 
                 </div>

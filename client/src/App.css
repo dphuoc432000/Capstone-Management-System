@@ -62,3 +62,11 @@ a {
 a:hover {
   color: inherit;
 }
+
+.cursor-pointer{
+  cursor: pointer;
+}
+
+.main-navbar .active{
+  color: white;
+}

@@ -4,9 +4,18 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import Task from "../Task/Task.component";
 import ItemButton from "../ItemButton/ItemButton.component";
+import OptionalDialog from "../../../../ui/DialogMessage/OptionalDialog/OptionalDialog.component";
 
-function ListTask({ listId, title, tasks, openTaskDetail, addTask, listIndex, moveTask, removeList }) {
-
+function ListTask({
+  listId,
+  title,
+  tasks,
+  openTaskDetail,
+  addTask,
+  listIndex,
+  moveTask,
+  removeList,
+}) {
   return (
     <div className={styles["list-task"] + " js-list-task"}>
       <div
@@ -23,13 +32,21 @@ function ListTask({ listId, title, tasks, openTaskDetail, addTask, listIndex, mo
             {tasks.length}
           </span>
           <BorderColorOutlinedIcon
-            className="mx-2"
+            className="mx-2 cursor-pointer"
             sx={{ color: "#64748b", fontSize: "20px" }}
           />
-          <DeleteOutlineOutlinedIcon
-            sx={{ color: "#64748b", fontSize: "20px" }}
-            onClick={() => removeList(listId, listIndex)}
-          />
+          <OptionalDialog
+            title="Message"
+            content="Are you sure that you want to delete this list ?"
+            onAgree={() => {}}
+            onDisagree={() => {}}
+          >
+            <DeleteOutlineOutlinedIcon
+              className="cursor-pointer"
+              sx={{ color: "#64748b", fontSize: "20px" }}
+              onClick={() => removeList(listId, listIndex)}
+            />
+          </OptionalDialog>
         </div>
       </div>
       <div className={styles["list-task_body"]}>
@@ -51,7 +68,12 @@ function ListTask({ listId, title, tasks, openTaskDetail, addTask, listIndex, mo
             />
           </div>
         ))}
-        <div className="mt-2"><ItemButton addItem={(title) => addTask(title, listIndex)} text="Add another card" /></div>
+        <div className="mt-2">
+          <ItemButton
+            addItem={(title) => addTask(title, listIndex)}
+            text="Add another card"
+          />
+        </div>
       </div>
     </div>
   );

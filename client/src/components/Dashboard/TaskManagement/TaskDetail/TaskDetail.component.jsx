@@ -12,6 +12,7 @@ import AttachmentOutlinedIcon from '@mui/icons-material/AttachmentOutlined';
 import TodayOutlinedIcon from '@mui/icons-material/TodayOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
+import OptionalDialog from "../../../../ui/DialogMessage/OptionalDialog/OptionalDialog.component";
 function TaskDetail({
     closeTaskDetail,
     title,
@@ -62,13 +63,20 @@ function TaskDetail({
             <div
                 className={
                     styles["task-detail_header"] +
-                    " d-flex justify-content-between default-bg"
+                    " d-flex justify-content-between default-bg align-items-center"
                 }
             >
-                <div className="d-flex justify-content-between w-25">
+                <div className="d-flex justify-content-between align-items-center w-25">
                     <TodayOutlinedIcon />
                     <AccountCircleOutlinedIcon />
-                    <DeleteOutlineOutlinedIcon />
+                    <OptionalDialog
+                        title="Message"
+                        content="Are you sure that you want to delete this task ?"
+                        onAgree={() => { }}
+                        onDisagree={() => { }}
+                    >
+                        <DeleteOutlineOutlinedIcon />
+                    </OptionalDialog>
                     <AttachmentOutlinedIcon />
                     <CheckBoxOutlinedIcon />
                 </div>

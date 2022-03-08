@@ -3,7 +3,7 @@ $tablet-width: 900px;
 $desktop-width: 1024px;
 
 .stage-board {
-  min-height: 100vh;
+  min-height: 80vh;
   .stage-board_list-stage {
     @media screen and (max-width: $tablet-width) {
       width: 100%;

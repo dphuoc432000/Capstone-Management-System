@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const Stage = ({ stageId, title, desc, editedAt }) => {
     return (
-        <Link to={"stage-" + stageId}>
+        <Link to={"stage/"+ title.replace(" ","-") + "%" + stageId}>
             <div className={styles["stage"]}>
                 <div className="my-auto">
                     <div className={styles["stage_box"] + " light-bg mb-4"}>

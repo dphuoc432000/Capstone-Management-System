@@ -7,4 +7,22 @@
     font-weight: 900 !important;
     font-family: "Permanent Marker", cursive !important;
   }
+
+}
+
+.navbar_info-bar {
+  width: 300px;
+  h5{
+    font-size: 18px;
+  }
+  p{
+    font-size: 14px;
+  }
+  p,span,svg {
+    color: #64748b !important;
+  }
+
+  svg{
+    margin-right: 10px;
+  }
 }

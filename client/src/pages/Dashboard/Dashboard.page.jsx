@@ -19,12 +19,13 @@ function Dashboard() {
           </>
           : ""
       }
-      <div className={styles["dashboard_right"] + " ml-auto"}>
+      <div className={styles["dashboard_right"] + (isShownSidebar?" ml-auto":" w-100")}>
         <div className="w-100" style={{ position: "absolute" }}>
-          <Navbar></Navbar>
+          <Navbar openSidebar={()=>setIsShownSidebar(!isShownSidebar)} isShownSidebarIcon={true}></Navbar>
         </div>
-        <div style={{minHeight:"100%",background:"#f1f5f9"}} className="pb-5 px-4 w-100">
-          {/* <h5 className="py-2 mb-4">{"Dashboard > Task Management"}</h5> */}
+        <div style={{minHeight:"100%",background:"#f1f5f9"}} className="w-100">
+          {/* document.querySelector(".main-navbar").offsetHeight */}
+          <div style={{height:"64px"}} className="w-100"></div>
           <StudentRouter></StudentRouter>
         </div>
       </div>
