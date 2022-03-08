@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import IconTextbox from "../../ui/Form/IconTextbox/IconTextbox.component";
 import styles from "./RegisterCapstone.module.scss";
 import Checkbox from "@mui/material/Checkbox";
@@ -45,35 +45,77 @@ function RegisterCapstone() {
                   placeholder="Email"
                   Icon={() => <EmailOutlinedIcon sx={{ fontSize: "1.3rem" }} />}
                   type="text"
+                  onChange={function(event){
+                    var value = event.target.value;
+                    account.email = value;
+                    setAccount({...account});
+                    if(value.includes('@') === false) setError({email: "Email must include @"});
+                    else setError("");
+                  }}
                 ></IconTextbox>
+                <p className="error-text">{error.email}</p>
+                <p className="error-text">{submit && account.email === '' ? "This field can't be blank" : ''}</p>
               </div>
               <div className={styles["register_right_textbox"]}>
                 <IconCombobox
                   list={["Level 1 : Not Good", "Level 2 : Medium", "Level 3 : Good", "Level 4 : Very Good"]}
                   defaultValues="2"
                   Icon={() => <SchoolOutlinedIcon sx={{ fontSize: "1.3rem" }} />}
+                  onChange={function(event){
+                    var value = event.target.value;
+                    account.level = value;
+                    setAccount({...account});
+                  }}
                 ></IconCombobox>
+                <p className="error-text">{error.level}</p>
+                <p className="error-text">{submit && account.level === '' ? "This field can't be blank" : ''}</p>
               </div>
               <div className={styles["register_right_textbox"]}>
                 <IconTextbox
                   placeholder="GPA"
                   Icon={() => <QuizOutlinedIcon sx={{ fontSize: "1.3rem" }} />}
                   type="text"
+                  onChange={function(event){
+                    var value = event.target.value;
+                    account.gpa = value;
+                    setAccount({...account});
+                    if(Number.isInteger(parseInt(value)) === false || parseInt(value) < 0) setError({gpa: "GPA must be a number and more than 0"});
+                    else setError("");
+                  }}
                 ></IconTextbox>
+                <p className="error-text">{error.gpa}</p>
+                <p className="error-text">{submit && account.gpa === '' ? "This field can't be blank" : ''}</p>
               </div>
               <div className={styles["register_right_textbox"]}>
                 <IconTextbox
                   placeholder="Course Creadits"
                   Icon={() => <Filter1OutlinedIcon sx={{ fontSize: "1.3rem" }} />}
                   type="text"
+                  onChange={function(event){
+                    var value = event.target.value;
+                    account.credits = value;
+                    setAccount({...account});
+                    if(value === '') setError("");
+                    else if(Number.isInteger(parseInt(value)) === false || parseInt(value) < 0) setError({credits: "Credits must be a number and more than 0"});
+                    else setError("");
+                  }}
                 ></IconTextbox>
+                <p className="error-text">{error.credits}</p>
+                <p className="error-text">{submit && account.credits === '' ? "This field can't be blank" : ''}</p>
               </div>
               <div className={styles["register_right_textbox"]}>
                 <IconCombobox
                   list={["Capstone 1", "Capstone 2"]}
                   defaultValues="2"
                   Icon={() => <ClassOutlinedIcon sx={{ fontSize: "1.3rem" }} />}
+                  onChange={function(event){
+                    var value = event.target.value;
+                    account.type = value;
+                    setAccount({...account});
+                  }}
                 ></IconCombobox>
+                <p className="error-text">{error.type}</p>
+                <p className="error-text">{submit && account.type === '' ? "This field can't be blank" : ''}</p>
               </div>
               <div className={styles["register_right_undertb"]}>
                 <span>
@@ -82,7 +124,7 @@ function RegisterCapstone() {
                 </span>
                 <span className="light-text">Forgot password ?</span>
               </div>
-              <Button className="w-100" variant="contained">
+              <Button className="w-100" variant="contained" onClick={checkFields}>
                 Register
               </Button>
 
