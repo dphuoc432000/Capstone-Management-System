@@ -1,15 +1,18 @@
 import React, { useState } from "react";
-import HeaderButton from "../../../components/Dashboard/TaskManagement/HeaderButton/HeaderButton.component";
-import ItemButton from "../../../components/Dashboard/TaskManagement/ItemButton/ItemButton.component";
-import ListTask from "../../../components/Dashboard/TaskManagement/ListTask/ListTask.component";
-import TaskDetail from "../../../components/Dashboard/TaskManagement/TaskDetail/TaskDetail.component";
+import HeaderButton from "../../../../components/Dashboard/TaskManagement/HeaderButton/HeaderButton.component";
+import ItemButton from "../../../../components/Dashboard/TaskManagement/ItemButton/ItemButton.component";
+import ListTask from "../../../../components/Dashboard/TaskManagement/ListTask/ListTask.component";
+import TaskDetail from "../../../../components/Dashboard/TaskManagement/TaskDetail/TaskDetail.component";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import styles from "./TaskManagement.module.scss";
 import { Link, useParams } from "react-router-dom";
-import ItemHeaderButton from "../../../components/Dashboard/Stageboard/ItemHeaderButton/ItemHeaderButton.component";
-import OptionalDialog from "../../../ui/DialogMessage/OptionalDialog/OptionalDialog.component";
+import ItemHeaderButton from "../../../../components/Dashboard/Stageboard/ItemHeaderButton/ItemHeaderButton.component";
+import OptionalDialog from "../../../../ui/DialogMessage/OptionalDialog/OptionalDialog.component";
+import Header from "../../../../components/Dashboard/Header/Header.component";
+import Body from "../../../../components/Dashboard/Body/Body.component";
+
 function TaskManagement() {
     const [listsTask, setListsTask] = useState([
         {
@@ -180,16 +183,16 @@ function TaskManagement() {
 
     return (
         <div className={styles["task-management"]}>
-            <div
-                className={
-                    styles["task-management_header"] +
-                    " d-flex justify-content-between align-items-center"
-                }
-            >
-                <h5 className="mb-0">{stageName.replace("-"," ")}</h5>
-                <div className="d-flex">
+            <Header>
+                <h5>
+                    {stageName.replace("-", " ")}
+                </h5>
+                <div className="d-flex align-items-center">
                     <Link to="/dashboard/task-management">
-                        <HeaderButton text="Boards" Icon={() => <BarChartOutlinedIcon />} />
+                        <HeaderButton
+                            text="Boards"
+                            Icon={() => <BarChartOutlinedIcon />}
+                        />
                     </Link>
                     <div className="mx-3">
                         <ItemHeaderButton
@@ -216,48 +219,50 @@ function TaskManagement() {
                         </OptionalDialog>
                     </div>
                 </div>
-            </div>
-            <div className="d-flex m-5">
-                {listsTask.map((list, listIndex) => (
-                    <div className={styles["task-management_list"] + " mb-5"}>
-                        <ListTask
-                            openTaskDetail={openTaskDetail}
-                            key={listIndex}
-                            listIndex={listIndex}
-                            listId={list.listId}
-                            title={list.title}
-                            tasks={list.tasks}
-                            addTask={addTask}
-                            removeList={removeList}
-                            moveTask={moveTask}
-                        />
+            </Header>
+            <Body>
+                <div className="d-flex p-5">
+                    {listsTask.map((list, listIndex) => (
+                        <div className=" mb-5">
+                            <ListTask
+                                openTaskDetail={openTaskDetail}
+                                key={listIndex}
+                                listIndex={listIndex}
+                                listId={list.listId}
+                                title={list.title}
+                                tasks={list.tasks}
+                                addTask={addTask}
+                                removeList={removeList}
+                                moveTask={moveTask}
+                            />
+                        </div>
+                    ))}
+                    <div style={{ width: "300px" }}>
+                        <ItemButton addItem={addList} text={"Add another list"} />
                     </div>
-                ))}
-                <div style={{ width: "300px" }}>
-                    <ItemButton addItem={addList} text={"Add another list"} />
+                    {isOpenedTaskDetail ? (
+                        <div
+                            className={
+                                styles["task-management_task-detail"] +
+                                " d-flex justify-content-center align-items-center"
+                            }
+                        >
+                            <TaskDetail
+                                title={task.title}
+                                desc={task.desc}
+                                startDate={task.startDate}
+                                tag={task.tag}
+                                endDate={task.endDate}
+                                members={task.members}
+                                comments={task.comments}
+                                closeTaskDetail={closeTaskDetail}
+                            />
+                        </div>
+                    ) : (
+                        ""
+                    )}
                 </div>
-                {isOpenedTaskDetail ? (
-                    <div
-                        className={
-                            styles["task-management_task-detail"] +
-                            " d-flex justify-content-center align-items-center"
-                        }
-                    >
-                        <TaskDetail
-                            title={task.title}
-                            desc={task.desc}
-                            startDate={task.startDate}
-                            tag={task.tag}
-                            endDate={task.endDate}
-                            members={task.members}
-                            comments={task.comments}
-                            closeTaskDetail={closeTaskDetail}
-                        />
-                    </div>
-                ) : (
-                    ""
-                )}
-            </div>
+            </Body>
         </div>
     );
 }

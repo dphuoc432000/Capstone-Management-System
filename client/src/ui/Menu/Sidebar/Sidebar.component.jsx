@@ -8,9 +8,8 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { NavLink } from "react-router-dom";
 // icon
-import AssessmentIcon from "@mui/icons-material/Assessment";
+import FormatListNumberedOutlinedIcon from '@mui/icons-material/FormatListNumberedOutlined';
 import GroupIcon from "@mui/icons-material/Group";
-import NoteIcon from "@mui/icons-material/Note";
 import DescriptionIcon from "@mui/icons-material/Description";
 import TimelineIcon from "@mui/icons-material/Timeline";
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
@@ -52,12 +51,12 @@ const EmployeeSidebar = () => {
           <ListItemText primary="Task Management" />
         </ListItemButton>
       </NavLink>
-      <NavLink className="base-link" to="/dashboard/timesheet-report">
+      <NavLink className="base-link" to="/dashboard/my-topic">
         <ListItemButton>
           <ListItemIcon>
-            <NoteIcon />
+            <FormatListNumberedOutlinedIcon />
           </ListItemIcon>
-          <ListItemText primary="Timesheet Report" />
+          <ListItemText primary="My Topic" />
         </ListItemButton>
       </NavLink>
       <NavLink className="base-link" to="/dashboard/expense-report">
@@ -65,7 +64,7 @@ const EmployeeSidebar = () => {
           <ListItemIcon>
             <DescriptionIcon />
           </ListItemIcon>
-          <ListItemText primary="Expense Report" />
+          <ListItemText primary="My Group" />
         </ListItemButton>
       </NavLink>
       <NavLink className="base-link" to="/dashboard/my-team">
@@ -73,7 +72,7 @@ const EmployeeSidebar = () => {
           <ListItemIcon>
             <GroupIcon />
           </ListItemIcon>
-          <ListItemText primary="My Team" />
+          <ListItemText primary="Template Document" />
         </ListItemButton>
       </NavLink>
       <NavLink className="base-link" to="/dashboard/chat">
@@ -81,7 +80,7 @@ const EmployeeSidebar = () => {
           <ListItemIcon>
             <ChatIcon />
           </ListItemIcon>
-          <ListItemText primary="Chat" />
+          <ListItemText primary="Template Topic" />
         </ListItemButton>
       </NavLink>
       <NavLink className="base-link" to="/dashboard/timesheet-code">

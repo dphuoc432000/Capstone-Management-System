@@ -5,12 +5,12 @@ import GlobalDialogSupporter from "./services/GlobalSupporter/GlobalDialogSuppor
 
 
 function App() {
-  useEffect(() => {
+  useEffect(async () => {
     GlobalDialogSupporter.initGlobalFunction();
   }, []);
 
   return (
-    <div className="App">
+    <div  className="App">
       <AppRouter></AppRouter>
       <div id="js-global"></div>
     </div>

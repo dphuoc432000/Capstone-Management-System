@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import RegexValidation from "../../DataValidation/RegexValidation/RegexValidation.component";
 
-function Textarea({ regex, defaultValue, onChange, message }) {
+function Textarea({ regex, defaultValue, onChange, message, isSubmitted }) {
     const [error, setError] = useState("");
+    const [text, setText] = useState("");
 
     const handleCheck = (event) => {
         onChange(event);
         const { value } = event.target;
+        setText(value);
         var isValid = regex.exec(value);
         if (!isValid) setError(message);
         else setError("");
@@ -21,6 +23,7 @@ function Textarea({ regex, defaultValue, onChange, message }) {
                 onChange={handleCheck}
             ></textarea>
             <RegexValidation message={error} />
+            <RegexValidation message={isSubmitted && !text ? message : ""} />
         </div>
     );
 }

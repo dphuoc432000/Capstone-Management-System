@@ -27,6 +27,11 @@ $desktop-width: 1024px;
     min-height: 100%;
     position: relative;
 
+    .dashboard_right_body{
+      min-height: 100%;
+      background: #f1f5f9;
+    }
+
     @media screen and (max-width: $mobile-width) {
       width: 100%;
     }

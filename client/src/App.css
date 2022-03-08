@@ -39,7 +39,7 @@ body {
 }
 
 .default-bg {
-  background: #1976d2;
+  background: #1976d2 !important;
 }
 
 .light-bg {
@@ -69,4 +69,8 @@ a:hover {
 
 .main-navbar .active{
   color: white;
+}
+
+.advanced-table .MuiDataGrid-virtualScrollerRenderZone{
+  background-color: white;
 }

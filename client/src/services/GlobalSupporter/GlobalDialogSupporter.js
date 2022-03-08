@@ -1,5 +1,4 @@
 import ReactDOM from "react-dom";
-import * as React from "react";
 import OptionalDialog from "../../ui/DialogMessage/OptionalDialog/OptionalDialog.component";
 
 // alert globally with yes and no button
@@ -11,12 +10,9 @@ function alertOptional(title, content, agree, disagree) {
   //     title={title}
   //     content={content}
   //     agree={agree}
-  //     disagree={() => {
-  //       disagree();
-  //       document.getElementById("js-global").innerHTML = "";
-  //     }}
+  //     disagree={disagree}
   //   />,
-  //   document.getElementById("js-global-dialog")
+  //   document.getElementById("js-global")
   // );
 }
 
