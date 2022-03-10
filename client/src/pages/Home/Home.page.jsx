@@ -5,7 +5,7 @@ function Home() {
     return (
         <div>
             <Navbar openSidebar={()=>{}} isShownSidebarIcon={true}></Navbar>
-            Home
+            Home22
         </div>
     );
 }
