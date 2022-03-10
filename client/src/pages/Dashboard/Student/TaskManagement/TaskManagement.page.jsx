@@ -1,21 +1,22 @@
 import React, { useState } from "react";
-import HeaderButton from "../../../../components/TaskManagement/HeaderButton/HeaderButton.component";
-import ItemButton from "../../../../components/TaskManagement/ItemButton/ItemButton.component";
-import ListTask from "../../../../components/TaskManagement/ListTask/ListTask.component";
-import TaskDetail from "../../../../components/TaskManagement/TaskDetail/TaskDetail.component";
+import HeaderButton from "../../../../components/Dashboard/TaskManagement/HeaderButton/HeaderButton.component";
+import ItemButton from "../../../../components/Dashboard/TaskManagement/ItemButton/ItemButton.component";
+import ListTask from "../../../../components/Dashboard/TaskManagement/ListTask/ListTask.component";
+import TaskDetail from "../../../../components/Dashboard/TaskManagement/TaskDetail/TaskDetail.component";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import NoteAltOutlinedIcon from '@mui/icons-material/NoteAltOutlined';
 import styles from "./TaskManagement.module.scss";
 import { Link, useParams } from "react-router-dom";
-import ItemHeaderButton from "../../../../components/Stageboard/ItemHeaderButton/ItemHeaderButton.component";
+import ItemHeaderButton from "../../../../components/Dashboard/Stageboard/ItemHeaderButton/ItemHeaderButton.component";
 import OptionalDialog from "../../../../ui/DialogMessage/OptionalDialog/OptionalDialog.component";
-import Header from "../../../../components/Header/Header.component";
-import Body from "../../../../components/Body/Body.component";
-import Box from "@mui/material/Box";
-import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
+import Header from "../../../../components/Dashboard/Header/Header.component";
+import Body from "../../../../components/Dashboard/Body/Body.component";
+import TaskActivities from "../../../../components/Dashboard/TaskManagement/TaskActivities/TaskActivities.component";
 
 function TaskManagement() {
+    const [isOpenedActivities, setIsOpenedActivities] = useState(false);
     const [listsTask, setListsTask] = useState([
         {
             listId: "1",
@@ -142,16 +143,22 @@ function TaskManagement() {
             ],
         },
     ]);
+    
     const [isOpenedTaskDetail, setIsOpenedTaskDetail] = useState(false);
     const [task, setTask] = useState({});
     const { stageName } = useParams();
-    const [currentIndex, setCurrentIndex] = useState({});
 
-    const openTaskDetail = (currentTask, clistIndex, ctaskIndex) => {
+
+    const openActivities = () => {
+        if(isOpenedActivities)
+            setIsOpenedActivities(false);
+        else
+            setIsOpenedActivities(true);
+    }
+
+    const openTaskDetail = (currentTask) => {
         setTask(currentTask);
         setIsOpenedTaskDetail(true);
-        currentIndex.listIndex = clistIndex;
-        currentIndex.taskIndex = ctaskIndex;
     };
 
     const closeTaskDetail = () => {
@@ -186,122 +193,56 @@ function TaskManagement() {
         }
     };
 
-    const addComment = (content) => {
-        let { listIndex, taskIndex } = currentIndex;
-        listsTask[listIndex].tasks[taskIndex].comments.push({
-            userId: "bas-basd2",
-            firstName: "Nguyen",
-            lastName: "Viet",
-            content: content,
-        });
-        setListsTask([...listsTask]);
-    };
-
     return (
         <div className={styles["task-management"]}>
             <Header>
-                <h5>{stageName.replace("-", " ")}</h5>
-                <div
-                    className={
-                        styles["task-management_tool"] + " d-flex align-items-center"
-                    }
-                >
-                    <Box sx={{ display: { xs: "none", sm: "flex" } }}>
-                        <Link to="/dashboard/task-management">
-                            <HeaderButton
-                                text="Boards"
-                                Icon={() => <BarChartOutlinedIcon />}
-                            />
-                        </Link>
-                        <div className="ml-3">
-                            <ItemHeaderButton
-                                addItem={() => { }}
-                                CustomButton={() => (
-                                    <HeaderButton
-                                        text="Activity"
-                                        Icon={() => <BorderColorOutlinedIcon />}
-                                    />
-                                )}
-                            />
-                        </div>
-                        <div className="mx-3">
-                            <ItemHeaderButton
-                                addItem={() => { }}
-                                CustomButton={() => (
-                                    <HeaderButton
-                                        text="Edit"
-                                        Icon={() => <BorderColorOutlinedIcon />}
-                                    />
-                                )}
-                            />
-                        </div>
-                        <div>
-                            <OptionalDialog
-                                title="Message"
-                                content="Are you sure that you want to delete this stage ?"
-                                onAgree={() => { }}
-                                onDisagree={() => { }}
-                            >
+                <h5>
+                    {stageName.replace("-", " ")}
+                </h5>
+                <div className="d-flex align-items-center">
+                    <Link to="/dashboard/task-management">
+                        <HeaderButton
+                            text="Boards"
+                            Icon={() => <BarChartOutlinedIcon />}
+                        />
+                    </Link>
+                    <div className="mx-3">
+                        <ItemHeaderButton
+                            addItem={() => { }}
+                            CustomButton={() => (
                                 <HeaderButton
-                                    text="Delete"
-                                    Icon={() => <DeleteOutlineOutlinedIcon />}
+                                    text="Edit"
+                                    Icon={() => <BorderColorOutlinedIcon />}
                                 />
-                            </OptionalDialog>
-                        </div>
-                    </Box>
-                    <Box sx={{ display: { xs: "block", sm: "none" } }}>
-                        <div className="dropdown">
-                            <button
-                                className="btn btn-secondary dropdown-toggle d-flex align-items-center"
-                                type="button"
-                                id="dropdownMenuButton"
-                                data-toggle="dropdown"
-                            >
-                                <ListOutlinedIcon />
-                            </button>
-                            <div
-                                className="dropdown-menu dropdown-menu-right p-2"
-                                aria-labelledby="dropdownMenuButton"
-                            >
-                                <Link to="/dashboard/task-management">
-                                    <HeaderButton
-                                        text="Boards"
-                                        Icon={() => <BarChartOutlinedIcon />}
-                                    />
-                                </Link>
-                                <div className="my-2">
-                                    <ItemHeaderButton
-                                        addItem={() => { }}
-                                        CustomButton={() => (
-                                            <HeaderButton
-                                                text="Edit"
-                                                Icon={() => <BorderColorOutlinedIcon />}
-                                            />
-                                        )}
-                                    />
-                                </div>
-                                <div className="d-flex">
-                                    <OptionalDialog
-                                        title="Message"
-                                        content="Are you sure that you want to delete this stage ?"
-                                        onAgree={() => { }}
-                                        onDisagree={() => { }}
-                                    >
-                                        <HeaderButton
-                                            text="Delete"
-                                            Icon={() => <DeleteOutlineOutlinedIcon />}
-                                        />
-                                    </OptionalDialog>
-                                </div>
-                            </div>
-                        </div>
-                    </Box>
+                            )}
+                        />
+                    </div>
+                    <div>
+                        <OptionalDialog
+                            title="Message"
+                            content="Are you sure that you want to delete this stage ?"
+                            onAgree={() => { }}
+                            onDisagree={() => { }}
+                        >
+                            <HeaderButton
+                                text="Delete"
+                                Icon={() => <DeleteOutlineOutlinedIcon />}
+                            />
+                        </OptionalDialog>
+                    </div>
+                    <div className="ml-3" onClick={openActivities}>
+                        <HeaderButton
+                                text="Activities"
+                                Icon={() => <NoteAltOutlinedIcon/>}
+                            />
+                    </div>
                 </div>
             </Header>
             <Body>
-                <div className={styles["task-management_list"] + " d-flex p-5"}>
+                {isOpenedActivities?<TaskActivities></TaskActivities>:""}
+                <div className="d-flex p-5">
                     {listsTask.map((list, listIndex) => (
-                        <div className={" mb-5"}>
+                        <div className=" mb-5">
                             <ListTask
                                 openTaskDetail={openTaskDetail}
                                 key={listIndex}
@@ -334,7 +275,6 @@ function TaskManagement() {
                                 members={task.members}
                                 comments={task.comments}
                                 closeTaskDetail={closeTaskDetail}
-                                addComment={addComment}
                             />
                         </div>
                     ) : (
