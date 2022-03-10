@@ -1,7 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const { POSTGRESQL_DEVELOPMENT_HOST } = require("../config/dbconfig");
-const { Project } = require("./ProjectModel");
-const { Stage } = require("./StageModel");
+const { ListTask } = require("./ListTaskModel");
 const sequelize = new Sequelize(POSTGRESQL_DEVELOPMENT_HOST);
 
 const Task = sequelize.define("task", {
@@ -11,21 +10,24 @@ const Task = sequelize.define("task", {
         primaryKey: true,
         allowNull: false,
     },
-    stageId: {
+    listTaskId: {
         type: DataTypes.UUID,
         references: {
-            model: Stage,
-            key: "stageId"
+            model: ListTask,
+            key: "listTaskId"
         }
     },
-    taskName: DataTypes.STRING(50),
-    taskDesc: DataTypes.STRING(100),
+    taskName: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+    },
+    taskDesc: DataTypes.STRING(50),
     startDate: DataTypes.DATE,
     endDate: DataTypes.DATE,
 });
 
-Stage.hasMany(Task, {
-    foreignKey: "stageId"
+ListTask.hasMany(Task, {
+    foreignKey: "listTaskId"
 })
 
 const initTask = async () => {

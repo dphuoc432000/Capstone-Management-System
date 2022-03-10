@@ -3,7 +3,7 @@ const userService = require('../service/UserService');
 //api: /api/user/
 class UserController {
 
-    //Thêm user
+    //Thêm user (Test)
     //POST: /add
     addUser = async (req, res, next) => {
         const user = req.body;
@@ -40,6 +40,8 @@ class UserController {
             })
     }
 
+    //Xóa user(account) 
+    //POST: /delete/:userId
     removeUserById = async (req, res, next) => {
         const userId = req.params.userId
         await userService.removeUserById(userId)

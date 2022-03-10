@@ -1,24 +1,20 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const { POSTGRESQL_DEVELOPMENT_HOST } = require("../config/dbconfig");
+const { User } = require("./UserModel");
 const sequelize = new Sequelize(POSTGRESQL_DEVELOPMENT_HOST);
-const {User} = require('./UserModel');
 
-const FileStorage = sequelize.define("file_storage", {
-    fileId: {
+const Notification = sequelize.define("notification", {
+    notificationId: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
         allowNull: false,
     },
-    fileName: {
-        type: DataTypes.STRING(50),
+    title: {
+        type: DataTypes.STRING(150),
         allowNull: false,
     },
-    type:{
-        type: DataTypes.STRING(50),
-        allowNull: false,
-    },
-    path: {
+    content: {
         type: DataTypes.TEXT,
         allowNull: false,
     },
@@ -29,13 +25,14 @@ const FileStorage = sequelize.define("file_storage", {
             key: 'userId'
         }
     },
-});
 
-User.hasMany(FileStorage,{
-    foreignKey: 'userId'
 })
 
-const initFileStorage = async ()=>{
-    return FileStorage.sync({ alter: true })
+User.hasMany(Notification, { foreignKey: 'userId' });
+
+const initNotification = async () => {
+    return Notification.sync({ alter: true })
 }
-module.exports = {FileStorage, initFileStorage};
+
+module.exports = { Notification, initNotification }
+

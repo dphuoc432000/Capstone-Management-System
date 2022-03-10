@@ -17,6 +17,9 @@ const { Project, initProject } = require("../models/ProjectModel");
 const { Council, initCouncil } = require("../models/CouncilModel");
 const { Role, initRole } = require("../models/RoleModel");
 const { GroupLecturer, initGroupLecturer } = require("../models/GroupLecturerModel");
+const { ListTask, initListTask } = require("../models/ListTaskModel");
+const { Notification, initNotification } = require('../models/NotificationModel');
+const { NotificationFile, initNotificationFile } = require('../models/NotificationFileModel');
 
 const initAll = async () => {
     await initDepartment()
@@ -28,10 +31,12 @@ const initAll = async () => {
             await initUser();
         })
         .then(async () => {
+            await initNotification();
             await initFileStorage();
             await initUserRole();
         })
         .then(async () => {
+            await initNotificationFile();
             await initLecturer();
             await initStudent();
             await initGroup();
@@ -41,7 +46,8 @@ const initAll = async () => {
             await initProject();
         }).then(async () => {
             await initStage();
-
+        }).then(async () => {
+            await initListTask();
         }).then(async () => {
             await initTask();
         }).then(async () => {
@@ -52,7 +58,7 @@ const initAll = async () => {
         })
 }
 
-// initAll();
+initAll();
 
 module.exports = {
     Department,
@@ -69,9 +75,12 @@ module.exports = {
     GroupStudent,
     Project,
     Stage,
+    ListTask,
     Task,
     TaskAssignment,
     Comment,
     CouncilMember,
     Score,
+    Notification,
+    NotificationFile
 };

@@ -19,6 +19,7 @@
   "homepage": "https://github.com/dphuoc432000/Capstone-Management-System#readme",
   "dependencies": {
     "axios": "^0.26.0",
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.19.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
