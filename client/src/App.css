@@ -26,6 +26,10 @@ body {
   height: 100vh;
 }
 
+.activity-notification_sidebar .ck-editor__editable:not(.ck-editor__nested-editable) { 
+  min-height: 400px;
+}
+
 .light-text {
   color: #b3b3b3;
 }
@@ -79,22 +83,22 @@ a:hover {
   color: inherit;
 }
 
-.cursor-pointer{
+.cursor-pointer {
   cursor: pointer;
 }
 
-.main-navbar .active{
+.main-navbar .active {
   color: white;
 }
 
-.advanced-table .MuiDataGrid-virtualScrollerRenderZone{
+.advanced-table .MuiDataGrid-virtualScrollerRenderZone {
   background-color: white;
 }
 
-.dark-bg{
+.dark-bg {
   background: rgba(0, 0, 0, 0.35) !important;
 }
 
-.ldark-bg{
+.ldark-bg {
   background: rgba(0, 0, 0, 0.3) !important;
 }

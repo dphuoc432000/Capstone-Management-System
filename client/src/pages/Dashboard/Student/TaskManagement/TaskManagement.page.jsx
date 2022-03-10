@@ -179,6 +179,7 @@ function TaskManagement() {
     };
 
     const moveTask = (listIndex, taskIndex, newListIndex, taskId) => {
+        console.log(listIndex + " " + newListIndex);
         if (listIndex !== newListIndex) {
             listsTask[newListIndex].tasks.push(listsTask[listIndex].tasks[taskIndex]);
             listsTask[listIndex].tasks.splice(taskIndex, 1);

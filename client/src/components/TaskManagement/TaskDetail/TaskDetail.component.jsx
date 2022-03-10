@@ -23,8 +23,8 @@ function TaskDetail({
     startDate,
     endDate,
     tag,
-    members,
-    comments,
+    members = [],
+    comments = [],
 }) {
     const [content, setContent] = useState("");
 

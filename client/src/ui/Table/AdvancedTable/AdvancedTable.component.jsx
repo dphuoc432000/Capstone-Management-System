@@ -29,6 +29,7 @@ export default function AdvancedTable({
     data,
     cellType,
     children,
+    onOpen
 }) {
     const [order, setOrder] = React.useState("asc");
     const [orderBy, setOrderBy] = React.useState("calories");
@@ -270,7 +271,7 @@ export default function AdvancedTable({
             className={styles["advanced-table"]}
             sx={{ width: "100%", height: "100%", borderTop: "1px solid #e0e0e0" }}
         >
-            <Paper sx={{ width: "100%", height: "100%", background: "#f8fafc" }}>
+            <Paper sx={{ width: "100%", height: "100%", background: "#f1f5f9", boxShadow: "none" }}>
                 <EnhancedTableToolbar numSelected={selected.length} />
                 <TableContainer>
                     <Table
@@ -294,17 +295,17 @@ export default function AdvancedTable({
                             {stableSort(rows, getComparator(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row, index) => {
-                                    const isItemSelected = isSelected(row.id);
+                                    const isItemSelected = isSelected(row[headCells[0].id]);
                                     const labelId = `enhanced-table-checkbox-${index}`;
                                     return (
                                         <>
                                             <TableRow
                                                 hover
-                                                onClick={(event) => handleClick(event, row.id)}
+                                                onClick={(event) => handleClick(event, row[headCells[0].id])}
                                                 role="checkbox"
                                                 aria-checked={isItemSelected}
                                                 tabIndex={-1}
-                                                key={row.id}
+                                                key={row[headCells[0].id]}
                                                 selected={isItemSelected}
                                             >
                                                 <TableCell padding="checkbox">
@@ -322,7 +323,7 @@ export default function AdvancedTable({
                                                     scope="row"
                                                     padding="none"
                                                 >
-                                                    {row.id}
+                                                    {row[headCells[0].id]}
                                                 </TableCell>
                                                 {headCells.map((headCell, headCellIndex) => {
                                                     if (
@@ -339,7 +340,7 @@ export default function AdvancedTable({
                                                 <TableCell align="left">
                                                     <Button onClick={() => {
                                                         dispatch({ type: "RESET_STATUS_TOPIC_FORM" });
-                                                        dispatch({ type: "UPDATE_CURRENT_DELETED_ITEM", payload: { index: index, id: row.id } });
+                                                        onOpen(row[headCells[0].id],index);
                                                     }}>
                                                         <KeyboardArrowDownOutlinedIcon />
                                                     </Button>
@@ -377,7 +378,7 @@ export default function AdvancedTable({
                     component="div"
                     count={rows.length}
                     rowsPerPage={rowsPerPage}
-                    page={5}
+                    page={page}
                     onPageChange={handleChangePage}
                     onRowsPerPageChange={handleChangeRowsPerPage}
                 />

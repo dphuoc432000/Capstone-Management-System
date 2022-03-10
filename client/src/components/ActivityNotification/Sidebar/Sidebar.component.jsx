@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import styles from './Sidebar.module.scss';
+import NotificationForm from '../NotificationForm/NotificationForm.component';
+import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined';
 
-function Sidebar({ children }) {
+function Sidebar({ children,addNotification }) {
+    const [isOpen, setIsOpen] = useState(false);
+
     return (
-        <div className={styles["sidebar"] + " llight-right-border"}>
+        <div className={styles["sidebar"] + " llight-right-border activity-notification_sidebar"}>
             <div className={styles["sidebar_header"] + " d-flex light-bg llight-bottom-border"}>
-                <div className="w-100 d-flex justify-content-between m-auto">
+                <div className="w-100 d-flex justify-content-between align-items-center">
                     <h5 className="mb-0">Notification</h5>
-                    <MoreVertOutlinedIcon />
+                    <div className="d-flex align-items-center">
+                        <MoreVertOutlinedIcon />
+                        <AddBoxOutlinedIcon onClick={() => setIsOpen(true)} className="cursor-pointer" />
+                    </div>
                 </div>
             </div>
             <div className={styles["sidebar_body"]}>
@@ -17,6 +24,7 @@ function Sidebar({ children }) {
             <div className={styles["sidebar_footer"] + " d-flex light-bg llight-top-border"}>
                 {children[1]}
             </div>
+            {!isOpen || <NotificationForm onClose={() => setIsOpen(false)} onSubmit={addNotification} />};
         </div>
     );
 }

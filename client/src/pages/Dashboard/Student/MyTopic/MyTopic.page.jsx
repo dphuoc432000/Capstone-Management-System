@@ -282,8 +282,8 @@ function MyTopic() {
         },
     ]);
     const [title, setTitle] = useState("");
+    const [topicIndex, setTopicIndex] = useState(0);
     const dispatch = useDispatch();
-    const currentDeletedItem = useSelector(s => s.currentDeletedItem);
 
     const addTopic = () => {
         let newTopics = [{
@@ -305,8 +305,7 @@ function MyTopic() {
     };
 
     const deleteTopic = () => {
-        let { index } = currentDeletedItem;
-        topics.splice(index, 1);
+        topics.splice(topicIndex, 1);
         setTopics([...topics]);
     };
 
@@ -335,6 +334,7 @@ function MyTopic() {
                     title="List Topics"
                     data={topics}
                     cellType={TopicTypeModel}
+                    onOpen={(id, index) => setTopicIndex(index)}
                 >
                     <TopicForm onUpdate={updateTopic} onDelete={deleteTopic} />
                 </AdvancedTable>

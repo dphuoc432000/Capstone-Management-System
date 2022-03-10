@@ -99,6 +99,11 @@ function ActivityNotification() {
         setNotificationDetail(notification);
     };
 
+    const addNotification = (notification) => {
+        notifications.push(notification);
+        setNotifications(notifications);
+    }
+
     return (
         <div className={styles["activity-notification"]}>
             <Header>
@@ -113,7 +118,7 @@ function ActivityNotification() {
             </Header>
             <Body>
                 <div className={styles["activity-notification_body"] + " d-flex w-100 h-100 llight-top-border"}>
-                    <Sidebar>
+                    <Sidebar addNotification={addNotification}>
                         {notifications.map((notification, notificationIndex) => {
                             let currentPage = page - 1;
                             if (
@@ -209,7 +214,7 @@ function ActivityNotification() {
                                     3 Attachments
                                 </h5>
                             </div>
-                            <Box sx={{display:{md:"flex",xs:"block"}}}>
+                            <Box sx={{ display: { md: "flex", xs: "block" } }}>
                                 <div className="mr-3">
                                     <ItemImage src="https://3.bp.blogspot.com/-eilZTdgbWPA/XFUltCS4Z1I/AAAAAAAABz0/feDxTa3Emtsb3Wx4xxu0hWnFrohqtwQfwCKgBGAs/w3440-h1440-c/mountain-lake-scenery-nature-cottage-25-4K.jpg" title="mystery.jpg" content="15.05 KB" />
                                 </div>
