@@ -1,9 +1,9 @@
 import { Button } from "@mui/material";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Body from "../../../../components/Body/Body.component";
-import Header from "../../../../components/Header/Header.component";
-import TopicForm from "../../../../components/MyTopic/TopicForm/TopicForm.component";
+import Body from "../../../../components/Dashboard/Body/Body.component";
+import Header from "../../../../components/Dashboard/Header/Header.component";
+import TopicForm from "../../../../components/Dashboard/MyTopic/TopicForm/TopicForm.component";
 import TopicTypeModel from "../../../../models/TopicTypeModel";
 import AdvancedTable from "../../../../ui/Table/AdvancedTable/AdvancedTable.component";
 import styles from "./MyTopic.module.scss";
@@ -281,9 +281,8 @@ function MyTopic() {
             isApproved: "Approved",
         },
     ]);
-    const [title, setTitle] = useState("");
     const dispatch = useDispatch();
-    const currentDeletedItem = useSelector(s => s.currentDeletedItem);
+    const currentDeletedTopic = useSelector(s => s.currentDeletedTopic);
 
     const addTopic = () => {
         let newTopics = [{
@@ -294,7 +293,8 @@ function MyTopic() {
             leader: "",
             groupId: "",
             groupTitle: "",
-            isApproved: ""
+            isApproved: "",
+            isNew: true
         }].concat(topics);
         setTopics([...newTopics]);
         dispatch({ type: "ACTIVE_STATUS_TOPIC_FORM" })
@@ -305,19 +305,14 @@ function MyTopic() {
     };
 
     const deleteTopic = () => {
-        let { index } = currentDeletedItem;
-        topics.splice(index, 1);
+        let { topicIndex } = currentDeletedTopic;
+        topics.splice(topicIndex,1);
         setTopics([...topics]);
     };
 
-    const searchTopic = (event) => {
-        let { value } = event.target;
-        let newTopics = topics.filter((topic) => topic.title.toUpperCase().indexOf(value) >= 0);
-        setTopics([...newTopics]);
-    }
-
     return (
         <div className={styles["my-topic"]}>
+
             <Header>
                 <h5>My Topic</h5>
                 <div className="d-flex justify-content-end">
@@ -325,7 +320,6 @@ function MyTopic() {
                         type="text"
                         className="form-control w-50 mr-2"
                         placeholder="Search topics"
-                        onChange={searchTopic}
                     />
                     <Button onClick={addTopic} variant="contained">Add</Button>
                 </div>

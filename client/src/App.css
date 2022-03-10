@@ -30,10 +30,6 @@ body {
   color: #b3b3b3;
 }
 
-.bold-light-text {
-  color: #999;
-}
-
 .default-text {
   color: #1976d2;
 }
@@ -58,18 +54,6 @@ body {
   border: 1px solid #b3b3b3a1;
 }
 
-.llight-right-border {
-  border-right: 1px solid #b3b3b369;
-}
-
-.llight-top-border {
-  border-top: 1px solid #b3b3b342;
-}
-
-.llight-bottom-border {
-  border-bottom: 1px solid #b3b3b342;
-}
-
 a {
   color: inherit;
   text-decoration: none !important;
@@ -89,12 +73,4 @@ a:hover {
 
 .advanced-table .MuiDataGrid-virtualScrollerRenderZone{
   background-color: white;
-}
-
-.dark-bg{
-  background: rgba(0, 0, 0, 0.35) !important;
-}
-
-.ldark-bg{
-  background: rgba(0, 0, 0, 0.3) !important;
 }

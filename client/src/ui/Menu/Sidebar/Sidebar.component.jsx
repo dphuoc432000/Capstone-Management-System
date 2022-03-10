@@ -18,16 +18,15 @@ import QrCodeIcon from "@mui/icons-material/QrCode";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import TodayIcon from "@mui/icons-material/Today";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
-import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined';
-import CampaignOutlinedIcon from '@mui/icons-material/CampaignOutlined';
+
 // stylesheet
 
 // sidebar for employee
-const StudentSidebar = () => {
+const EmployeeSidebar = () => {
   return (
     <List
       className="dashboard_sidebar_main"
-      sx={{ width: "100%", height: "100%", bgcolor: "background.paper" }}
+      sx={{ width: "100%", bgcolor: "background.paper" }}
       component="nav"
       aria-labelledby="nested-list-subheader"
       subheader={
@@ -60,20 +59,20 @@ const StudentSidebar = () => {
           <ListItemText primary="My Topic" />
         </ListItemButton>
       </NavLink>
-      <NavLink className="base-link" to="/dashboard/my-group">
+      <NavLink className="base-link" to="/dashboard/expense-report">
         <ListItemButton>
           <ListItemIcon>
-            <GroupOutlinedIcon />
+            <DescriptionIcon />
           </ListItemIcon>
           <ListItemText primary="My Group" />
         </ListItemButton>
       </NavLink>
-      <NavLink className="base-link" to="/dashboard/activity-notification">
+      <NavLink className="base-link" to="/dashboard/my-team">
         <ListItemButton>
           <ListItemIcon>
-            <CampaignOutlinedIcon />
+            <GroupIcon />
           </ListItemIcon>
-          <ListItemText primary="Notification" />
+          <ListItemText primary="Template Document" />
         </ListItemButton>
       </NavLink>
       <NavLink className="base-link" to="/dashboard/chat">
@@ -123,7 +122,7 @@ const StudentSidebar = () => {
 function Sidebar() {
   return (
     <div className={styles["sidebar"]}>
-      <StudentSidebar />
+      <EmployeeSidebar />
     </div>
   );
 }

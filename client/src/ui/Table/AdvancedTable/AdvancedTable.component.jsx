@@ -339,7 +339,7 @@ export default function AdvancedTable({
                                                 <TableCell align="left">
                                                     <Button onClick={() => {
                                                         dispatch({ type: "RESET_STATUS_TOPIC_FORM" });
-                                                        dispatch({ type: "UPDATE_CURRENT_DELETED_ITEM", payload: { index: index, id: row.id } });
+                                                        dispatch({ type: "UPDATE_CURRENT_DELETED_TOPIC", payload: { topicIndex: index, topicId: row.id } });
                                                     }}>
                                                         <KeyboardArrowDownOutlinedIcon />
                                                     </Button>

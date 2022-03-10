@@ -10,22 +10,19 @@ import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import GridViewOutlinedIcon from "@mui/icons-material/GridViewOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import { Button } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import RoundedAvatar from "../../Avatar/RoundedAvatar/RoundedAvatar.component";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import MenuIcon from "@mui/icons-material/Menu";
 import styles from "./Navbar.module.scss";
-import { NavLink } from "react-router-dom";
-import Notification from "../../Communication/Notification/Notification.component";
-import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
-import CampaignOutlinedIcon from "@mui/icons-material/CampaignOutlined";
-import ColorLensOutlinedIcon from "@mui/icons-material/ColorLensOutlined";
+import { Link, NavLink } from "react-router-dom";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -68,41 +65,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function Navbar({ isShownSidebarIcon, openSidebar }) {
-  const themes = [
-    {
-      name: "Light Mode",
-      color: "blue",
-      themeValue: 0,
-    },
-    {
-      name: "Dark Mode",
-      color: "black",
-      themeValue: 1,
-    },
-    {
-      name: "Red Mode",
-      color: "red",
-      themeValue: 2,
-    },
-    {
-      name: "Green Mode",
-      color: "green",
-      themeValue: 3,
-    },
-    {
-      name: "Purple Mode",
-      color: "purple",
-      themeValue: 4,
-    },
-    {
-      name: "Orange Mode",
-      color: "orange",
-      themeValue: 5,
-    },
-  ];
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-  const dispatch = useDispatch();
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -127,7 +91,6 @@ export default function Navbar({ isShownSidebarIcon, openSidebar }) {
   };
 
   const menuId = "primary-search-account-menu";
-
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -195,6 +158,7 @@ export default function Navbar({ isShownSidebarIcon, openSidebar }) {
       onClose={handleMobileMenuClose}
     >
       <div className={styles["navbar_info-bar"]}>
+
         <MenuItem onClick={handleMenuClose}>
           <HomeOutlinedIcon />
           <span>Home</span>
@@ -242,28 +206,11 @@ export default function Navbar({ isShownSidebarIcon, openSidebar }) {
 
           <Box sx={{ display: "flex" }}>
             <Box sx={{ display: { xs: "none", md: "flex" } }}>
-              <NavLink
-                className="d-flex m-auto light-text"
-                style={{ padding: "12px" }}
-                to="/home"
-              >
-                Home
-              </NavLink>
-              <NavLink
-                className="d-flex m-auto light-text"
-                style={{ padding: "12px" }}
-                to="/about"
-              >
-                About
-              </NavLink>
-              <NavLink
-                className="d-flex m-auto light-text"
-                style={{ padding: "12px" }}
-                to="/dashboard"
-              >
-                Dashboard
-              </NavLink>
+              <NavLink className="d-flex m-auto light-text" style={{padding:"12px"}} to="/home">Home</NavLink>
+              <NavLink className="d-flex m-auto light-text" style={{padding:"12px"}} to="/about">About</NavLink>
+              <NavLink className="d-flex m-auto light-text" style={{padding:"12px"}} to="/dashboard">Dashboard</NavLink>
             </Box>
+
 
             {isLogedIn ? (
               <>
@@ -272,104 +219,18 @@ export default function Navbar({ isShownSidebarIcon, openSidebar }) {
                   aria-label="show 4 new mails"
                   color="inherit"
                 >
-                  <div className="dropdown">
-                    <div data-toggle="dropdown">
-                      <Badge badgeContent={4} color="error">
-                        <CampaignOutlinedIcon />
-                      </Badge>
-                    </div>
-                    <div
-                      style={{ width: "400px" }}
-                      className="dropdown-menu dropdown-menu-right p-3"
-                    >
-                      <div className="d-flex justify-content-between mb-2">
-                        <h5>Notification</h5>
-                        <MoreHorizOutlinedIcon />
-                      </div>
-                      <Notification
-                        fullName="Nguyen Long"
-                        time="6 days ago"
-                        message="Updated the task"
-                      />
-                    </div>
-                  </div>
+                  <Badge badgeContent={4} color="error">
+                    <MailIcon />
+                  </Badge>
                 </IconButton>
                 <IconButton
                   size="large"
                   aria-label="show 17 new notifications"
                   color="inherit"
                 >
-                  <div className="dropdown">
-                    <div data-toggle="dropdown">
-                      <Badge className="" badgeContent={17} color="error">
-                        <NotificationsIcon />
-                      </Badge>
-                    </div>
-                    <div
-                      style={{ width: "400px" }}
-                      className="dropdown-menu dropdown-menu-right p-3"
-                    >
-                      <div className="d-flex justify-content-between mb-2">
-                        <h5>Activity</h5>
-                        <MoreHorizOutlinedIcon />
-                      </div>
-                      <Notification
-                        fullName="Nguyen Long"
-                        time="6 days ago"
-                        message="Updated the task"
-                      />
-                    </div>
-                  </div>
-                </IconButton>
-                <IconButton
-                  size="large"
-                  aria-label="show 17 new notifications"
-                  color="inherit"
-                >
-                  <div className="dropdown">
-                    <div data-toggle="dropdown">
-                      <Badge>
-                        <ColorLensOutlinedIcon />
-                      </Badge>
-                    </div>
-                    <div
-                      style={{ width: "300px" }}
-                      className="dropdown-menu dropdown-menu-right p-3"
-                    >
-                      <div className="d-flex justify-content-between mb-2">
-                        <h5>Colors</h5>
-                        <MoreHorizOutlinedIcon />
-                      </div>
-                      <div>
-                        {themes.map((theme) => (
-                          <>
-                            <div
-                              onClick={() =>
-                                dispatch({ type: "UPDATE_THEME", payload: theme.themeValue })
-                              }
-                              className="d-flex align-items-center py-1"
-                            >
-                              <div
-                                className={
-                                  styles["navbar_color-mode"] + " mr-4"
-                                }
-                              >
-                                <div className="light-bg"></div>
-                                <div
-                                  style={{ background: theme.color }}
-                                  className={
-                                    styles["navbar_color-mode_sub"] + ""
-                                  }
-                                ></div>
-                              </div>
-                              <span>{theme.name}</span>
-                            </div>
-                            <div className="dropdown-divider w-50" />
-                          </>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+                  <Badge badgeContent={17} color="error">
+                    <NotificationsIcon />
+                  </Badge>
                 </IconButton>
                 <IconButton
                   size="large"
