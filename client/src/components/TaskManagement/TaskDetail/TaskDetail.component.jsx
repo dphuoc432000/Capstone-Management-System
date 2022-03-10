@@ -1,20 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
-import Textbox from "../../../../ui/Form/Textbox/Textbox.component";
+import Textbox from "../../../ui/Form/Textbox/Textbox.component";
 import InsertCommentOutlinedIcon from "@mui/icons-material/InsertCommentOutlined";
-import Comment from "../../../../ui/Communication/Comment/Comment.component";
+import Comment from "../../../ui/Communication/Comment/Comment.component";
 import styles from "./TaskDetail.module.scss";
-import ListCheckbox from "../../../../ui/Form/ListCheckbox/ListCheckbox.component";
-import RoundedAvatar from "../../../../ui/Avatar/RoundedAvatar/RoundedAvatar.component";
-import Textarea from "../../../../ui/Form/Textarea/Textarea.component";
+import ListCheckbox from "../../../ui/Form/ListCheckbox/ListCheckbox.component";
+import RoundedAvatar from "../../../ui/Avatar/RoundedAvatar/RoundedAvatar.component";
+import Textarea from "../../../ui/Form/Textarea/Textarea.component";
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import AttachmentOutlinedIcon from '@mui/icons-material/AttachmentOutlined';
 import TodayOutlinedIcon from '@mui/icons-material/TodayOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
-import OptionalDialog from "../../../../ui/DialogMessage/OptionalDialog/OptionalDialog.component";
+import OptionalDialog from "../../../ui/DialogMessage/OptionalDialog/OptionalDialog.component";
+import { Button } from "@mui/material";
+
 function TaskDetail({
     closeTaskDetail,
+    addComment,
     title,
     desc,
     startDate,
@@ -23,6 +26,8 @@ function TaskDetail({
     members,
     comments,
 }) {
+    const [content, setContent] = useState("");
+
     let group = [
         {
             userId: "1",
@@ -52,8 +57,6 @@ function TaskDetail({
                 checked: isSame,
             };
         });
-
-        console.log(result);
 
         return result;
     };
@@ -160,15 +163,23 @@ function TaskDetail({
                         <InsertCommentOutlinedIcon />
                         <h5 className="mb-0 ml-2">Activity</h5>
                     </div>
-                    <textarea
-                        class="form-control"
-                        rows="1"
-                        defaultValue="Enter a comment"
-                    ></textarea>
-                    <div className="py-3">
+                    <div className="d-flex">
+                        <RoundedAvatar src="" name="David Kain" />
+                        <div className="w-100 ml-3">
+                            <textarea
+                                class="form-control mb-2"
+                                rows="1"
+                                defaultValue="Enter a comment"
+                                onChange={(event) => setContent(event.target.value)}
+                            ></textarea>
+                            <Button onClick={() => addComment(content)} variant="contained">Add Comment</Button>
+                        </div>
+                    </div>
+                    <div className="py-4">
                         <div>
                             {comments.map((comment, commentIndex) => (
                                 <Comment
+                                    key={commentIndex}
                                     fullname={comment.firstName + " " + comment.lastName}
                                     content={comment.content}
                                     createdAt={comment.createdAt}

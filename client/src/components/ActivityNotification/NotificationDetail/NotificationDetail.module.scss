@@ -1,0 +1,33 @@
+$mobile-width: 550px;
+$tablet-width: 900px;
+$desktop-width: 1024px;
+
+.notification-detail {
+  width: 75%;
+  height: 100%;
+  overflow-y: auto;
+  padding: 70px 50px;
+
+  @media screen and (max-width: $mobile-width) {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .notification-detail_header {
+    width: 100%;
+  }
+
+  .notification-detail_body {
+    width: 100%;
+    p {
+      font-size: 15px;
+      line-height: 1.4;
+    }
+  }
+
+  .notification-detail_footer {
+    width: 100%;
+  }
+}

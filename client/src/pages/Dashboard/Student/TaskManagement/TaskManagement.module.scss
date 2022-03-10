@@ -9,8 +9,20 @@ $desktop-width: 1024px;
     display: block !important;
   }
 
-  .task-management_header
-  {
+  .task-management_list {
+    @media screen and (max-width: $mobile-width) {
+      display: grid !important;
+      background: #f1f5f9;
+    }
+  }
+
+  .task-management_tool {
+    @media screen and (max-width: $mobile-width) {
+      display: block !important;
+    }
+  }
+
+  .task-management_header {
     width: 100%;
   }
 
@@ -21,6 +33,10 @@ $desktop-width: 1024px;
     background: rgba(0, 0, 0, 0.2);
     top: 0;
     left: 0;
-    z-index: 2;
+    z-index: 3;
+    @media screen and (max-width: $mobile-width) {
+      // display: block !important;
+      display: block;
+    }
   }
 }

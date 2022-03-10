@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styles from "./Task.module.scss";
 import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
-import RoundedAvatar from "../../../../ui/Avatar/RoundedAvatar/RoundedAvatar.component";
-import DateConverter from "../../../../services/Converter/DateConverter";
+import RoundedAvatar from "../../../ui/Avatar/RoundedAvatar/RoundedAvatar.component";
+import DateConverter from "../../../services/Converter/DateConverter";
 import Draggable from "react-draggable";
 import InsertCommentOutlinedIcon from '@mui/icons-material/InsertCommentOutlined';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';

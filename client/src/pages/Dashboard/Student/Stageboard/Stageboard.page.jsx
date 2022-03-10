@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Body from "../../../../components/Dashboard/Body/Body.component";
-import ItemButton from "../../../../components/Dashboard/Stageboard/ItemButton/ItemButton.component";
-import Stage from "../../../../components/Dashboard/Stageboard/Stage/Stage.component";
+import Body from "../../../../components/Body/Body.component";
+import ItemButton from "../../../../components/Stageboard/ItemButton/ItemButton.component";
+import Stage from "../../../../components/Stageboard/Stage/Stage.component";
 import styles from "./Stageboard.module.scss";
 
 function Taskboard() {

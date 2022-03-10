@@ -6,7 +6,7 @@ import styles from "./Comment.module.scss";
 function Comment({ fullname, content, createdAt }) {
     return (
         <div className={styles["comment"] + " d-flex"}>
-            <RoundedAvatar src="" name={fullname} style={{ width: "30px", height: "30px" }} />
+            <RoundedAvatar src="" name={fullname} style={{ width: "30px", height: "30px",fontSize:"16px" }} />
             <div className={styles["comment_right"] + " ml-3"}>
                 <div className="d-flex align-items-end">
                     <h5 className="mb-0 mr-2">{fullname}</h5>

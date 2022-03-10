@@ -4,7 +4,7 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import Task from "../Task/Task.component";
 import ItemButton from "../ItemButton/ItemButton.component";
-import OptionalDialog from "../../../../ui/DialogMessage/OptionalDialog/OptionalDialog.component";
+import OptionalDialog from "../../../ui/DialogMessage/OptionalDialog/OptionalDialog.component";
 
 function ListTask({
   listId,
@@ -38,8 +38,8 @@ function ListTask({
           <OptionalDialog
             title="Message"
             content="Are you sure that you want to delete this list ?"
-            onAgree={() => {}}
-            onDisagree={() => {}}
+            onAgree={() => { }}
+            onDisagree={() => { }}
           >
             <DeleteOutlineOutlinedIcon
               className="cursor-pointer"
@@ -52,7 +52,7 @@ function ListTask({
       <div className={styles["list-task_body"]}>
         {tasks.map((task, taskIndex) => (
           <div
-            onClick={() => openTaskDetail(task)}
+            onClick={() => openTaskDetail(task, listIndex, taskIndex)}
             key={taskIndex}
             className={taskIndex > 0 ? "mt-3" : ""}
           >

@@ -1,9 +1,10 @@
 const defaultState = {
   isLogedIn: true,
   isTopicFormSubmitted: false,
+  theme: 0,
 
   // student dashboard
-  currentDeletedTopic: {topicId:"sdf"},
+  currentDeletedItem: { topicId: "sdf" },
 };
 
 export const reducer = function (state = defaultState, action) {
@@ -17,8 +18,11 @@ export const reducer = function (state = defaultState, action) {
     case "RESET_STATUS_TOPIC_FORM":
       state.isTopicFormSubmitted = false;
       return { ...state };
-    case "UPDATE_CURRENT_DELETED_TOPIC":
-      state.currentDeletedTopic = action.payload;
+    case "UPDATE_CURRENT_DELETED_ITEM":
+      state.currentDeletedItem = action.payload;
+      return { ...state };
+    case "UPDATE_THEME":
+      state.theme = action.payload;
       return { ...state };
     default:
       return state;

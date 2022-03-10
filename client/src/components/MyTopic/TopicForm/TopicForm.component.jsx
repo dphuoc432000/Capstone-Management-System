@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import Textarea from "../../../../ui/Form/Textarea/Textarea.component";
-import Textbox from "../../../../ui/Form/Textbox/Textbox.component";
-import Checkbox from "../../../../ui/Form/Checkbox/Checkbox.component";
-import Combobox from "../../../../ui/Form/Combobox/Combobox.component";
+import Textarea from "../../../ui/Form/Textarea/Textarea.component";
+import Textbox from "../../../ui/Form/Textbox/Textbox.component";
+import Combobox from "../../../ui/Form/Combobox/Combobox.component";
 import styles from "./TopicForm.module.scss";
 import { Button } from "@mui/material";
 
