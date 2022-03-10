@@ -12,7 +12,6 @@ class UserService {
             },
             defaults: user_role
         })
-        console.log(userRoleData)
         let check =  userRoleData.find(userRoleEle =>{
             return typeof userRoleEle === 'boolean';
         })

@@ -12,13 +12,14 @@ const User = sequelize.define("user", {
     },
     lastName: DataTypes.STRING(20),
     firstName: DataTypes.STRING(15),
+    dateOfBirth: DataTypes.DATE,
     email: {
         type: DataTypes.STRING(30),
         unique: true,
         // allowNull: false
     },
     password: {
-        type: DataTypes.STRING(30),
+        type: DataTypes.STRING(100),
         // allowNull: false
     },
     phone: DataTypes.STRING(11),
