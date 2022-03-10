@@ -10,12 +10,14 @@ const Student = sequelize.define("student", {
         primaryKey: true,
         allowNull: false,
     },
-    stuCode: DataTypes.INTEGER,
+    stuCode: DataTypes.STRING(11),
     gpa: DataTypes.FLOAT(1, 2),
     courseCreadits: DataTypes.INTEGER,
     codeLevel: DataTypes.INTEGER,
     note: DataTypes.STRING(100),
     capstone: DataTypes.STRING(50),
+    class: DataTypes.STRING(10),
+    isApproved: DataTypes.BOOLEAN,
     userId: {
         type: DataTypes.UUID,
         references: {
