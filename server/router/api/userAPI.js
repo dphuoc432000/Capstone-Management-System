@@ -5,5 +5,6 @@ const userController = require('../../controller/UserController');
 router.post('/add', userController.addUser);//(Test)
 router.post('/update/:userId', userController.updateUser);//(Test)
 router.post('/delete/:userId', userController.removeUserById);
+router.post('/signin', userController.signin);
 
 module.exports = router;

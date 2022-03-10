@@ -54,6 +54,11 @@ class UserController {
                 return res.status(400).json(err);
             })
     }
+
+    signin = async (req,res)=>{
+        const data = await userService.signin(req.body);
+        res.status(200).send(data);
+    }
 }
 
 module.exports = new UserController();

@@ -1,4 +1,9 @@
+
 const { User } = require("../db/postgresql/PostgreSQL");
+const database = require("../db/postgresql/PostgreSQL");
+var jwt = require("jsonwebtoken");
+const config = require("../config/auth.config");
+var bcrypt = require("bcryptjs");
 
 class UserService {
 
@@ -34,6 +39,47 @@ class UserService {
                 return data;
             });
     }
+
+    signin = async (account) => {
+        return await database.User.findOne({
+            where: {
+              email: account.email
+            }
+          })
+          .then( async (user) => {
+            if (!user) {
+              return "account Not found."
+            }
+      
+            // var passwordIsValid = bcrypt.compareSync(
+            //     account.password,
+            //   user.password
+            // );
+
+            var passwordIsValid = account.password === user.password?true:false;
+      
+            if (!passwordIsValid) {
+                return "Invalid Password!"
+            }
+            const token = jwt.sign({
+              id: user.userId
+            }, process.env.jwtsecret, {
+              expiresIn: config.jwtExpiration // 24 hours
+            });
+            const roles = await database.UserRole.findAll({
+                where: {userId: user.userId}
+            });
+            const roleUser =await Promise.all(roles.map(async element => {
+                return await database.Role.findOne({
+                    where: {roleId: element.roleId}
+                }).then( rl=>{
+                  return  rl.roleName;
+                });
+            }));
+            console.log(roleUser);
+            return {...user.toJSON(), token, roleUser};
+          });
+      };
 }
 
 module.exports = new UserService();

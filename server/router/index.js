@@ -4,6 +4,7 @@ const user_roleAPI = require('./api/user_roleAPI');
 const lecturerAPI = require('./api/lecturerAPI');
 const departmentAPI = require('./api/departmentAPI');
 const majorAPI = require('./api/majorAPI');
+const studentAPI = require('./api/studentAPI')
 
 function router(server) {
     server.use('/api/role/', roleAPI);
@@ -12,6 +13,7 @@ function router(server) {
     server.use('/api/lecturer/', lecturerAPI);
     server.use('/api/department/', departmentAPI);
     server.use('/api/major/', majorAPI);
+    server.use('/api/student/', studentAPI)
 }
 
 
