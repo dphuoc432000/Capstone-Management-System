@@ -6,13 +6,21 @@ const { Department } = require('./DepartmentModel');
 const Major = sequelize.define("major", {
     majorId: {
         type: DataTypes.UUID,
-        defaultValue: DataTypes.UUIV4,
+        defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
         allowNull: false,
+    },
+    majorCode: {
+        type: DataTypes.STRING(10),
+        allowNull: false,
+        unique: true
     },
     majorName: {
         type: DataTypes.STRING(50),
         allowNull: false
+    },
+    majorDesc: {
+        type: DataTypes.TEXT,
     },
     depId: {
         type: DataTypes.UUID,

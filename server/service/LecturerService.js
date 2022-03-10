@@ -5,6 +5,9 @@ const userRoleService = require('./UserRoleService');
 const roleService = require('./RoleService');
 const { sendEmailUser, LectureMail } = require('../helper/SendEmail');
 var validator = require("email-validator");
+const majorService = require("./MajorService");
+const departmentService = require('./DepartmentService')
+const bcrypt = require('bcrypt');
 
 class LecturerService {
 
@@ -14,8 +17,9 @@ class LecturerService {
         if (validator.validate(email)) {
 
             //Tạo user
+            //mã hóa password
             let userId;
-            const userData = await userService.addUser({ email, password })
+            const userData = await userService.addUser({ email, password: bcrypt.hashSync(password, 10) })
                 .then(data => {
                     //kiểm tra user có phải là object 
                     if (checkObject(data)) {
@@ -103,6 +107,70 @@ class LecturerService {
         return null;
     }
 
+    //Danh sachs Lecturer
+    getAllLecturer = async () => {
+        return await Lecturer.findAll({raw:true})
+            .then(async dataList => {
+                return await Promise.all(dataList.map(async data => {
+                    return await this.getLecturerByUserId(data.userId, data);
+                }))
+            })
+    }
+
+    //Lấy thông tin một lecturer bằng userId
+    //lecturer: biến phụ có thể có hoặc không
+    getLecturerByUserId = async (userId, lecturer) => {
+        const user = await userService.getUserByUserId(userId)
+            .then(async userData => {
+                let lecturerData;
+                if (!lecturer)
+                    lecturerData = await Lecturer.findOne({ where: { userId }, raw: true })
+                else
+                    lecturerData = lecturer;
+                return {
+                    ...userData,
+                    ...lecturerData,
+                }
+            }).then(async userData => {
+                if (userData.majorId) {
+                    return await majorService.getMajorByMajorId(userData.majorId)
+                        .then(async major => {
+                            delete userData.majorId;
+                            delete major.createdAt;
+                            delete major.createdAt;
+                            delete major.updatedAt;
+                            return {
+                                ...userData,
+                                major
+                            }
+                        })
+                        .then(async userData => {
+                            if (userData.major.depId) {
+                                const department = await departmentService.getDepartmentByDepId(userData.major.depId);
+                                delete userData.major.depId;
+                                delete department.createdAt;
+                                delete department.updatedAt;
+                                return {
+                                    ...userData,
+                                    major: {
+                                        ...userData.major,
+                                        department
+                                    }
+                                }
+                            }
+                        })
+                }
+                delete userData.majorId;
+                return {
+                    ...userData,
+                    major: null
+                }
+            })
+        delete user.password;
+        delete user.createdAt;
+        delete user.updatedAt;
+        return user;
+    }
 }
 
 module.exports = new LecturerService();

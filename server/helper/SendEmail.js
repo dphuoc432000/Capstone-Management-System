@@ -1,7 +1,6 @@
 const mailer_config = require('../config/mailer.config');
 const nodemailer = require('nodemailer');
 
-
 const LectureMail = (email, password) => {
     return {
         from: mailer_config.CMS_USERNAME, // sender address

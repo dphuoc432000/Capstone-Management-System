@@ -9,6 +9,11 @@ const Department = sequelize.define("department", {
         primaryKey: true,
         allowNull: false,
     },
+    depCode: {
+        type: DataTypes.STRING(10),
+        allowNull: false,
+        unique: true
+    },
     depName: {
         type: DataTypes.STRING(50),
         allowNull: false,
