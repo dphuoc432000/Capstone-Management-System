@@ -28,6 +28,7 @@ export default [
     numeric: true,
     disablePadding: false,
     label: "Leader",
+    editable: true,
   },
   {
     id: "groupId",

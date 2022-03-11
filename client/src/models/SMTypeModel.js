@@ -1,0 +1,60 @@
+export default [
+    { field: "id", headerName: "ID", width: 90 },
+  {
+    field: "fullName",
+    headerName: "Full name",
+    width: 200,
+    editable: true,
+  },
+  {
+    field: "studentID",
+    headerName: "Student ID",
+    width: 140,
+    editable: true,
+  },
+  {
+    field: "email",
+    headerName: "Email",
+    width: 220,
+    editable: true,
+  },
+  {
+    field: "phoneNumber",
+    headerName: "Phone Number",
+    width: 140,
+    editable: true,
+  },
+  {
+    field: "gpa",
+    headerName: "GPA",
+    type: "number",
+    width: 100,
+    editable: true,
+  },
+  {
+    field: "capstoneType",
+    headerName: "Capstone Type",
+    width: 170,
+    editable: true,
+  },
+  {
+    field: "codingLevel",
+    headerName: "Coding Level",
+    width: 170,
+    editable: true,
+  },
+  {
+    field: "remainCredits",
+    headerName: "Remaining Credits",
+    type: "number",
+    width: 140,
+    editable: true,
+  },
+  {
+    field: "isInternship",
+    headerName: "Had an internship",
+    type: "checkbox",
+    width: 140,
+    editable: true,
+  },
+];

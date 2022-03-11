@@ -3,6 +3,8 @@ import Sidebar from "../../ui/Menu/Sidebar/Sidebar.component";
 import StudentRouter from "../../router/Student/StudentRouter";
 import Navbar from "../../ui/Menu/Navbar/Navbar.component";
 import styles from "./Dashboard.module.scss";
+import GeneralRouter from "../../router/General/GeneralRouter";
+import MorderatorRouter from "../../router/Morderator/MorderatorRouter";
 
 function Dashboard() {
   const [isShownSidebar, setIsShownSidebar] = useState(true);
@@ -27,16 +29,18 @@ function Dashboard() {
   }
 
   return (
-    <div className={styles["dashboard"] + " w-100 h-100"}>
+    <div className={styles["dashboard"] + " w-100 h-100 dashboard"}>
       {showSidebar()}
       <div className={styles["dashboard_right"] + (isShownSidebar ? " ml-auto" : " w-100")}>
         <div className="w-100" style={{ position: "absolute" }}>
           <Navbar openSidebar={() => setIsShownSidebar(!isShownSidebar)} isShownSidebarIcon={true}></Navbar>
         </div>
-        <div className={styles["dashboard_right_body"] + " w-100"}>
+        <div className={styles["dashboard_right_body"] + " w-100 dashboard_right"}>
           <div style={{ height: "64px" }} className="w-100" />
           <div style={{ height: getHeight() + "px" }}>
             <StudentRouter></StudentRouter>
+            <MorderatorRouter></MorderatorRouter>
+            <GeneralRouter></GeneralRouter>
           </div>
         </div>
       </div>

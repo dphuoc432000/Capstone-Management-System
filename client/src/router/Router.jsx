@@ -1,13 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "../pages/Home/Home.page";
 import Dashboard from "../pages/Dashboard/Dashboard.page";
 import Login from "../pages/Login/Login.page";
 import RegisterCapstone from "../pages/RegisterCapstone/RegisterCapstone.component";
 import About from "../pages/About/About.page";
 
-function Home(){
-  return <h1>Homepage</h1>
-}
 export default function AppRouter() {
   return (
     <Router>

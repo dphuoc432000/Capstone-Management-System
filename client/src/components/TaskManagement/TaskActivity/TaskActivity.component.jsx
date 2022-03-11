@@ -1,7 +1,7 @@
 import React from "react";
-import RoundedAvatar from "../../../../ui/Avatar/RoundedAvatar/RoundedAvatar.component";
+import RoundedAvatar from "../../../ui/Avatar/RoundedAvatar/RoundedAvatar.component";
 import styles from "./TaskActivity.module.scss";
-import DateConverter from "../../../../services/Converter/DateConverter";
+import DateConverter from "../../../services/Converter/DateConverter";
 
 function TaskActivity({ fullName, activity, tag, time }) {
   return (

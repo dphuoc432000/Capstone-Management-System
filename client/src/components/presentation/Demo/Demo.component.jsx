@@ -25,11 +25,11 @@ class Demo extends Component {
           }}
           type="button"
         >
-          Count231234
+          Count
         </button>
 
         <button onClick={() => active()} type="button">
-          Active2235555
+          Active
         </button>
         <Stack spacing={2} direction="row">
           <Button
@@ -42,7 +42,7 @@ class Demo extends Component {
             }}
             variant="contained"
           >
-            Contained1234
+            Contained
           </Button>
         </Stack>
       </div>
