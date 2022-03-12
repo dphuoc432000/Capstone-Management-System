@@ -4,16 +4,15 @@ import Sidebar from "../../../../components/ActivityNotification/Sidebar/Sidebar
 import Body from "../../../../components/Body/Body.component";
 import Header from "../../../../components/Header/Header.component";
 import Pagination from "@mui/material/Pagination";
-import styles from "./ActivityNotification.module.scss";
+import styles from "./Notification.module.scss";
 import NotificationDetail from "../../../../components/ActivityNotification/NotificationDetail/NotificationDetail.component";
 import NotificationsActiveOutlinedIcon from "@mui/icons-material/NotificationsActiveOutlined";
-import NotificationForm from "../../../../components/ActivityNotification/NotificationForm/NotificationForm.component";
 
-function ActivityNotification() {
+function Notification() {
     const [notifications, setNotifications] = useState([
         {
             notificationId: "1",
-            title: "Lorem ipsum dolor sit amet.1Lorem ipsum dolor sit amet.1Lorem ipsum dolor sit amet.1",
+            title: "Lorem ipsum dolor sit amet.1",
             content:
                 "Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque obcaecati impedit perferendis accusantium eius vero deserunt iusto, veniam expedita vitae.",
             createdAt: "2022-02-24 15:15:41.781+07",
@@ -91,39 +90,19 @@ function ActivityNotification() {
     ]);
 
     const [page, setPage] = useState(1);
-    const [isOpen, setIsOpen] = useState(false);
-    const [currentNotification, setCurrentNotification] = useState({});
-    const [notificationIndex, setNotificationIndex] = useState(-1);
+    const [notificationDetail, setNotificationDetail] = useState({ title: "" });
 
-    const openNotificationDetail = (notification, cNotificationIndex) => {
-        setCurrentNotification(notification);
-        setNotificationIndex(cNotificationIndex);
+    const openNotificationDetail = (notification) => {
+        setNotificationDetail(notification);
     };
 
     const addNotification = (notification) => {
-        notifications = [notification].concat(notifications);
+        notifications.push(notification);
         setNotifications([...notifications]);
-    };
-
-    const updateNotification = (notification) => {
-        notifications[notificationIndex] = notification;
-        setNotifications([...notifications]);
-        setCurrentNotification(notification);
-    };
-
-    const deleteNotification = () => {
-        notifications.splice(notificationIndex, 1);
-        setNotifications([...notifications]);
-        setNotificationIndex(-1);
-        setCurrentNotification({});
     };
 
     return (
-        <div
-            className={
-                styles["activity-notification"] + " activity-notification"
-            }
-        >
+        <div className={styles["activity-notification"]}>
             <Header>
                 <h5>Activity Notification</h5>
                 <div className="w-50 d-flex justify-content-end">
@@ -141,18 +120,7 @@ function ActivityNotification() {
                         " d-flex w-100 h-100 llight-top-border"
                     }
                 >
-                    {!isOpen || (
-                        <NotificationForm
-                            onClose={() => setIsOpen(false)}
-                            onSubmit={updateNotification}
-                            text="Update"
-                            defaultNotification={currentNotification}
-                        />
-                    )}
-                    <Sidebar
-                        addNotification={addNotification}
-                        updateNotification={updateNotification}
-                    >
+                    <Sidebar addNotification={addNotification}>
                         {notifications.map(
                             (notification, notificationIndex) => {
                                 let currentPage = page - 1;
@@ -166,8 +134,7 @@ function ActivityNotification() {
                                             className="llight-bottom-border mb-2"
                                             onClick={() =>
                                                 openNotificationDetail(
-                                                    notification,
-                                                    notificationIndex
+                                                    notification
                                                 )
                                             }
                                         >
@@ -191,14 +158,11 @@ function ActivityNotification() {
                             color="primary"
                         />
                     </Sidebar>
-                    {Object.keys(currentNotification).length ? (
+                    {notificationDetail.title ? (
                         <NotificationDetail
-                            title={currentNotification.title}
-                            content={currentNotification.content}
-                            createdAt={currentNotification.createdAt}
-                            onClose={() => setCurrentNotification({})}
-                            onDelete={deleteNotification}
-                            onUpdate={() => setIsOpen(true)}
+                            title={notificationDetail.title}
+                            content={notificationDetail.content}
+                            createdAt={notificationDetail.createdAt}
                         />
                     ) : (
                         <div className="d-flex w-75">
@@ -220,4 +184,4 @@ function ActivityNotification() {
     );
 }
 
-export default ActivityNotification;
+export default Notification;

@@ -26,12 +26,26 @@ body {
   height: 100vh;
 }
 
+.ck.ck-dropdown__panel{
+  width: 400px !important;
+}
+
+
 .activity-notification_sidebar .ck-editor__editable:not(.ck-editor__nested-editable) { 
+  min-height: 400px;
+}
+
+.activity-notification .ck-editor__editable:not(.ck-editor__nested-editable) { 
   min-height: 400px;
 }
 
 .light-text {
   color: #b3b3b3;
+}
+
+
+.hlight-text {
+  color: #7f8fa6;
 }
 
 .bold-light-text {

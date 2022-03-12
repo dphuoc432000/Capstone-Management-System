@@ -1,23 +1,25 @@
 import React from "react";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import FullEditor from 'ckeditor5-build-full'
+import "./AdvancedEditor.stylesheet.css";
 
 function AdvancedEditor({ defaultValue, onChange }) {
     return (
         <CKEditor
-            editor={ClassicEditor}
+            editor={FullEditor}
             config={{
                 removePlugins: [
-                    "CKFinderUploadAdapter",
-                    "CKFinder",
-                    "EasyImage",
-                    "Image",
-                    "ImageCaption",
-                    "ImageStyle",
-                    "ImageToolbar",
+                    // "CKFinderUploadAdapter",
+                    // "CKFinder",
+                    // "EasyImage",
+                    // "Image",
+                    // "ImageCaption",
+                    // "ImageStyle",
+                    // "ImageToolbar",
                     "ImageUpload",
                     "MediaEmbed",
                 ],
+                
             }}
             data={defaultValue}
             onReady={(editor) => {
