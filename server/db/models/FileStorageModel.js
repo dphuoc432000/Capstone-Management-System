@@ -11,11 +11,11 @@ const FileStorage = sequelize.define("file_storage", {
         allowNull: false,
     },
     fileName: {
-        type: DataTypes.STRING(50),
+        type: DataTypes.STRING(255),
         allowNull: false,
     },
     type:{
-        type: DataTypes.STRING(50),
+        type: DataTypes.STRING(255),
         allowNull: false,
     },
     path: {
