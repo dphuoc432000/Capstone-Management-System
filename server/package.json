@@ -1,7 +1,6 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "nodemon --experimental-modules --es-module-specifier-resolution=node index.js",
@@ -18,7 +17,7 @@
   },
   "homepage": "https://github.com/dphuoc432000/Capstone-Management-System#readme",
   "dependencies": {
-    "axios": "^0.26.0",
+    "axios": "^0.26.1",
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.2",
@@ -37,5 +36,7 @@
   "devDependencies": {
     "morgan": "^1.10.0",
     "nodemon": "^2.0.15"
-  }
+  },
+  "keywords": [],
+  "description": ""
 }

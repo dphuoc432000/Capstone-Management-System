@@ -14,6 +14,8 @@ const majorService = require("./MajorService");
 const departmentService = require('./DepartmentService')
 const bcrypt = require('bcrypt');
 const excelJS = require("exceljs");
+const database = require("../db/postgresql/PostgreSQL");
+
 
 class LecturerService {
 
@@ -177,6 +179,8 @@ class LecturerService {
                         .then(async userData => {
                             if (userData.major.depId) {
                                 const department = await departmentService.getDepartmentByDepId(userData.major.depId);
+                                const depCode = department.depCode;
+                                const depName = department.depName;
                                 delete userData.major.depId;
                                 delete department.createdAt;
                                 delete department.updatedAt;
@@ -185,7 +189,9 @@ class LecturerService {
                                     major: {
                                         ...userData.major,
                                         department
-                                    }
+                                    },
+                                    depCode,
+                                    depName
                                 }
                             }
                         })
@@ -244,7 +250,7 @@ class LecturerService {
                 width: 10
             },
             {
-                header: "Department Name",
+                header: "Department",
                 key: "depName",
                 width: 10
             },
@@ -263,8 +269,15 @@ class LecturerService {
             };
         });
         try {
-            const data = await workbook.xlsx.writeFile(`${path}/users.xlsx`);
-            console.log(path);
+            let url = `${path}/users.xlsx`;
+            let fileName = "users.xlsx";
+            let type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            database.FileStorage.create({
+                fileName: fileName,
+                type:type,
+                path: url
+            });
+            let data = await workbook.xlsx.writeFile(`${path}/users.xlsx`);
             return data;
         } catch (err) {
             return "ERROR EXPORT FILE"
