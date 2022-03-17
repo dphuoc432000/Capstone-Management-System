@@ -93,37 +93,28 @@ class LecturerService {
         majorId,
         academicLevel
     } */
-    updateLecturerAndUser = async (dataUpdate) => {
+    updateLecturerAndUser = async (userId, dataUpdate) => {
         if (checkObject(dataUpdate)) {
-            return await userService.getUserByUserId(dataUpdate.userId)
+            return await userService.getUserByUserId(userId)
                 .then(async (data) => {
                     if (data) {
-                        const userId = data.userId;
-                        if (userId) {
-                            const userInfor = {
-                                firstName: dataUpdate.firstName,
-                                lastName: dataUpdate.lastName,
-                                email: dataUpdate.email,
-                                phone: dataUpdate.phone,
-                                majorId: dataUpdate.majorId,
-                            }
-                            const lecturerInfor = {
-                                academicLevel: dataUpdate.academicLevel
-                            }
-                            //update data user table
-                            const updateUserData = await userService.updateUser(userInfor, {
-                                userId
-                            })
-                            //update data lecturer table
-                            const updateLecturerData = await Lecturer.update(lecturerInfor, {
-                                where: {
-                                    userId
-                                }
-                            })
-                            return {
-                                user_row_updated: updateUserData[0],
-                                lecture_row_updated: updateLecturerData[0]
-                            }
+                        const userInfor = {
+                            firstName: dataUpdate.firstName,
+                            lastName: dataUpdate.lastName,
+                            email: dataUpdate.email,
+                            phone: dataUpdate.phone,
+                            majorId: dataUpdate.majorId,
+                        }
+                        const lecturerInfor = {
+                            academicLevel: dataUpdate.academicLevel
+                        }
+                        //update data user table
+                        const updateUserData = await userService.updateUser(userInfor, { userId })
+                        //update data lecturer table
+                        const updateLecturerData = await Lecturer.update(lecturerInfor, { where: { userId } })
+                        return {
+                            user_row_updated: updateUserData[0],
+                            lecture_row_updated: updateLecturerData[0]
                         }
                     }
                     return "USER NOT FOUND";
@@ -134,9 +125,7 @@ class LecturerService {
 
     //Danh sachs Lecturer
     getAllLecturer = async () => {
-        return await Lecturer.findAll({
-                raw: true
-            })
+        return await Lecturer.findAll({ raw: true })
             .then(async dataList => {
                 return await Promise.all(dataList.map(async data => {
                     return await this.getLecturerByUserId(data.userId, data);
@@ -169,38 +158,32 @@ class LecturerService {
                         .then(async major => {
                             delete userData.majorId;
                             delete major.createdAt;
-                            delete major.createdAt;
                             delete major.updatedAt;
                             return {
                                 ...userData,
-                                major
+                                // major
+                                ...major
                             }
                         })
                         .then(async userData => {
-                            if (userData.major.depId) {
-                                const department = await departmentService.getDepartmentByDepId(userData.major.depId);
-                                const depCode = department.depCode;
-                                const depName = department.depName;
-                                delete userData.major.depId;
+                            if (userData.depId) {
+                                const department = await departmentService.getDepartmentByDepId(userData.depId);
+                                delete userData.depId;
                                 delete department.createdAt;
                                 delete department.updatedAt;
                                 return {
                                     ...userData,
-                                    major: {
-                                        ...userData.major,
-                                        department
-                                    },
-                                    depCode,
-                                    depName
+                                    // major: {
+                                    //     ...userData.major,
+                                    //     department
+                                    // }
+                                    ...department
                                 }
                             }
+                            return userData;
                         })
                 }
-                delete userData.majorId;
-                return {
-                    ...userData,
-                    major: null
-                }
+                return userData;
             })
         delete user.password;
         delete user.createdAt;

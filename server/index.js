@@ -5,6 +5,7 @@ const PORT = process.env.PORT || 5000;
 const router = require('./router/index');
 const db = require('./db/index');
 const path = require('path');
+const { deleteFile } = require("./helper/handleFile");
 
 db.connect();
 router(server);
@@ -14,9 +15,12 @@ server.get('/',(req,res)=>{
 
 //download
 server.get('/download', function(req, res){
-  const file = `${__dirname}/upload/3112022363882714-New Microsoft Word Document.docx`;
+  const file = `${__dirname}/upload/3142022454411912-C1SE.31-ProductBacklogAndUserStory-v1.5.xlsx`;
   res.download(file); // Set disposition and send it.
 });
+
+//
+console.log(deleteFile('\\upload\\roles.csv'));
 
 
 server.listen(PORT, () => {

@@ -10,7 +10,11 @@ class NotificationController {
             ...req.body,
             userId: req.params.userId
         }
-        const files = req.files;
+        const file1 = req.files.file1 ? req.files.file1[0]: null;
+        const file2 = req.files.file2 ? req.files.file2[0]: null;
+        const file3 = req.files.file3 ? req.files.file3[0]: null;
+        const file4 = req.files.file4 ? req.files.file4[0]: null;
+        const files = [file1, file2, file3, file4];
         await notificationService.addNotification(notification, files)
             .then(data =>{
                 if(data)
@@ -22,6 +26,41 @@ class NotificationController {
             })
     }
 
+    //Chi tiết notificaion
+    //GET: /get/:notificationId
+    getNotificationByNotificationId = async (req, res, next) =>{
+        await notificationService.getNotificationByNotificationId(req.params.notificationId)
+            .then(data =>{
+                if(data)
+                    return res.status(200).json(data);
+                return res.status(404).send("Không tìm thấy notification");
+            })
+            .catch(err =>{
+                return res.status(400).send(err);
+            })
+    }
+
+    //Danh sach notification
+    //GET: /list
+    getAllNotification = async (req, res, next) =>{
+        await notificationService.getAllNotification()
+            .then(data =>{
+                return res.status(200).json(data);
+            })
+            .catch(err =>{
+                return res.status(400).json(err)
+            })
+    }
+
+    deleteNotificationByNotificationID = async (req, res, next) =>{
+        await notificationService.deleteNotificationByNotificationID(req.params.notificationId)
+            .then(data =>{
+                return res.status(200).json(data)
+            })
+            .catch(err =>{
+                return res.status(400).json(err)
+            })
+    }
 }
 
 module.exports = new NotificationController();
