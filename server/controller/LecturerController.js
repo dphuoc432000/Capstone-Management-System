@@ -26,8 +26,9 @@ class LecturerController {
     //Cập nhật lecture
     //Post: /update/:userId
     updateLecturerAndUser = async (req, res, next) => {
+        const userId = req.params.userId;
         const dataUpdate = req.body;
-        await lecturerService.updateLecturerAndUser(dataUpdate)
+        await lecturerService.updateLecturerAndUser(userId, dataUpdate)
             .then(data => {
                 if (data !== "USER NOT FOUND")
                     return res.status(200).send("Cập nhật thành công");

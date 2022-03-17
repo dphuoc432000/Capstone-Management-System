@@ -18,6 +18,14 @@ class NotificationFileService {
         }
         return null;
     }
+
+    getAllFileByNotificationiId = async (notificationId) =>{
+        return await NotificationFile.findAll({
+            where: {
+                notificationId
+            }, raw: true
+        })
+    }
 }
 
 module.exports = new NotificationFileService();
