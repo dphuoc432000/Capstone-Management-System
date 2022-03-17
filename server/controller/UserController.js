@@ -56,8 +56,12 @@ class UserController {
     }
 
     signin = async (req,res)=>{
-        const data = await userService.signin(req.body);
-        res.status(200).send(data);
+        await userService.signin(req.body)
+        .then( data=>{
+            data === "Invalid Password!"|| data ==="account Not found"?res.status(400).send("login fail"):res.status(200).send(data);
+        }).catch(err=>{
+            res.status(400).send(err)
+        })
     }
 }
 

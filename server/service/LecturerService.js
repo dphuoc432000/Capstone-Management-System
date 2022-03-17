@@ -1,25 +1,39 @@
-const { Lecturer } = require("../db/models/LecturerModel")
+const {
+    Lecturer
+} = require("../db/models/LecturerModel")
 const userService = require("./UserService");
 const checkObject = require('../utils/checkObject');
 const userRoleService = require('./UserRoleService');
 const roleService = require('./RoleService');
-const { sendEmailUser, LectureMail } = require('../helper/SendEmail');
+const {
+    sendEmailUser,
+    LectureMail
+} = require('../helper/SendEmail');
 var validator = require("email-validator");
 const majorService = require("./MajorService");
 const departmentService = require('./DepartmentService')
 const bcrypt = require('bcrypt');
+const excelJS = require("exceljs");
+const database = require("../db/postgresql/PostgreSQL");
+
 
 class LecturerService {
 
     //Thêm lecturer[mentor]
-    addLecturer = async ({ email, password }) => {
+    addLecturer = async ({
+        email,
+        password
+    }) => {
         //validate email
         if (validator.validate(email)) {
 
             //Tạo user
             //mã hóa password
             let userId;
-            const userData = await userService.addUser({ email, password: bcrypt.hashSync(password, 10) })
+            const userData = await userService.addUser({
+                    email,
+                    password: bcrypt.hashSync(password, 10)
+                })
                 .then(data => {
                     //kiểm tra user có phải là object 
                     if (checkObject(data)) {
@@ -37,10 +51,15 @@ class LecturerService {
 
             if (userId && roleId) {
                 //Tạo role mentor cho user trong bảng userRole
-                await userRoleService.addUserRole({ userId, roleId })
+                await userRoleService.addUserRole({
+                    userId,
+                    roleId
+                })
 
                 const lecturerData = await Lecturer.findOrCreate({
-                    where: { userId },
+                    where: {
+                        userId
+                    },
                     defaults: {
                         userId: userId
                     }
@@ -121,7 +140,12 @@ class LecturerService {
             .then(async userData => {
                 let lecturerData;
                 if (!lecturer)
-                    lecturerData = await Lecturer.findOne({ where: { userId }, raw: true })
+                    lecturerData = await Lecturer.findOne({
+                        where: {
+                            userId
+                        },
+                        raw: true
+                    })
                 else
                     lecturerData = lecturer;
                 return {
@@ -165,6 +189,82 @@ class LecturerService {
         delete user.createdAt;
         delete user.updatedAt;
         return user;
+    }
+
+    exportFile = async () => {
+
+        const workbook = new excelJS.Workbook(); // Create a new workbook
+        const worksheet = workbook.addWorksheet("My Users"); // New Worksheet
+        const path = "./files"; // Path to download excel
+        // Column for data in excel. key must match data key
+        worksheet.columns = [{
+                header: "S no.",
+                key: "s_no",
+                width: 10
+            },
+            {
+                header: "First Name",
+                key: "firstName",
+                width: 10
+            },
+            {
+                header: "Last Name",
+                key: "lastName",
+                width: 10
+            },
+            {
+                header: "Email",
+                key: "email",
+                width: 10
+            },
+            {
+                header: "Phone Number",
+                key: "phone",
+                width: 10
+            },
+            {
+                header: "Academic Level",
+                key: "academicLevel",
+                width: 10
+            },
+            {
+                header: "Department Code",
+                key: "depCode",
+                width: 10
+            },
+            {
+                header: "Department",
+                key: "depName",
+                width: 10
+            },
+        ];
+        let counter = 1;
+        const lectures = await this.getAllLecturer();
+        lectures.forEach((user) => {
+            user.s_no = counter;
+            worksheet.addRow(user); // Add data in worksheet
+            counter++;
+        });
+        // Making first line in excel bold
+        worksheet.getRow(1).eachCell((cell) => {
+            cell.font = {
+                bold: true
+            };
+        });
+        try {
+            let url = `${path}/users.xlsx`;
+            let fileName = "users.xlsx";
+            let type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            database.FileStorage.create({
+                fileName: fileName,
+                type:type,
+                path: url
+            });
+            let data = await workbook.xlsx.writeFile(`${path}/users.xlsx`);
+            return data;
+        } catch (err) {
+            return "ERROR EXPORT FILE"
+        }
     }
 }
 

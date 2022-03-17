@@ -9,7 +9,10 @@ class LecturerController {
         //{email}
         const email = req.body.email.trim();
         const password = generalPassword();
-        await lecturerService.addLecturer({ email, password })
+        await lecturerService.addLecturer({
+                email,
+                password
+            })
             .then(data => {
                 if (data) {
                     if (data !== "USERID DUPPLICATE")
@@ -65,6 +68,23 @@ class LecturerController {
             .catch(err => {
                 return res.status(400).json(err);
             })
+    }
+
+    //GET: /exportFile
+    exportFile = async (req, res) => {
+
+        try {
+            lecturerService.exportFile();
+            res.send({
+                status: "200",
+                message: "file successfully downloaded",
+            });
+        } catch (err) {
+            res.send({
+                status: "400",
+                message: "Something went wrong",
+            });
+        }
     }
 
 }

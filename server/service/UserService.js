@@ -48,15 +48,15 @@ class UserService {
           })
           .then( async (user) => {
             if (!user) {
-              return "account Not found."
+              return "account Not found"
             }
       
-            // var passwordIsValid = bcrypt.compareSync(
-            //     account.password,
-            //   user.password
-            // );
+            var passwordIsValid = bcrypt.compareSync(
+                account.password,
+              user.password
+            );
 
-            var passwordIsValid = account.password === user.password?true:false;
+            // var passwordIsValid = account.password === user.password?true:false;
       
             if (!passwordIsValid) {
                 return "Invalid Password!"
@@ -76,7 +76,6 @@ class UserService {
                   return  rl.roleName;
                 });
             }));
-            console.log(roleUser);
             return {...user.toJSON(), token, roleUser};
           });
       };

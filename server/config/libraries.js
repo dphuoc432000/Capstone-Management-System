@@ -8,11 +8,12 @@ const path = require('path');
 
 function initLibraries() {
   const server = express();
-  server.use(cors({
-    origin: HOST_URL,
-    optionsSuccessStatus: 200,
-    credentials: true
-  }));
+  server.use(cors());
+  // server.use(cors({
+  //   origin: HOST_URL,
+  //   optionsSuccessStatus: 200,
+  //   credentials: true
+  // }));
   server.use(cookieParser());
   server.use(bodyParser.urlencoded({extended: false}));
   // server.use(bodyParser.urlencoded({ limit: "2mb", extended: true }));

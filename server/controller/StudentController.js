@@ -7,9 +7,8 @@ class StudentController {
                 if (data !== "STUDENT IS IN DB") {
                     return res.status(200).send(data);
                 }
-                return res.status(400).send("register fail");
+                return res.status(400).send("STUDENT IS IN DB");
             }
-            return res.status(400).send("register fail");
         }).catch(err => {
             return res.status(500).send(err.message);
         })
@@ -32,6 +31,17 @@ class StudentController {
         }).catch(err => {
             return res.status(500).send(err.message);
         });
+    }
+
+    approveStudent = async (req,res)=>{
+        await studentService.approveStudent(req.params.id)
+        .then(data =>{
+            if(data){
+                res.status(200).send("update success");
+            }
+        }).catch(err=>{
+            res.status(500).send(err.message);
+        })
     }
 
     getAllStudent = async (req, res) => {
