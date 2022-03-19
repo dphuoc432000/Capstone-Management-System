@@ -5,7 +5,7 @@ const LectureMail = (user) => {
     return {
         from: mailer_config.CMS_USERNAME, // sender address
         to: user.email, // list of receivers
-        subject: `CMS - Cung Cấp Mật Khẩu`, // Subject line
+        subject: `CMS - Cung cấp mật khẩu`, // Subject line
         html: `
             Chào bạn,
             <p>Chúng tôi là hệ thống CMS từ Trường Đại học Duy Tân. Cung cấp tài khoản đăng nhập đến bạn: </p>
@@ -17,12 +17,13 @@ const LectureMail = (user) => {
                 <li>Cập nhật đầy đủ thông tin</li>
                 <li>Thay đổi mật khẩu</li>
             </ul>
-            <p><strong>Truy cập hệ thông: </strong> <a href="http://localhost:5000"/> .</p>
+            <p><strong>Truy cập hệ thông: </strong> <a href="http://localhost:5000"> Link truy cập hệ thống. </a> </p>
             <br />
             <p>Cảm ơn bạn vì đã sử dụng hệ thống. Chúc bạn sức khỏe!</p>
             `, // html body
     }
 }
+
 
 const studentEmail = (user) => {
     return {

@@ -25,8 +25,8 @@ const NotificationFile = sequelize.define("notification_file", {
     },
 })
 
-Notification.belongsToMany(FileStorage, {through: NotificationFile, foreignKey: 'notificationId'});
-FileStorage.belongsToMany(Notification, {through: NotificationFile, foreignKey: 'fileId'});
+// Notification.belongsToMany(FileStorage, {through: NotificationFile, foreignKey: 'notificationId'});
+// FileStorage.belongsToMany(Notification, {through: NotificationFile, foreignKey: 'fileId'});
 
 const initNotificationFile = async () =>{
     return NotificationFile.sync({alter: true})
