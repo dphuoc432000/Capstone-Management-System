@@ -15,9 +15,9 @@ function initLibraries() {
   //   credentials: true
   // }));
   server.use(cookieParser());
-  server.use(bodyParser.urlencoded({extended: false}));
   // server.use(bodyParser.urlencoded({ limit: "2mb", extended: true }));
   server.use(bodyParser.json());
+  server.use(bodyParser.urlencoded({extended: true}));
   server.use(express.static(path.join(__dirname)));
   dotenv.config();
   return server;

@@ -17,7 +17,7 @@ const LectureMail = (email, password) => {
                 <li>Cập nhật đầy đủ thông tin</li>
                 <li>Thay đổi mật khẩu</li>
             </ul>
-            <p><strong>Truy cập hệ thông: </strong> <a href="http://localhost:5000"/> .</p>
+            <p><strong>Truy cập hệ thông: </strong> <a href="http://localhost:5000"> Link truy cập hệ thống. </a> </p>
             <br />
             <p>Cảm ơn bạn vì đã sử dụng hệ thống. Chúc bạn sức khỏe!</p>
             `, // html body

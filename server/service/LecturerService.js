@@ -12,7 +12,7 @@ const {
 var validator = require("email-validator");
 const majorService = require("./MajorService");
 const departmentService = require('./DepartmentService')
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const excelJS = require("exceljs");
 const database = require("../db/postgresql/PostgreSQL");
 

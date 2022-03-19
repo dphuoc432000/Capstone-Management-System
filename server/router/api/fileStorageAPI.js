@@ -7,7 +7,7 @@ router.post('/upload/:userId', uploadFile("upload\\notification").fields([
     {name: 'file1', maxCount: 1},
     {name: 'file2', maxCount: 1},
     {name: 'file3', maxCount: 1},
-    {name: 'file4', maxCount: 1}]), fileStorageController.addFile);//Test
+    {name: 'file4', maxCount: 1}]), fileStorageController.addFiles);//Test
 router.get('/', fileStorageController.get);
 
 module.exports = router;

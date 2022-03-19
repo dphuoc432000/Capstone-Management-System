@@ -5,7 +5,7 @@ class FileStorageController {
 
     //Thêm file cho userId (Test)
     //POST: /upload/:userId
-    addFile = async (req, res, next) =>{
+    addFiles = async (req, res, next) =>{
         
         const file1 = req.files.file1 ? req.files.file1[0]: null;
         const file2 = req.files.file2 ? req.files.file2[0]: null;
@@ -15,7 +15,7 @@ class FileStorageController {
         // console.log(files.file1)
         // console.log(files)
         const userId = req.params.userId;
-        await fileStorageService.addFile(files,userId)
+        await fileStorageService.addFiles(files,userId)
             .then(data =>{
                 if(data) //data trả về mảng
                     // return res.status(200).send("Lưu file thành công!");

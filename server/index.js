@@ -20,7 +20,7 @@ server.get('/download', function(req, res){
 });
 
 //
-console.log(deleteFile('\\upload\\roles.csv'));
+// console.log(deleteFile('\\upload\\roles.csv'));
 
 
 server.listen(PORT, () => {
