@@ -70,7 +70,7 @@ class LecturerService {
                 })
                 if (check) {
                     //gửi mail
-                    await sendEmailUser(email, password, LectureMail);
+                    await sendEmailUser({email, password}, LectureMail);
                     return {
                         user: userData,
                         lecturer: lecturerData[0]
