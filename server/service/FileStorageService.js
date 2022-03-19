@@ -52,6 +52,15 @@ class FileStorageService {
         }).catch(err => {console.log(err)});
 
     }
+
+    downloadFileByFileId = async(fileId) =>{
+        return await FileStorage.findOne({where:{fileId}, raw: true})
+            .then(data => {
+                if(data)
+                    return data.path;
+                return null;
+            })
+    }
 }
 
 module.exports = new FileStorageService();

@@ -1,4 +1,5 @@
 const fileStorageService = require('../service/FileStorageService') 
+const path = require('path');
 
 //api: /api/fileStorage/
 class FileStorageController {
@@ -30,6 +31,23 @@ class FileStorageController {
     //get
     get = async (req, res, next) =>{
         res.send('../index.html')
+    }
+
+    downloadFileByFileId = async(req, res, next) =>{
+        //trả về path
+        await fileStorageService.downloadFileByFileId(req.params.fileId)
+            .then(data =>{
+                if(data){
+                    const pathFolder = __dirname;
+                    // console.log(pathFolder)
+                    const file = `${pathFolder.substring(0, pathFolder.lastIndexOf('\\') + 1)}${data}`;
+                    // console.log(file)
+                    return res.download(file); // Set disposition and send it.
+                }
+                return res.status(400).send("Không tìm thấy file");
+            }).catch(err =>{
+                return res.status(400).json(err);
+            })
     }
 }
 
