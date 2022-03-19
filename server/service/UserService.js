@@ -32,6 +32,37 @@ class UserService {
         return await User.findOne({ where: { userId: userId }, raw: true });
     }
 
+    //getAllUser
+
+    getAllUser = async ()=>{
+      return await User.findAll({raw: true})
+      .then(async datas=>{
+        return await Promise.all(datas.map(async student=>{
+            const roles = await database.UserRole.findAll({
+                where: {userId: student.userId}
+            });
+            const roleUser =await Promise.all(roles.map(async element => {
+                return await database.Role.findOne({
+                    where: {roleId: element.roleId}
+                }).then( rl=>{
+                  return  rl.roleName;
+                });
+            }));
+            const department = await database.Major.findOne({
+                where: {majorId: student.majorId},
+            }).then(async major=>{
+                console.log(major.depId);
+                let dep = await database.Department.findOne({
+                    where: {depId: major.depId}
+                });
+                return dep.depName;
+            } );
+            delete student.password;
+            return {...student, department, roleUser};
+        }))
+      })
+    }
+
     //Xóa user theo user Id
     removeUserById = async (userId) => {
         return await User.destroy({ where: { userId: userId } })
@@ -41,7 +72,7 @@ class UserService {
     }
 
     signin = async (account) => {
-        return await database.User.findOne({
+        return database.User.findOne({
             where: {
               email: account.email
             }
@@ -50,11 +81,12 @@ class UserService {
             if (!user) {
               return "account Not found"
             }
-      
             var passwordIsValid = bcrypt.compareSync(
                 account.password,
               user.password
             );
+            console.log(passwordIsValid);
+
 
             // var passwordIsValid = account.password === user.password?true:false;
       
