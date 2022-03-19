@@ -1,6 +1,10 @@
 const database = require("../db/postgresql/PostgreSQL");
+const generatePassword = require("../helper/GeneralPassword");
+const { sendEmailUser, studentEmail } = require("../helper/SendEmail");
 const RoleService = require("./RoleService");
 const UserRoleService = require("./UserRoleService");
+const bcrypt = require('bcrypt');
+
 
 class StudentService {
     //userId undefine 
@@ -12,9 +16,8 @@ class StudentService {
                 email: student.email
             }
         });
-        console.log(data);
 
-        if (data) {
+        if (!data) {
             let userId;
             const user = await database.User.create({
                 firstName: student.firstName,
@@ -107,14 +110,51 @@ class StudentService {
         });
     }
 
-    approveStudent = async (params) => {
-        return await database.Student.update({
-            isApproved: true
-        }, {
+    approveStudent = async (studId) => {
+
+        return await database.Student.findOne({
             where: {
-                stuId: params
+                stuId: studId
             },
-        });
+            raw: true
+        }).then(async student => {
+            let countRow = await database.Student.update({
+                isApproved: true
+            }, {
+                where: {
+                    stuId: studId
+                },
+            });
+
+            if(countRow>0){
+                const password = generatePassword();
+                const passwordBcrypt = bcrypt.hashSync(password, 10);
+                await database.User.update({
+                    password: passwordBcrypt
+                }, {
+                    where: {
+                        userId: student.userId
+                    }
+                });
+
+                const info = await database.User.findOne({
+                    where: {
+                        userId: student.userId
+                    },
+                    raw: true
+                });
+                const sendInfo = {
+                    firstName: info.firstName,
+                    email: info.email,
+                    password: password,
+
+                }
+                await sendEmailUser(sendInfo, studentEmail);
+                return countRow;
+            }
+
+        })
+
     }
 }
 

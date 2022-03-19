@@ -6,5 +6,6 @@ router.post('/add', userController.addUser);//(Test)
 router.post('/update/:userId', userController.updateUser);//(Test)
 router.post('/delete/:userId', userController.removeUserById);
 router.post('/signin', userController.signin);
+router.get('/', userController.getAllUser);
 
 module.exports = router;

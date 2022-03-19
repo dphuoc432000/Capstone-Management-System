@@ -14,7 +14,7 @@ server.get('/',(req,res)=>{
 
 //download
 server.get('/download', function(req, res){
-  const file = `${__dirname}/upload/3112022363882714-New Microsoft Word Document.docx`;
+  const file = `${__dirname}/files/users.xlsx`;
   res.download(file); // Set disposition and send it.
 });
 

@@ -5,7 +5,7 @@ class StudentController {
         await studentService.registerExecuteProject(req.body).then(data => {
             if (data) {
                 if (data !== "STUDENT IS IN DB") {
-                    return res.status(200).send(data);
+                    return res.status(200).send("register success");
                 }
                 return res.status(400).send("STUDENT IS IN DB");
             }
@@ -39,7 +39,9 @@ class StudentController {
             if(data){
                 res.status(200).send("update success");
             }
+            else res.status(400).send("no file student");
         }).catch(err=>{
+            console.log(err.message);
             res.status(500).send(err.message);
         })
     }

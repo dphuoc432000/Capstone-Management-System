@@ -9,6 +9,7 @@ class LecturerController {
         //{email}
         const email = req.body.email.trim();
         const password = generalPassword();
+        // console.log(password);
         await lecturerService.addLecturer({
                 email,
                 password
