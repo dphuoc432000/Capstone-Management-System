@@ -1,16 +1,16 @@
 const mailer_config = require('../config/mailer.config');
 const nodemailer = require('nodemailer');
 
-const LectureMail = (email, password) => {
+const LectureMail = (user) => {
     return {
         from: mailer_config.CMS_USERNAME, // sender address
-        to: email, // list of receivers
-        subject: `SEDCO - Khôi phục mật khẩu`, // Subject line
+        to: user.email, // list of receivers
+        subject: `CMS - Cung cấp mật khẩu`, // Subject line
         html: `
             Chào bạn,
             <p>Chúng tôi là hệ thống CMS từ Trường Đại học Duy Tân. Cung cấp tài khoản đăng nhập đến bạn: </p>
-            <span><nobr>+ Email: <h4>${email}</h4></nobr></span>
-            <span><nobr>+ Password: <h4>${password}</h4></nobr><span>
+            <span><nobr>+ Email: <h4>${user.email}</h4></nobr></span>
+            <span><nobr>+ Password: <h4>${user.password}</h4></nobr><span>
             <br>
             <strong>Yêu cầu bắt buộc sau khi đăng nhập lần đầu tiên vào hệ thống</strong>
             <ul>
@@ -24,7 +24,7 @@ const LectureMail = (email, password) => {
     }
 }
 
-const sendEmailUser = async (email, password, objectNeedSend) => {
+const sendEmailUser = async ( user, objectNeedSend) => {
     let transporter = nodemailer.createTransport({
         host: mailer_config.MAILER_HOST,
         port: mailer_config.MAILER_PORT,
@@ -36,7 +36,7 @@ const sendEmailUser = async (email, password, objectNeedSend) => {
     });
 
     let info = await transporter.sendMail(
-        objectNeedSend(email, password)
+        objectNeedSend(user)
     )
         .then(data => data)
         .catch(err => err);
