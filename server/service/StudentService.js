@@ -4,6 +4,7 @@ const { sendEmailUser, studentEmail } = require("../helper/SendEmail");
 const RoleService = require("./RoleService");
 const UserRoleService = require("./UserRoleService");
 const bcrypt = require('bcrypt');
+const groupStudentService = require("./GroupStudentService");
 
 
 class StudentService {
@@ -14,7 +15,7 @@ class StudentService {
         let data = await database.User.findOne({
             where: {
                 email: student.email
-            }
+            }, raw: true
         });
 
         if (!data) {
@@ -53,7 +54,6 @@ class StudentService {
                 .then(data => {
                     roleId = data.roleId;
                 })
-
             if (userId && roleId) {
 
                 await UserRoleService.addUserRole({
@@ -155,6 +155,31 @@ class StudentService {
 
         })
 
+    }
+
+    checkStudentisApproved = async (stuId) =>{
+        return await database.Student.findOne({
+            where:{
+                stuId: stuId
+            },
+            raw: true
+        }).then(data => {
+            return data && data.isApproved?true:false
+        });
+    }
+
+    //Phuoc viet
+    //kiểm tra đã được approve chưa
+    //Kiểm tra studId và leaderId có chung nhóm không.
+    //Nếu chung => kiểm tra nhóm đó có phải nhóm NCKH không
+    //Kiểm tra nhóm đã đăng ký đồ án chưa
+    //Nếu chưa => tạo đồ án
+    createTopic = async (stuId, {title, description, leaderId}) =>{
+        //check student submit topic
+        if( await this.checkStudentisApproved(stuId) &&  await this.checkStudentisApproved(leaderId)){
+            console.log(await groupStudentService.getGroupIdByStuId(stuId))
+        }
+        return "UNAPPROVED STUDENT OR LEADER";
     }
 }
 
