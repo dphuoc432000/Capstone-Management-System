@@ -1,5 +1,6 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const { POSTGRESQL_DEVELOPMENT_HOST } = require("../config/dbconfig");
+const { Group } = require("./GroupModel");
 const sequelize = new Sequelize(POSTGRESQL_DEVELOPMENT_HOST);
 const { User } = require('./UserModel');
 
@@ -10,7 +11,10 @@ const Student = sequelize.define("student", {
         primaryKey: true,
         allowNull: false,
     },
-    stuCode: DataTypes.STRING(11),
+    stuCode: {
+        type: DataTypes.STRING(11),
+        unique: true
+    },
     gpa: DataTypes.FLOAT(1, 2),
     courseCreadits: DataTypes.INTEGER,
     codeLevel: DataTypes.INTEGER,
@@ -27,10 +31,21 @@ const Student = sequelize.define("student", {
         unique: true,
 
     },
+    groupId:{
+        type: DataTypes.UUID,
+        references:{
+            model: Group,
+            key: "groupId"
+        }
+    }
 });
 
 User.hasOne(Student, {
     foreignKey: 'userId',
+})
+
+Group.hasMany(Student,{
+    foreignKey: "groupId"
 })
 
 const initStudent = async () => {

@@ -9,7 +9,7 @@ const { TaskAssignment, initTaskAssignment } = require("../models/TaskAssigmentM
 const { Comment, initComment } = require("../models/CommentModel");
 const { Group, initGroup } = require("../models/GroupModel");
 const { Task, initTask } = require("../models/TaskModel");
-const { GroupStudent, initGroupStudent } = require("../models/GroupStudentModel");
+// const { GroupStudent, initGroupStudent } = require("../models/GroupStudentModel");
 const { CouncilMember, initCouncilMember } = require("../models/CouncilMemberModel");
 const { Score, initScore } = require("../models/ScoreModel");
 const { Stage, initStage } = require("../models/StageModel");
@@ -29,20 +29,20 @@ const initAll = async () => {
             await initRole();
         }).then(async () => {
             await initUser();
+            await initFileStorage();
         })
         .then(async () => {
             await initNotification();
-            await initFileStorage();
             await initUserRole();
         })
         .then(async () => {
             await initNotificationFile();
             await initLecturer();
-            await initStudent();
             await initGroup();
+            await initStudent();
         }).then(async () => {
             await initGroupLecturer();
-            await initGroupStudent();
+            // await initGroupStudent();
             await initProject();
         }).then(async () => {
             await initStage();
@@ -58,7 +58,7 @@ const initAll = async () => {
         })
 }
 
-// initAll();
+initAll();
 
 module.exports = {
     Department,
@@ -72,7 +72,7 @@ module.exports = {
     Student,
     Group,
     GroupLecturer,
-    GroupStudent,
+    // GroupStudent,
     Project,
     Stage,
     ListTask,

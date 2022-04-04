@@ -2,6 +2,7 @@ const { Sequelize, DataTypes } = require("sequelize");
 const { POSTGRESQL_DEVELOPMENT_HOST } = require("../config/dbconfig");
 const { Group } = require("./GroupModel");
 const { Lecturer } = require("./LecturerModel");
+const {Student} = require("./StudentModel")
 const sequelize = new Sequelize(POSTGRESQL_DEVELOPMENT_HOST);
 
 const Project = sequelize.define("project", {
@@ -30,6 +31,14 @@ const Project = sequelize.define("project", {
             key: "groupId",
         }
     },
+    leaderId:{
+        type: DataTypes.UUID,
+        allowNull: true,
+        references:{
+            model: Student,
+            key: "stuId"
+        }
+    },
     isApproved: DataTypes.BOOLEAN,
     isRegisterd: DataTypes.BOOLEAN,
 });
@@ -40,6 +49,11 @@ Lecturer.hasMany(Project,{
 Group.hasOne(Project,{
     foreignKey: 'groupId'
 })
+
+Student.hasOne(Project,{
+    foreignKey: "leaderId"
+})
+
 const initProject = async () => {
     return  Project.sync({alert: true})
 }
