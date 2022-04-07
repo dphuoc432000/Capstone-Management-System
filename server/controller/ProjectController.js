@@ -1,0 +1,64 @@
+const ProjectService = require("../service/ProjectService");
+
+class ProjectController {
+
+    updateProjectNoStart = async (req, res, next) =>{
+        await ProjectService.updateProjectNoStart(req.params.projectId, req.body)
+            .then(data =>{
+                if(data)
+                    return res.status(200).send("Cập nhật topic thành công");
+                return res.status(400).send("Không tìm thấy topic")
+            }).catch(err => {
+                return res.status(500).send(err.message);
+            });
+    }
+
+    updateProjectStart = async (req, res, next) =>{
+        await ProjectService.updateProjectStart(req.params.projectId, req.body)
+            .then(data =>{
+                if(data){
+                    if(data === "NOT ALLOWED")
+                        return res.status(400).send("Bạn đang cố tình thay đổi projectName hoặc projectDesc. Cập nhật project không thành công");
+                    else if(data === "NO APPROVED")
+                        return res.status(400).send("Topic chưa được cho phép.");
+                    return res.status(200).send("Cập nhật project thành công");
+                }
+                return res.status(400).send("Không tìm thấy project")
+            }).catch(err => {
+                return res.status(500).send(err.message);
+            });
+    }
+
+    getProjectByTypeCapstone = async(req, res, next) =>{
+        await ProjectService.getAllProjectByTypeCapstone(req.params.typeCapstone)
+            .then(data =>{
+                return res.status(200).send(data);
+            }).catch(err => {
+                return res.status(500).send(err.message);
+            });
+    }
+
+    rejectTopic = async (req, res, next) =>{
+        await ProjectService.rejectTopic(req.params.projectId)
+            .then(data =>{
+                if(data)    
+                    return res.status(200).send("Reject topic thành công");
+                return res.status(400).send("Không tìm thấy topic");
+            }).catch(err => {
+                return res.status(500).send(err.message);
+            });
+    }
+
+    approvedTopic = async (req, res, next) =>{
+        await ProjectService.approvedTopic(req.params.projectId)
+            .then(data =>{
+                if(data)    
+                    return res.status(200).send("Approved topic thành công");
+                return res.status(400).send("Không tìm thấy topic");
+            }).catch(err => {
+                return res.status(500).send(err.message);
+            });
+    }
+}
+
+module.exports = new ProjectController();

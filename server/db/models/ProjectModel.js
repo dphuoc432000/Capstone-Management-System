@@ -12,18 +12,24 @@ const Project = sequelize.define("project", {
         primaryKey: true,
         allowNull: false,
     },
-    projectName: DataTypes.STRING(50),
-    projectDesc: DataTypes.STRING(100),
+    projectName: {
+        type: DataTypes.STRING(255),
+        allowNull: false
+    },
+    projectDesc: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
     startDate: DataTypes.DATE,
     endDate: DataTypes.DATE,
-    note: DataTypes.STRING(50),
-    lecturerId: {
-        type: DataTypes.UUID, 
-        references: {
-            model: Lecturer,
-            key: 'lecturerId'
-        }
-    },
+    note: DataTypes.STRING(255),
+    // lecturerId: {
+    //     type: DataTypes.UUID, 
+    //     references: {
+    //         model: Lecturer,
+    //         key: 'lecturerId'
+    //     }
+    // },
     groupId: {
         type: DataTypes.UUID,
         references: {
@@ -39,13 +45,13 @@ const Project = sequelize.define("project", {
             key: "stuId"
         }
     },
-    isApproved: DataTypes.BOOLEAN,
-    isRegisterd: DataTypes.BOOLEAN,
+    isApproved: DataTypes.STRING,
+    // isRegisterd: DataTypes.BOOLEAN,
 });
 
-Lecturer.hasMany(Project,{
-    foreignKey: 'lecturerId'
-})
+// Lecturer.hasMany(Project,{
+//     foreignKey: 'lecturerId'
+// })
 Group.hasOne(Project,{
     foreignKey: 'groupId'
 })

@@ -12,7 +12,15 @@ const Group = sequelize.define("group", {
         primaryKey: true,
         allowNull: false,
     },
-    groupName: DataTypes.STRING(50),
+    //cap dang thực hiện 1 hay 2
+    typeCapstone: {
+        type: DataTypes.INTEGER,
+        allowNull:false
+    },
+    groupName: {
+        type:DataTypes.STRING(50),
+        allowNull: false
+    },
     groupDesc: DataTypes.STRING(100),
     isScientificGroup: DataTypes.BOOLEAN,
     councilId:{ 

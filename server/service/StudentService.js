@@ -4,7 +4,6 @@ const { sendEmailUser, studentEmail } = require("../helper/SendEmail");
 const RoleService = require("./RoleService");
 const UserRoleService = require("./UserRoleService");
 const bcrypt = require('bcrypt');
-const groupStudentService = require("./GroupStudentService");
 
 
 class StudentService {
@@ -171,14 +170,61 @@ class StudentService {
     //Phuoc viet
     //kiểm tra đã được approve chưa
     //Kiểm tra studId và leaderId có chung nhóm không.
-    //Nếu chung => kiểm tra nhóm đó có phải nhóm NCKH không
     //Kiểm tra nhóm đã đăng ký đồ án chưa
     //Nếu chưa => tạo đồ án
-    createTopic = async (stuId, {title, description, leaderId}) =>{
+    ////update leaderId trong ProjectModel
+    createTopic = async (stuId, project) =>{
         //check student submit topic
-        if( await this.checkStudentisApproved(stuId) &&  await this.checkStudentisApproved(leaderId)){
-            console.log(await groupStudentService.getGroupIdByStuId(stuId))
+        if( await this.checkStudentisApproved(stuId) &&  await this.checkStudentisApproved(project.leaderId)){
+           //Kiểm tra studId và leaderId có chung nhóm không.
+            const groupIdStuId = await database.Student.findOne({where:{stuId}, raw: true})
+                .then(data => data?data.groupId:null)
+            const groupIdleaderId = await database.Student.findOne({where:{stuId:project.leaderId}, raw: true})
+                .then(data => data?data.groupId:null)
+            //chung nhóm
+            if(groupIdStuId === groupIdleaderId && groupIdStuId === project.groupId && groupIdleaderId === project.groupId){
+                //Kiểm tra nhóm đã đăng ký đồ án chưa
+                const checkHasProject = await database.Project.findOne({
+                    where:{
+                        groupId: groupIdStuId,
+                    }, raw: true
+                }).then(data => data?true:false);
+                // console.log(checkHasProject)
+                //chưa có
+                if(!checkHasProject){
+                    //tạo project
+                    const procjectBody = {
+                        projectName: project.projectName,
+                        projectDesc: project.projectDesc,
+                        note: project.note,
+                        groupId: groupIdleaderId,
+                        leaderId: project.leaderId,
+                        isApproved: "pending",
+                        // isRegisterd: true,
+                    }
+                    const projectData = await database.Project.findOrCreate({
+                        where:{
+                            groupId: procjectBody.groupId,
+                        },
+                        defaults: procjectBody,
+                        raw: true
+                    })
+                    // console.log(projectData)
+                    //nếu Project đã có thì projectData sẽ không có dữ liệu
+                    const checkProjectInserted = projectData.find(proEle => typeof proEle === "boolean")
+                    //nếu đã insert thành công
+                    if(checkProjectInserted){
+                        return true;
+                    }
+                    return false;
+                }
+                //đã có
+                return "HAS PROJECT";
+            }
+            //không chung nhóm
+            return "NOT SAME GROUP"
         }
+        //Student hoặc leader chưa approved
         return "UNAPPROVED STUDENT OR LEADER";
     }
 }
