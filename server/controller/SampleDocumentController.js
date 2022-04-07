@@ -48,6 +48,17 @@ class SampleDocumentController {
         sampleDocument.remove(pathName, name);
         res.status(200).json({ message: "Successfully delete item !" });
     };
+
+    //Rename file
+    //POST: /sampleDocument/rename
+    rename = (req, res, next) => {
+        let { pathName, oldName, newName } = req.body;
+
+        sampleDocument.rename(pathName, newName, oldName);
+        if (oldName && newName)
+            res.status(200).json({ message: "Successfully delete item !" });
+        else res.status(404).json({ message: "Fields is empty !" });
+    };
 }
 
 module.exports = new SampleDocumentController();

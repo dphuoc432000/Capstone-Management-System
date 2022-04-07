@@ -52,5 +52,6 @@ router.post(
 router.post("/addFolder", sampleDocumentController.addFolder);
 router.get("/download", sampleDocumentController.download);
 router.post("/delete", sampleDocumentController.remove);
+router.post("/rename", sampleDocumentController.rename);
 
 module.exports = router;

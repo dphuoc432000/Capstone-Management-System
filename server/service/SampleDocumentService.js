@@ -74,6 +74,13 @@ class SampleDocumentService {
 
         return arr;
     }
+
+    rename = (pathName, newName, oldName) => {
+        let newPath = `${this.baseDir}/upload/sample-document${pathName}/${newName}`;
+        let oldPath = `${this.baseDir}/upload/sample-document${pathName}/${oldName}`;
+
+        fs.renameSync(oldPath, newPath);
+    };
 }
 
 module.exports = new SampleDocumentService();
