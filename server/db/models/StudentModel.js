@@ -19,7 +19,7 @@ const Student = sequelize.define("student", {
     courseCreadits: DataTypes.INTEGER,
     codeLevel: DataTypes.INTEGER,
     note: DataTypes.STRING(100),
-    capstone: DataTypes.STRING(50),
+    typeCapstone: DataTypes.INTEGER,
     class: DataTypes.STRING(10),
     isApproved: DataTypes.BOOLEAN,
     userId: {

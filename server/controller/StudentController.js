@@ -62,9 +62,16 @@ class StudentController {
     createTopic = async(req, res, next) =>{
         await studentService.createTopic(req.params.stuId,req.body)
             .then(data =>{
-                if(data === "UNAPPROVED STUDENT OR LEADER")
+                if(data === true)
+                    return res.status(200).send("Student thêm topic thành công");
+                else if(data === false)
+                    return res.status(400).send("Thêm topic không thành công");
+                else if(data === "HAS PROJECT")
+                    return res.status(400).send("Gruop đã đăng ký topic. Thêm không thành công");
+                else if(data === "UNAPPROVED STUDENT OR LEADER")
                     return res.status(400).send("Student or leader is unapproved");
-                return res.status(200).send(data);
+                else if(data = "NOT SAME GROUP")
+                    return res.status(400).send("You and leader no same group")
             }).catch(err => {
                 return res.status(500).send(err.message);
             });
