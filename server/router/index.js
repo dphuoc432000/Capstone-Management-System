@@ -8,6 +8,7 @@ const studentAPI = require('./api/studentAPI')
 const fileStorageAPI = require('./api/fileStorageAPI');
 const notificationAPI = require('./api/notificationAPI');
 const projectAPI = require('./api/projectAPI');
+const sampleDocumentAPI = require('./api/sampleDocumentAPI');
 
 function router(server) {
     server.use('/api/role/', roleAPI);
@@ -20,6 +21,7 @@ function router(server) {
     server.use('/api/fileStorage/', fileStorageAPI);
     server.use('/api/notification/', notificationAPI);
     server.use('/api/project/', projectAPI);
+    server.use('/api/sampleDocument/', sampleDocumentAPI);
 }
 
 
