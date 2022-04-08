@@ -14,7 +14,7 @@ class RoleService {
         const role = await Role.findOne({
             where:{
                 roleName
-            }
+            }, raw: true
         })
         // console.log(role);
         return role;

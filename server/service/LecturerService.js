@@ -64,10 +64,10 @@ class LecturerService {
                         userId: userId
                     }
                 })
-
                 let check = lecturerData.find(lecturerEle => {
                     return typeof lecturerEle === 'boolean';
                 })
+
                 if (check) {
                     //gửi mail
                     await sendEmailUser({email, password}, LectureMail);

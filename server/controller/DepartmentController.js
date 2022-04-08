@@ -19,8 +19,9 @@ class DepartmentController {
             .catch(err=>{
                 return res.status(400).json(err);
                 // next(err);
-            })
+            }) 
     }
+
 
     getDepartmentByDepId = async(req, res, next) =>{
         const depId = req.params.depId;

@@ -1,6 +1,7 @@
 const { Sequelize, DataTypes } = require("sequelize");
 const { POSTGRESQL_DEVELOPMENT_HOST } = require("../config/dbconfig");
 const { Council } = require("./CouncilModel");
+const {Student} = require("./StudentModel");
 const sequelize = new Sequelize(POSTGRESQL_DEVELOPMENT_HOST);
 
 

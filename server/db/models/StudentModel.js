@@ -11,7 +11,10 @@ const Student = sequelize.define("student", {
         primaryKey: true,
         allowNull: false,
     },
-    stuCode: DataTypes.STRING(11),
+    stuCode: {
+        type: DataTypes.STRING(11),
+        unique: true
+    },
     gpa: DataTypes.FLOAT(1, 2),
     courseCreadits: DataTypes.INTEGER,
     codeLevel: DataTypes.INTEGER,
@@ -39,6 +42,10 @@ const Student = sequelize.define("student", {
 
 User.hasOne(Student, {
     foreignKey: 'userId',
+})
+
+Group.hasMany(Student,{
+    foreignKey: "groupId"
 })
 
 const initStudent = async () => {
