@@ -1,7 +1,9 @@
+const { GroupLecturer } = require("../db/models/GroupLecturerModel");
 const { Group } = require("../db/models/GroupModel");
 const { Project } = require("../db/models/ProjectModel");
 const { Student } = require("../db/models/StudentModel");
 const { User } = require("../db/models/UserModel");
+const lecturerService = require("./LecturerService");
 
 class ProjectService {
 
@@ -57,7 +59,13 @@ class ProjectService {
     }
 
     getAllProjectByTypeCapstone = async (typeCapstone) =>{
-        return await Group.findAll({where:{typeCapstone},raw:true})
+        return await Group.findAll({
+            where:{typeCapstone},
+            raw:true,
+            order:[
+                ["groupName","ASC"]
+            ]
+        })
             .then(async arr => {
                 if(arr){
                     return await Promise.all(arr.map(async group =>{
@@ -69,33 +77,88 @@ class ProjectService {
                             }, raw: true
                         })
                         if(project){
-                            delete project.createdAt;
-                            delete project.updatedAt;
                             delete project.groupId;
                             delete project.startDate;
                             delete project.endDate;
 
-                            const stuLeader = await Student.findOne({
+                            const leaderData = await Student.findOne({
                                 where: {
                                     stuId: project.leaderId
                                 },
+                                attributes:[
+                                    "stuId",
+                                    "stuCode", 
+                                    "gpa",
+                                    "note",
+                                    "typeCapstone",
+                                    "class",
+                                    "userId"
+                                ],
+                                raw: true
+                            }).then(async data =>{
+                                const userLeader = await User.findOne({
+                                    where:{
+                                        userId: data.userId
+                                    },
+                                    raw: true,
+                                    attributes: [
+                                        "userId",
+                                        "firstName",
+                                        "lastName",
+                                        "email",
+                                        "phone",
+                                    ]
+                                })  
+                                return {...data, ...userLeader}
+                            })
+                            let members = await Student.findAll({
+                                where:{groupId: group.groupId},
+                                order: [
+                                    ["gpa", "DESC"]
+                                ],
+                                attributes:[
+                                    "stuId",
+                                    "stuCode", 
+                                    "gpa",
+                                    "note",
+                                    "typeCapstone",
+                                    "class",
+                                    "userId"
+                                ],
                                 raw: true
                             })
-                            const userLeader = await User.findOne({
-                                where:{
-                                    userId: stuLeader.userId
-                                }
-                            }) 
-                            const leaderData = {
-                                firstName: userLeader.firstName,
-                                lastName: userLeader.lastName,
-                                email: userLeader.email,
-                                phone: userLeader.phone,
-                                stuCode: stuLeader.stuCode
-                            }
+                            members = members.filter(stu => stu.stuCode != leaderData.stuCode)
+                            const membersData = await Promise.all(members.map(async member =>{
+                                const memberData = await User.findOne({
+                                    where:{
+                                        userId: member.userId
+                                    },
+                                    raw: true,
+                                    attributes: [
+                                        "userId",
+                                        "firstName",
+                                        "lastName",
+                                        "email",
+                                        "phone",
+                                    ]
+                                })
+                                return {...member, ...memberData}
+                            }))
                             delete project.leaderId;
                             project.leader = leaderData;
+                            project.members = membersData;
                         }
+                        const mentorsGroup = await GroupLecturer.findAll({
+                            where:{
+                                groupId: group.groupId
+                            },
+                            attributes:["lecturerId"],
+                            raw: true
+                        })
+                        const mentorsData = await Promise.all(mentorsGroup.map(async mentor =>{
+                            return await lecturerService.getLecturerByLectureId(mentor.lecturerId)
+                        }))
+                        group.mentor = mentorsData;
                         group.project = project;
                         return group;
                     }))
@@ -142,6 +205,44 @@ class ProjectService {
         })
     }
 
+    cancelTopic = async (projectId) =>{
+        return await Project.findOne({
+            where:{
+                projectId
+            }, raw: true
+        })
+        .then(async data =>{
+            if(data){
+                await Project.update({isApproved: "pending"},{
+                    where: {
+                        projectId
+                    }
+                });
+                return true;
+            }
+            return false;
+        })
+    }
+
+    deleteTopic = async (projectId) =>{
+        return await Project.findOne({
+            where:{
+                projectId
+            }, raw: true
+        })
+        .then(async data =>{
+            if(data){
+                const countDelete = await Project.destroy({
+                    where: {
+                        projectId
+                    }
+                })
+                if(countDelete > 0)
+                    return true;
+            }
+            return false;
+        })
+    }
 }
 
 module.exports = new ProjectService();
