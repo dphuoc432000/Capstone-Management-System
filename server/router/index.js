@@ -21,9 +21,9 @@ function router(server) {
     server.use('/api/student/', studentAPI)
     server.use('/api/fileStorage/', fileStorageAPI);
     server.use('/api/notification/', notificationAPI);
+    server.use('/api/group/', groupAPI);
     server.use('/api/project/', projectAPI);
     server.use('/api/sampleDocument/', sampleDocumentAPI);
-    server.use('/api/group/', groupAPI);
 }
 
 

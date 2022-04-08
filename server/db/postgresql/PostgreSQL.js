@@ -9,7 +9,6 @@ const { TaskAssignment, initTaskAssignment } = require("../models/TaskAssigmentM
 const { Comment, initComment } = require("../models/CommentModel");
 const { Group, initGroup } = require("../models/GroupModel");
 const { Task, initTask } = require("../models/TaskModel");
-// const { GroupStudent, initGroupStudent } = require("../models/GroupStudentModel");
 const { CouncilMember, initCouncilMember } = require("../models/CouncilMemberModel");
 const { Score, initScore } = require("../models/ScoreModel");
 const { Stage, initStage } = require("../models/StageModel");
@@ -42,7 +41,6 @@ const initAll = async () => {
             await initStudent();
         }).then(async () => {
             await initGroupLecturer();
-            // await initGroupStudent();
             await initProject();
         }).then(async () => {
             await initStage();
@@ -73,7 +71,6 @@ module.exports = {
     Student,
     Group,
     GroupLecturer,
-    // GroupStudent,
     Project,
     Stage,
     ListTask,

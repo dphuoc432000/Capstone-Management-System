@@ -3,7 +3,7 @@ const { POSTGRESQL_DEVELOPMENT_HOST } = require("../config/dbconfig");
 const { Council } = require("./CouncilModel");
 const {Student} = require("./StudentModel");
 const sequelize = new Sequelize(POSTGRESQL_DEVELOPMENT_HOST);
-// const {} = require('./MajorModel')
+
 
 const Group = sequelize.define("group", {
     groupId: {
@@ -12,10 +12,9 @@ const Group = sequelize.define("group", {
         primaryKey: true,
         allowNull: false,
     },
-    //cap dang thực hiện 1 hay 2
     typeCapstone: {
         type: DataTypes.INTEGER,
-        allowNull:false
+        // allowNull:false
     },
     groupName: {
         type:DataTypes.STRING(50),
@@ -32,7 +31,6 @@ const Group = sequelize.define("group", {
     },
     
 });
-
 Council.hasMany(Group, {
     foreignKey: "councilId"
 })
