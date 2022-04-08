@@ -58,7 +58,6 @@ class LecturerController {
     }
 
     //GET: /get/:userId
-    //Lỗi
     getLecturerByUserId = async (req, res, next) => {
         await lecturerService.getLecturerByUserId(req.params.userId)
             .then(data => {

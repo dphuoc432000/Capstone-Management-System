@@ -1,6 +1,7 @@
 const {
     Lecturer
-} = require("../db/models/LecturerModel")
+} = require("../db/models/LecturerModel");
+const {User} = require("../db/models/UserModel")
 const userService = require("./UserService");
 const checkObject = require('../utils/checkObject');
 const userRoleService = require('./UserRoleService');
@@ -265,6 +266,37 @@ class LecturerService {
         } catch (err) {
             return "ERROR EXPORT FILE"
         }
+    }
+
+    getLecturerByLectureId = async(lecturerId) =>{
+        return await Lecturer.findOne({
+            where: {lecturerId},
+            raw: true,
+            attributes:[
+                "lecturerId",
+                "userId",
+                "academicLevel"
+            ]
+        }).then( async data =>{
+            if(data)
+                data = {
+                    ...data,
+                    ...await User.findOne({
+                    where:{
+                        userId: data.userId,
+                    },
+                    raw: true,
+                    attributes:[
+                        "firstName",
+                        "lastName",
+                        "dateOfBirth",
+                        "email",
+                        "phone",
+                        "majorId"
+                    ]
+                })}
+            return data
+        })
     }
 }
 

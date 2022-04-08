@@ -59,6 +59,28 @@ class ProjectController {
                 return res.status(500).send(err.message);
             });
     }
+
+    cancelTopic = async (req, res, next) =>{
+        await ProjectService.cancelTopic(req.params.projectId)
+            .then(data =>{
+                if(data)    
+                    return res.status(200).send("Cancel topic về pending thành công");
+                return res.status(400).send("Không tìm thấy topic");
+            }).catch(err => {
+                return res.status(500).send(err.message);
+            });
+    }
+
+    deleteTopic = async (req, res, next) =>{
+        await ProjectService.deleteTopic(req.params.projectId)
+            .then(data =>{
+                if(data)    
+                    return res.status(200).send("Xoá topic thành công");
+                return res.status(400).send("Không tìm thấy topic");
+            }).catch(err => {
+                return res.status(500).send(err.message);
+            });
+    }
 }
 
 module.exports = new ProjectController();
