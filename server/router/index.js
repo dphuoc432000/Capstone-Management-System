@@ -7,7 +7,7 @@ const majorAPI = require('./api/majorAPI');
 const studentAPI = require('./api/studentAPI')
 const fileStorageAPI = require('./api/fileStorageAPI');
 const notificationAPI = require('./api/notificationAPI');
-
+const groupAPI = require('./api/groupAPI');
 function router(server) {
     server.use('/api/role/', roleAPI);
     server.use('/api/user/', userAPI);
@@ -18,6 +18,7 @@ function router(server) {
     server.use('/api/student/', studentAPI)
     server.use('/api/fileStorage/', fileStorageAPI);
     server.use('/api/notification/', notificationAPI);
+    server.use('/api/group/', groupAPI);
 }
 
 

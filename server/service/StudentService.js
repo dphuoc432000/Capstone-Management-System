@@ -77,14 +77,16 @@ class StudentService {
         let userInfo = await database.User.findOne({
             where: {
                 userId: userId
-            }
+            },
+            raw:true
         });
         let studentInfo = await database.Student.findOne({
             where: {
                 userId: userId
-            }
+            },
+            raw:true
         });
-
+        delete userInfo.password; 
         return {
             userInfo: userInfo,
             studentInfo: studentInfo

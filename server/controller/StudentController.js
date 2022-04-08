@@ -3,12 +3,13 @@ const studentService = require("../service/StudentService");
 class StudentController {
     registerExecuteProject = async (req, res) => {
         await studentService.registerExecuteProject(req.body).then(data => {
+            console.log(data);
             if (data) {
                 if (data !== "STUDENT IS IN DB") {
                     return res.status(200).send("register success");
                 }
-                return res.status(400).send("STUDENT IS IN DB");
-            }
+                return res.status(400).send("something went wrong");
+            }else return res.status(400).send("something went wrong");
         }).catch(err => {
             return res.status(500).send(err.message);
         })

@@ -89,7 +89,6 @@ class UserService {
 
 
             // var passwordIsValid = account.password === user.password?true:false;
-      
             if (!passwordIsValid) {
                 return "Invalid Password!"
             }

@@ -2,7 +2,7 @@ const { Sequelize, DataTypes } = require("sequelize");
 const { POSTGRESQL_DEVELOPMENT_HOST } = require("../config/dbconfig");
 const { Council } = require("./CouncilModel");
 const sequelize = new Sequelize(POSTGRESQL_DEVELOPMENT_HOST);
-// const {} = require('./MajorModel')
+
 
 const Group = sequelize.define("group", {
     groupId: {
@@ -11,8 +11,16 @@ const Group = sequelize.define("group", {
         primaryKey: true,
         allowNull: false,
     },
-    groupName: DataTypes.STRING(50),
+    typeCapstone: {
+        type: DataTypes.INTEGER,
+        // allowNull:false
+    },
+    groupName: {
+        type:DataTypes.STRING(50),
+        allowNull: false
+    },
     groupDesc: DataTypes.STRING(100),
+    isScientificGroup: DataTypes.BOOLEAN,
     councilId:{ 
         type: DataTypes.UUID,
         references: {
@@ -20,8 +28,8 @@ const Group = sequelize.define("group", {
             key: "councilId",
         }
     },
+    
 });
-
 Council.hasMany(Group, {
     foreignKey: "councilId"
 })
