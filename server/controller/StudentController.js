@@ -76,6 +76,54 @@ class StudentController {
                 return res.status(500).send(err.message);
             });
     }
+    
+    getAllStudentGood = async (req,res)=>{
+        await studentService.getAllStudentGood().
+        then(data => {
+            if (data) {
+                return res.status(200).send(data);
+            }
+            return res.status(400).send("error get data");
+        }).catch(err => {
+            return res.status(500).send(err.message);
+        });
+    }
+    //get all student kha
+    getAllStudentTB = async (req,res)=>{
+        await studentService.getAllStudentTB().
+        then(data => {
+            if (data) {
+                return res.status(200).send(data);
+            }
+            return res.status(400).send("error get data");
+        }).catch(err => {
+            return res.status(500).send(err.message);
+        });
+    }
+    //get all student gioi
+    getAllStudentK = async (req,res)=>{
+        await studentService.getAllStudentK().
+        then(data => {
+            if (data) {
+                return res.status(200).send(data);
+            }
+            return res.status(400).send("error get data");
+        }).catch(err => {
+            return res.status(500).send(err.message);
+        });
+    }
+    //get all student tb
+    getAllStudentY = async (req,res)=>{
+        await studentService.getAllStudentY().
+        then(data => {
+            if (data) {
+                return res.status(200).send(data);
+            }
+            return res.status(400).send("error get data");
+        }).catch(err => {
+            return res.status(500).send(err.message);
+        });
+    }
 }
 
 module.exports = new StudentController();

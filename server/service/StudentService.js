@@ -98,17 +98,53 @@ class StudentService {
                 const user = database.User.findOne({
                     where: {
                         userId: data.userId
-                    }
+                    },
+                    raw:true
                 }).then(userInfo => {
                     let info = {
-                        ...userInfo.toJSON(),
+                        ...userInfo,
                         ...data.toJSON()
                     }
+                    delete info.password;
                     return info;
                 });
+                
                 return await user;
             }))
         });
+    }
+
+    getAllStudentGood = async () => {
+        const goodStudent = await database.Student.findAll({
+            where:{groupId: null}
+        }).then(async datas => {
+            return await Promise.all(datas.map(async data => {
+                
+                if(data.gpa <=4 && data.gpa >= 3.6){
+                    const user = database.User.findOne({
+                        where: {
+                            userId: data.userId
+                        },
+                        raw:true
+                    }).then(userInfo => {
+                        let info = {
+                            ...userInfo,
+                            ...data.toJSON()
+                        }
+                        delete info.password;
+                        return info;
+                    });
+                return await user;
+                }
+                return null;
+                
+            }))
+        });
+
+        var filtered = goodStudent.filter(function (el) {
+            return el != null;
+          });
+        return filtered;
     }
 
     approveStudent = async (studId) => {
@@ -228,6 +264,104 @@ class StudentService {
         }
         //Student hoặc leader chưa approved
         return "UNAPPROVED STUDENT OR LEADER";
+    }
+
+    getAllStudentK = async () => {
+        const goodStudent = await database.Student.findAll({
+            where:{groupId: null}
+        }).then(async datas => {
+            return await Promise.all(datas.map(async data => {
+                
+                if(data.gpa <=3.5 && data.gpa >= 3.2){
+                    const user = database.User.findOne({
+                        where: {
+                            userId: data.userId
+                        },
+                        raw:true
+                    }).then(userInfo => {
+                        let info = {
+                            ...userInfo,
+                            ...data.toJSON()
+                        }
+                        delete info.password;
+                        return info;
+                    });
+                return await user;
+                }
+                return null;
+                
+            }))
+        });
+
+        var filtered = goodStudent.filter(function (el) {
+            return el != null;
+          });
+        return filtered;
+    }
+
+    getAllStudentTB = async () => {
+        const goodStudent = await database.Student.findAll({
+            where:{groupId: null}
+        }).then(async datas => {
+            return await Promise.all(datas.map(async data => {
+                
+                if(data.gpa <=3.5 && data.gpa >= 3.2){
+                    const user = database.User.findOne({
+                        where: {
+                            userId: data.userId
+                        },
+                        raw:true
+                    }).then(userInfo => {
+                        let info = {
+                            ...userInfo,
+                            ...data.toJSON()
+                        }
+                        delete info.password;
+                        return info;
+                    });
+                return await user;
+                }
+                return null;
+                
+            }))
+        });
+
+        var filtered = goodStudent.filter(function (el) {
+            return el != null;
+          });
+        return filtered;
+    }
+
+    getAllStudentY = async () => {
+        const goodStudent = await database.Student.findAll({
+            where:{groupId: null}
+        }).then(async datas => {
+            return await Promise.all(datas.map(async data => {
+                
+                if(data.gpa <=3.1){
+                    const user = database.User.findOne({
+                        where: {
+                            userId: data.userId
+                        },
+                        raw:true
+                    }).then(userInfo => {
+                        let info = {
+                            ...userInfo,
+                            ...data.toJSON()
+                        }
+                        delete info.password;
+                        return info;
+                    });
+                return await user;
+                }
+                return null;
+            }))
+        });
+
+        var filtered = goodStudent.filter(function (el) {
+            return el != null;
+          });
+        return filtered;
     }
 }
 
