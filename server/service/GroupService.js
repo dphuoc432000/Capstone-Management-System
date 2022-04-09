@@ -12,6 +12,8 @@ class GroupService {
                 const group = await database.Group.create({
                     groupName: data.groupName,
                     groupDesc: data.groupDesc,
+                    typeCapstone: data.typeCapstone,
+                    isScientificGroup: data.isScientificGroup
                 });
                 await data.students.map(async studentId => {
                     await database.Student.update(
@@ -20,7 +22,8 @@ class GroupService {
                         },{
                         where: {
                             stuId: studentId,
-                            isApproved: true
+                            isApproved: true,
+                            groupId: null
                         }
                     });
                 });
@@ -44,7 +47,7 @@ class GroupService {
                 if(isGrouped){
                     const groupLecturer = await database.GroupLecturer.create({
                         groupId: groupId,
-                        lecturerId: data.lecturerId
+                        lecturerId: data.lecturerId,
                     });
                     return groupLecturer;
                 }
