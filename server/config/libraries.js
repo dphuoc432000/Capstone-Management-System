@@ -3,7 +3,6 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
-const HOST_URL = process.env.HOST_URL;
 const path = require('path');
 var multer = require('multer');
 var upload = multer();

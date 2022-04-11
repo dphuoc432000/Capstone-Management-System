@@ -3,13 +3,13 @@ const studentService = require("../service/StudentService");
 class StudentController {
     registerExecuteProject = async (req, res) => {
         await studentService.registerExecuteProject(req.body).then(data => {
+            console.log(data);
             if (data) {
                 if (data !== "STUDENT IS IN DB") {
                     return res.status(200).send("register success");
                 }
-                return res.status(400).send("STUDENT IS IN DB");
-            }
-            else return res.status(400).send("something went wrong");
+                return res.status(400).send("something went wrong");
+            }else return res.status(400).send("something went wrong");
         }).catch(err => {
             return res.status(500).send(err.message);
         })
@@ -75,6 +75,54 @@ class StudentController {
             }).catch(err => {
                 return res.status(500).send(err.message);
             });
+    }
+    
+    getAllStudentGood = async (req,res)=>{
+        await studentService.getAllStudentGood().
+        then(data => {
+            if (data) {
+                return res.status(200).send(data);
+            }
+            return res.status(400).send("error get data");
+        }).catch(err => {
+            return res.status(500).send(err.message);
+        });
+    }
+    //get all student kha
+    getAllStudentTB = async (req,res)=>{
+        await studentService.getAllStudentTB().
+        then(data => {
+            if (data) {
+                return res.status(200).send(data);
+            }
+            return res.status(400).send("error get data");
+        }).catch(err => {
+            return res.status(500).send(err.message);
+        });
+    }
+    //get all student gioi
+    getAllStudentK = async (req,res)=>{
+        await studentService.getAllStudentK().
+        then(data => {
+            if (data) {
+                return res.status(200).send(data);
+            }
+            return res.status(400).send("error get data");
+        }).catch(err => {
+            return res.status(500).send(err.message);
+        });
+    }
+    //get all student tb
+    getAllStudentY = async (req,res)=>{
+        await studentService.getAllStudentY().
+        then(data => {
+            if (data) {
+                return res.status(200).send(data);
+            }
+            return res.status(400).send("error get data");
+        }).catch(err => {
+            return res.status(500).send(err.message);
+        });
     }
 }
 
