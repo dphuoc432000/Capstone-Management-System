@@ -4,6 +4,11 @@ const { Project } = require("../db/models/ProjectModel");
 const { Student } = require("../db/models/StudentModel");
 const { User } = require("../db/models/UserModel");
 const lecturerService = require("./LecturerService");
+const exceljs = require("exceljs");
+const groupService = require("./GroupService");
+const MajorService = require("./MajorService");
+const DepartmentService = require("./DepartmentService");
+const { FileStorage } = require("../db/models/FileStorageModel");
 
 class ProjectService {
 
@@ -58,6 +63,7 @@ class ProjectService {
         return "NOT ALLOWED";
     }
 
+    //cho student
     getAllProjectByTypeCapstone = async (typeCapstone) =>{
         return await Group.findAll({
             where:{typeCapstone},
@@ -73,7 +79,8 @@ class ProjectService {
                         delete group.updatedAt;
                         const project = await Project.findOne({
                             where:{
-                                groupId: group.groupId
+                                groupId: group.groupId,
+                                lecturerId: null
                             }, raw: true
                         })
                         if(project){
@@ -242,6 +249,133 @@ class ProjectService {
             }
             return false;
         })
+    }
+
+    exportProjectListExcelFile = async () =>{
+        const workbook = new exceljs.Workbook();
+        const capstone1_worksheet = workbook.addWorksheet("Capstone 1");
+        const capstone2_worksheet = workbook.addWorksheet("Capstone 2");
+        const path="./files";
+
+        const columnsWorksheet =[
+            {
+                header: "No.",
+                key: "count"
+            },
+            {
+                header: "Student Code",
+                key: "stuCode"
+            },
+            {
+                header: "First name",
+                key: "firstName",
+            },
+            {
+                header: "Last name",
+                key: "lastName",
+            },
+            {
+                header: "Class",
+                key: "class",
+            },
+            {
+                header: "Group",
+                key: "groupName",
+            },
+            {
+                header: "Topic",
+                key: "projectName",
+            },
+            {
+                header: "Description",
+                key: "projectDesc",
+            }
+        ];
+
+        capstone1_worksheet.columns = columnsWorksheet;
+        capstone2_worksheet.columns = columnsWorksheet;
+
+        //add row capstone1
+        let counter = 1;
+        await this.getAllProjectByTypeCapstone(1)
+            .then(async getAllProjectByTypeCapstone1 =>{
+                let rowDataCapstone1 = [];
+                for(const projectByType1 of getAllProjectByTypeCapstone1){
+                    //lặp qua từng row sinh vien trong group
+                    await groupService.getMembersGroup(projectByType1.groupId)
+                        .then(async membersGroup =>{
+                            //lặp qua từng member để add voà mang rowDataCapstone1
+                            for (const member of membersGroup) {
+                                const major = await MajorService.getMajorByMajorId(member.majorId);
+                                const department = await DepartmentService.getDepartmentByDepId(major.depId);
+                                rowDataCapstone1.push({
+                                        count: counter,
+                                        stuCode: member.stuCode,
+                                        firstName: member.firstName,
+                                        lastName: member.lastName,
+                                        class: `${department.depCode}-${major.majorCode}`,
+                                        groupName: projectByType1.groupName,
+                                        projectName: projectByType1.project ? projectByType1.project.projectName:" ",
+                                        projectDesc: projectByType1.project ? projectByType1.project.projectDesc:" ",
+                                    })
+                                counter++;
+                            }
+                        })
+                }
+                return rowDataCapstone1;
+            })
+            .then(data =>{
+                counter = 1;
+                capstone1_worksheet.addRows(data);
+            })
+        
+        //add row capstone2
+        await this.getAllProjectByTypeCapstone(2)
+            .then(async getAllProjectByTypeCapstone2 =>{
+                let rowDataCapstone2 = [];
+                for(const projectByType2 of getAllProjectByTypeCapstone2){
+                    //lặp qua từng row sinh vien trong group
+                    await groupService.getMembersGroup(projectByType2.groupId)
+                        .then(async membersGroup =>{
+                            //lặp qua từng member để add voà mang rowDataCapstone2
+                            for (const member of membersGroup) {
+                                const major = await MajorService.getMajorByMajorId(member.majorId);
+                                const department = await DepartmentService.getDepartmentByDepId(major.depId);
+                                rowDataCapstone2.push({
+                                        count: counter,
+                                        stuCode: member.stuCode,
+                                        firstName: member.firstName,
+                                        lastName: member.lastName,
+                                        class: `${department.depCode}-${major.majorCode}`,
+                                        groupName: projectByType2.groupName,
+                                        projectName: projectByType2.project ? projectByType2.project.projectName:" ",
+                                        projectDesc: projectByType2.project ? projectByType2.project.projectDesc:" ",
+                                    })
+                                counter++;
+                            }
+                        })
+                }
+                return rowDataCapstone2;
+            })
+            .then(data =>{
+                counter = 1;
+                capstone2_worksheet.addRows(data);
+            })
+
+        try {
+            let url = `${path}/Danh_sach_de_tai_cac_nhom.xlsx`;
+            let fileName = "Danh_sach_de_tai_cac_nhom.xlsx";
+            let type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            await FileStorage.create({
+                fileName: fileName,
+                type:type,
+                path: url
+            });
+            let data = await workbook.xlsx.writeFile(`${path}/Danh_sach_de_tai_cac_nhom.xlsx`);
+            return data;
+        } catch (err) {
+            return "ERROR EXPORT FILE"
+        }
     }
 }
 

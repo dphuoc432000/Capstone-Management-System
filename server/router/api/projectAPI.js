@@ -9,5 +9,6 @@ router.post("/reject/:projectId", projectController.rejectTopic);
 router.post("/approved/:projectId", projectController.approvedTopic);
 router.post("/cancel/:projectId", projectController.cancelTopic);
 router.post("/delete/:projectId", projectController.deleteTopic);
+router.get("/exportFile", projectController.exportProjectListExcelFile );
 
 module.exports = router;

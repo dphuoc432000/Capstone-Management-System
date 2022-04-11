@@ -5,12 +5,14 @@ const PORT = process.env.PORT || 5000;
 const router = require("./router/index");
 const db = require("./db/index");
 const path = require("path");
+const express = require("express");
 const { deleteFile } = require("./helper/handleFile");
 
 db.connect();
 router(server);
-server.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "/index.html"));
+
+server.post("/test", (req, res) => {
+    console.log(req.body);
 });
 
 //download
@@ -19,6 +21,8 @@ server.get("/download", function (req, res) {
     res.download(file); // Set disposition and send it.
 });
 
+server.use(express.static(path.join(__dirname,"")));
+console.log(path.join(__dirname));
 //
 // console.log(deleteFile('\\upload\\roles.csv'));
 
