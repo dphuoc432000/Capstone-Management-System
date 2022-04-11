@@ -87,6 +87,48 @@ class LecturerController {
         }
     }
 
+    addTopicTemplate = async (req, res, next) =>{
+        const topicTemplate = {
+            projectName: req.body.projectName,
+            projectDesc: req.body.projectDesc,
+            lecturerId: req.body.lecturerId,
+            note: req.body.note,
+            files: req.files,
+        }
+        await lecturerService.addTopicTemplate(topicTemplate)
+            .then(data => {
+                if (data)
+                    return res.status(200).json(data);
+                return res.status(404).send("Lỗi thêm topic");
+            })
+            .catch(err => {
+                return res.status(400).json(err);
+            })
+    }
+
+    updateTopicTemplate = async (req, res, next) =>{
+        const lecturerId = req.params.lecturerId;
+        const projectId = req.params.projectId;
+        const topicTemplate = {
+            ...req.body,
+            lecturerId,
+            projectId,
+            newFiles: req.files ? req.files: []
+        }
+        await lecturerService.updateTopicTemplate(topicTemplate)
+            .then(data =>{
+                if(data === "NO PROJECT")
+                    return res.status(400).send("Không tìm thấy topic template của người này.")
+                else if(data === "NO USER-DATA")
+                    return res.status(400).send("Không tìm thấy user data.")
+                else
+                    return res.status(200).send("Cập nhật thành công");
+            })
+            .catch(err =>{
+                return res.status(400).json(err);
+            })
+    }
+
 }
 
 module.exports = new LecturerController();

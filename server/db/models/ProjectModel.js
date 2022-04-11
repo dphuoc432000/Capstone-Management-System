@@ -23,13 +23,13 @@ const Project = sequelize.define("project", {
     startDate: DataTypes.DATE,
     endDate: DataTypes.DATE,
     note: DataTypes.STRING(255),
-    // lecturerId: {
-    //     type: DataTypes.UUID, 
-    //     references: {
-    //         model: Lecturer,
-    //         key: 'lecturerId'
-    //     }
-    // },
+    lecturerId: {
+        type: DataTypes.UUID, 
+        references: {
+            model: Lecturer,
+            key: 'lecturerId'
+        }
+    },
     groupId: {
         type: DataTypes.UUID,
         references: {
@@ -49,9 +49,9 @@ const Project = sequelize.define("project", {
     // isRegisterd: DataTypes.BOOLEAN,
 });
 
-// Lecturer.hasMany(Project,{
-//     foreignKey: 'lecturerId'
-// })
+Lecturer.hasMany(Project,{
+    foreignKey: 'lecturerId'
+})
 Group.hasOne(Project,{
     foreignKey: 'groupId'
 })
