@@ -19,6 +19,7 @@ const { GroupLecturer, initGroupLecturer } = require("../models/GroupLecturerMod
 const { ListTask, initListTask } = require("../models/ListTaskModel");
 const { Notification, initNotification } = require('../models/NotificationModel');
 const { NotificationFile, initNotificationFile } = require('../models/NotificationFileModel');
+const { ProjectFile, initProjectFile} = require("../models/ProjectFileModel");
 
 const initAll = async () => {
     await initDepartment()
@@ -43,6 +44,7 @@ const initAll = async () => {
             await initGroupLecturer();
             await initProject();
         }).then(async () => {
+            await initProjectFile();
             await initStage();
         }).then(async () => {
             await initListTask();
@@ -57,7 +59,7 @@ const initAll = async () => {
 }
 
 
-//initAll();
+// initAll();
 
 module.exports = {
     Department,
@@ -73,6 +75,7 @@ module.exports = {
     GroupLecturer,
     Project,
     Stage,
+    ProjectFile,
     ListTask,
     Task,
     TaskAssignment,
