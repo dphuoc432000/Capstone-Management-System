@@ -98,7 +98,7 @@ class LecturerController {
         await lecturerService.addTopicTemplate(topicTemplate)
             .then(data => {
                 if (data)
-                    return res.status(200).json(data);
+                    return res.status(200).json("Thêm topic template thành công");
                 return res.status(404).send("Lỗi thêm topic");
             })
             .catch(err => {

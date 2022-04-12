@@ -20,7 +20,6 @@ function initLibraries() {
   server.use(bodyParser.json());
   server.use(bodyParser.urlencoded({extended: true}));
   // server.use(upload.array()); 
-  console.log(path.join(__dirname))
   dotenv.config();
   return server;
 }

@@ -91,6 +91,40 @@ class ProjectController {
             return res.status(500).send(err.message);
         });
     }
+
+    getTopicTemplateDetail = async (req, res, next) =>{
+        await ProjectService.getTopicTemplateDetail(req.params.projectId)
+            .then(data =>{
+                if(data)
+                    return res.status(200).send(data);
+                return res.status(400).send("Không tìm thấy topic template");
+            })
+            .catch(err =>{
+                return res.status(500).send(err.message);
+            })
+    }
+
+    getAllTopicTemplate = async (req, res, next) =>{
+        await ProjectService.getAllTopicTemplate()
+            .then(data =>{
+                return res.status(200).send(data);
+            })
+            .catch(err =>{
+                return res.status(500).send(err.message);
+            })
+    }
+
+    deleteTopicTemplate = async (req, res, next) =>{
+        await ProjectService.deleteTopicTemplate(req.params.lecturerId, req.params.projectId)
+            .then(data =>{
+                if(data)
+                    return res.status(200).send("Xoá topic template thành công");
+                return res.status(400).send("Không tìm thấy topic template của người dùng này");
+        })
+            .catch(err =>{
+                return res.status(500).send(err.message);
+            })
+    }
 }
 
 module.exports = new ProjectController();

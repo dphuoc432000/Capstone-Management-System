@@ -9,6 +9,10 @@ const groupService = require("./GroupService");
 const MajorService = require("./MajorService");
 const DepartmentService = require("./DepartmentService");
 const { FileStorage } = require("../db/models/FileStorageModel");
+const {Op} = require("sequelize");
+const { ProjectFile } = require("../db/models/ProjectFileModel");
+const LecturerService = require("./LecturerService");
+const FileStorageService = require("./FileStorageService")
 
 class ProjectService {
 
@@ -366,16 +370,125 @@ class ProjectService {
             let url = `${path}/Danh_sach_de_tai_cac_nhom.xlsx`;
             let fileName = "Danh_sach_de_tai_cac_nhom.xlsx";
             let type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            await FileStorage.create({
-                fileName: fileName,
-                type:type,
-                path: url
+            await FileStorage.findOrCreate({
+                where:{
+                    fileName: fileName,
+                    type:type,
+                    path: url
+                },
+                defaults: {
+                    fileName: fileName,
+                    type:type,
+                    path: url
+                }
             });
             let data = await workbook.xlsx.writeFile(`${path}/Danh_sach_de_tai_cac_nhom.xlsx`);
             return data;
         } catch (err) {
             return "ERROR EXPORT FILE"
         }
+    }
+
+    getTopicTemplateDetail = async(projectId) =>{
+        return await Project.findOne({
+            where:{
+                projectId,
+                lecturerId: {
+                    [Op.not]: null,
+                }
+            },
+            raw: true,
+            attributes:[
+                "projectId",
+                "projectName",
+                "projectDesc",
+                "note",
+                "lecturerId",
+                "createdAt",
+                "updatedAt"
+            ]
+        }).then(async data =>{
+            if(data){
+                const lecturerData = await LecturerService.getLecturerByLectureId(data.lecturerId);
+                const files = await ProjectFile.findAll({
+                    where: {
+                        projectId
+                    }, 
+                    raw: true
+                })
+                .then(async datas =>{
+                    if(datas.length > 0){
+                        datas = await Promise.all(datas.map(async file =>{
+                            return await FileStorage.findOne({
+                                where:{
+                                    fileId: file.fileId
+                                },
+                                raw: true
+                            })
+                        }))
+                    }
+                    return datas;
+                })
+                delete data.lecturerId;
+                data.lecturer = lecturerData;
+                data.files = files;
+            }
+            return data;
+        })
+    }
+
+    getAllTopicTemplate = async () =>{
+        return await Project.findAll ({
+            where:{
+                lecturerId: {
+                    [Op.not]: null
+                }
+            }
+        })
+        .then(async datas =>{
+            if(datas.length > 0){
+                datas = await Promise.all(datas.map(async data =>{
+                    return this.getTopicTemplateDetail(data.projectId)
+                }))
+            }
+            return datas;
+        })
+    }
+
+    deleteTopicTemplate = async (lecturerId, projectId) =>{
+        return await Project.findOne({
+            where:{
+                projectId,
+                lecturerId,
+            }
+            ,raw: true
+        })
+        .then(async project =>{
+            if(project){
+                //xoá file gốc
+                await ProjectFile.findAll({
+                    where: {
+                        projectId: project.projectId,
+                    },
+                    raw: true
+                })
+                .then(async projectFiles =>{
+                    const fileIds = projectFiles.length > 0 ? projectFiles.map(projectFile => projectFile.fileId): [];
+                    if(fileIds.length > 0)
+                        await FileStorageService.deleteFilesByFileIds(fileIds);
+                })
+
+                //xoá data project
+                const countDelete = await Project.destroy({
+                    where: {
+                        projectId,
+                        lecturerId,
+                    }
+                })
+                return countDelete > 0 ? true: false;
+            }
+            return null;
+        })
     }
 }
 
