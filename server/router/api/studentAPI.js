@@ -6,5 +6,4 @@ router.get('/:id', StudentController.getStudent);
 router.get('/',StudentController.getAllStudent);
 router.post('/update/:id', StudentController.approveStudent);
 router.post('/registerTopic/:stuId', StudentController.createTopic);
-// router.get('/', StudentController.getAllStudentGood);
 module.exports = router;
