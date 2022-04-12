@@ -41,7 +41,7 @@ class StudentService {
                     courseCreadits: student.courseCreadits,
                     codeLevel: student.codeLevel,
                     note: student.note,
-                    capstone: student.capstone,
+                    typeCapstone: student.typeCapstone,
                     class: student.class,
                     isApproved: student.isApproved,
                     userId: userId,
