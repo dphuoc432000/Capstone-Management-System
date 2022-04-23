@@ -28,7 +28,6 @@ function router(server) {
     server.use('/api/project/', projectAPI);
     server.use('/api/sampleDocument/', sampleDocumentAPI);
     server.use('/api/group/', groupAPI);
-    server.use('/api/project/', projectAPI);
     server.use('/api/stage/', stageAPI);
     server.use('/api/listTask/', listTaskAPI);
     server.use('/api/task/', taskAPI);

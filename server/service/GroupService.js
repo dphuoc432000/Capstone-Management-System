@@ -306,6 +306,7 @@ class GroupService {
             return group;
         }
         return null;
+    }
     getAllGroupByTypeCapstone = async (typeCapstone) =>{
         return await Group.findAll({
             where:{typeCapstone},
@@ -316,7 +317,5 @@ class GroupService {
         });
     }
 }
-
-
 
 module.exports = new GroupService();
