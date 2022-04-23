@@ -2,3 +2,5 @@
 /node_modules
 /view
 /db/config/dbconfig.js
+/files
+/upload
