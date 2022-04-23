@@ -85,7 +85,7 @@ class ProjectController {
     exportProjectListExcelFile = async (req, res, next) =>{
         await ProjectService.exportProjectListExcelFile()
         .then(data =>{
-            return res.status(200).send("file successfull")
+            return res.status(200).send(data);
         })
         .catch(err => {
             return res.status(500).send(err.message);

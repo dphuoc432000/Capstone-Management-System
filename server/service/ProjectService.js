@@ -370,7 +370,7 @@ class ProjectService {
             let url = `${path}/Danh_sach_de_tai_cac_nhom.xlsx`;
             let fileName = "Danh_sach_de_tai_cac_nhom.xlsx";
             let type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            await FileStorage.findOrCreate({
+            const fileId = await FileStorage.findOrCreate({
                 where:{
                     fileName: fileName,
                     type:type,
@@ -381,9 +381,13 @@ class ProjectService {
                     type:type,
                     path: url
                 }
+            })
+            .then(data =>{  
+                data = data[0].get({plain: true})
+                return data.fileId;
             });
             let data = await workbook.xlsx.writeFile(`${path}/Danh_sach_de_tai_cac_nhom.xlsx`);
-            return data;
+            return fileId;
         } catch (err) {
             return "ERROR EXPORT FILE"
         }

@@ -9,9 +9,12 @@ const Council = sequelize.define("council", {
         primaryKey: true,
         allowNull: false,
     },
-    councilName: DataTypes.STRING(50),
-    councilDesc: DataTypes.STRING(100),
-    note: DataTypes.STRING(50),
+    councilName: {
+        type: DataTypes.STRING(50),
+        allowNull: false
+    },
+    councilDesc: DataTypes.TEXT,
+    note: DataTypes.TEXT,
     startDate: DataTypes.DATE,
     endDate: DataTypes.DATE,
     location: DataTypes.STRING(100),

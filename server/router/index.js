@@ -10,6 +10,10 @@ const notificationAPI = require('./api/notificationAPI');
 const groupAPI = require('./api/groupAPI');
 const projectAPI = require('./api/projectAPI');
 const sampleDocumentAPI = require('./api/sampleDocumentAPI');
+const stageAPI = require('./api/stageAPI');
+const listTaskAPI = require('./api/listTaskAPI');
+const taskAPI = require('./api/taskAPI');
+const taskAssignmentAPI = require('./api/taskAssignmentAPI');
 
 function router(server) {
     server.use('/api/role/', roleAPI);
@@ -25,6 +29,10 @@ function router(server) {
     server.use('/api/sampleDocument/', sampleDocumentAPI);
     server.use('/api/group/', groupAPI);
     server.use('/api/project/', projectAPI);
+    server.use('/api/stage/', stageAPI);
+    server.use('/api/listTask/', listTaskAPI);
+    server.use('/api/task/', taskAPI);
+    server.use('/api/taskAssignment/', taskAssignmentAPI);
 }
 
 

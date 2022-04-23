@@ -2,6 +2,7 @@ const { Sequelize, DataTypes } = require("sequelize");
 const { POSTGRESQL_DEVELOPMENT_HOST } = require("../config/dbconfig");
 const { Council } = require("./CouncilModel");
 const { Lecturer } = require("./LecturerModel");
+const { Role } = require("./RoleModel");
 const sequelize = new Sequelize(POSTGRESQL_DEVELOPMENT_HOST);
 
 const CouncilMember = sequelize.define("council_member", {
@@ -10,7 +11,8 @@ const CouncilMember = sequelize.define("council_member", {
         references: {
             model: Council,
             key: 'councilId'
-        }
+        },
+        primaryKey: true
     },
     lecturerId: {
         type: DataTypes.UUID,
@@ -20,7 +22,13 @@ const CouncilMember = sequelize.define("council_member", {
         },
         primaryKey: true
     },
-    roleName: DataTypes.STRING(10),
+    roleId: {
+        type: DataTypes.UUID,
+        references:{
+            model: Role,
+            key:"roleId" 
+        },
+    },
 });
 
 Council.belongsToMany(Lecturer, {
@@ -32,6 +40,8 @@ Lecturer.belongsToMany(Council,{
     through: CouncilMember,
     foreignKey:  'lecturerId'
 });
+
+Role.hasOne(CouncilMember, {foreignKey:"roleId"})
 
 const initCouncilMember = async () => {
     return CouncilMember.sync({ alert: true })

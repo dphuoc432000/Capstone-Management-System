@@ -21,11 +21,11 @@ const TaskAssignment = sequelize.define("task_assignment", {
         },
         primaryKey: true,
     },
-    status: DataTypes.BOOLEAN,
-    note: DataTypes.STRING(100),
+    // status: DataTypes.BOOLEAN,
+    // note: DataTypes.TEXT,
 });
 
-Student.belongsToMany(Task, { through: TaskAssignment, foreignKey: "studId" })
+Student.belongsToMany(Task, { through: TaskAssignment, foreignKey: "stuId" })
 Task.belongsToMany(Student, { through: TaskAssignment, foreignKey: "taskId" })
 
 const initTaskAssignment = async () => {

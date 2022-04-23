@@ -18,7 +18,7 @@ const Student = sequelize.define("student", {
     gpa: DataTypes.FLOAT(1, 2),
     courseCreadits: DataTypes.INTEGER,
     codeLevel: DataTypes.INTEGER,
-    note: DataTypes.STRING(100),
+    note: DataTypes.TEXT,
     typeCapstone: DataTypes.INTEGER,
     class: DataTypes.STRING(10),
     isApproved: DataTypes.BOOLEAN,

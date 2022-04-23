@@ -10,8 +10,13 @@ const Stage = sequelize.define("stage", {
         primaryKey: true,
         allowNull: false,
     },
-    stageName: DataTypes.STRING(50),
-    stageDesc: DataTypes.STRING(100),
+    stageName: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
+    },
+    stageDesc: DataTypes.TEXT,
+    startDate: DataTypes.DATE,
+    endDate: DataTypes.DATE,
     projectId: {
         type: DataTypes.UUID,
         references:{

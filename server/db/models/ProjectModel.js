@@ -22,7 +22,7 @@ const Project = sequelize.define("project", {
     },
     startDate: DataTypes.DATE,
     endDate: DataTypes.DATE,
-    note: DataTypes.STRING(255),
+    note: DataTypes.TEXT,
     lecturerId: {
         type: DataTypes.UUID, 
         references: {

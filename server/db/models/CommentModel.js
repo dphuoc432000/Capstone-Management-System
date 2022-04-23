@@ -11,20 +11,25 @@ const Comment = sequelize.define("comment", {
         primaryKey: true,
         allowNull: false,
     },
-    content: DataTypes.STRING(100),
+    content: {
+        type: DataTypes.TEXT,
+        allowNull: false
+    },
     userId: {
         type: DataTypes.UUID,
         references: {
             model: User,
             key: 'userId'
-        }
+        },
+        allowNull: false
     },
     taskId: {
         type: DataTypes.UUID,
         references: {
             model: Task,
             key: 'taskId'
-        }
+        },
+        allowNull: false
     },
 });
 

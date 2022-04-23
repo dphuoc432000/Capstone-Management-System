@@ -110,7 +110,7 @@ class GroupService {
             return Groups;
         });
     }
-  getMembersGroup = async (groupId) =>{
+    getMembersGroup = async (groupId) =>{
         return await Student.findAll({
             where:{
                 groupId
