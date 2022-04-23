@@ -18,7 +18,7 @@ const Department = sequelize.define("department", {
         type: DataTypes.STRING(50),
         allowNull: false,
     },
-    depDesc: DataTypes.STRING(100)
+    depDesc: DataTypes.TEXT
 })
 
 const initDepartment = async () =>{

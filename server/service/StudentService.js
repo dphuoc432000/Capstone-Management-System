@@ -363,6 +363,45 @@ class StudentService {
           });
         return filtered;
     }
+
+    getStudentByStuId = async (stuId) =>{
+        return await database.Student.findOne({
+            where:{
+                stuId
+            }, 
+            raw: true,
+            attributes: [
+                "stuId",
+                "stuCode",
+                "class",
+                "groupId",
+                "userId"
+            ]
+        }).then( async data =>{
+            if(data){
+                data = await database.User.findOne({
+                    where: {
+                        userId: data.userId
+                    }, raw: true,
+                    attributes: [
+                        "firstName",
+                        "lastName",
+                        "dateOfBirth",
+                        "email",
+                        "phone"
+                    ]
+                }).then(userData =>{
+                    if(userData)
+                        userData = {
+                            ...userData,
+                            ...data
+                        }
+                    return userData;
+                })
+            }
+            return data;
+        })
+    }
 }
 
 module.exports = new StudentService();
