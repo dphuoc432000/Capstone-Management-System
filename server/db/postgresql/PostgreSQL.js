@@ -25,9 +25,9 @@ const initAll = async () => {
     await initDepartment()
         .then(async () => {
             await initMajor();
-            await initCouncil();
             await initRole();
         }).then(async () => {
+            await initCouncil();
             await initUser();
             await initFileStorage();
         })
