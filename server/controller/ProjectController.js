@@ -125,6 +125,18 @@ class ProjectController {
                 return res.status(500).send(err.message);
             })
     }
+
+    getProjectDetailByProjectId = async (req, res, next) =>{
+        await ProjectService.getProjectDetailByProjectId(req.params.projectId)
+            .then(data =>{
+                if(data)
+                    return res.status(200).send(data);
+                return res.status(400).send("Không tìm thấy project");
+        })
+            .catch(err =>{
+                return res.status(500).send(err.message);
+            })
+    }
 }
 
 module.exports = new ProjectController();

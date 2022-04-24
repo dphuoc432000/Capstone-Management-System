@@ -544,6 +544,134 @@ class ProjectService {
             return null;
         });
     };
+
+    getProjectDetailByProjectId = async (projectId) =>{
+        return await Project.findOne({
+            where:{
+                projectId,
+                // lecturer: null,
+                // groupId: {
+                //     [Op.not]: null,
+                // },
+                // isApproved: "approved"
+            },
+            raw: true
+        }).then(async project =>{
+            
+            if(project){
+                const projectData = {
+                    projectId: project.projectId,
+                    projectName: project.projectName,
+                    projectDesc: project.projectDesc,
+                    starDate: project.startDate,
+                    endDate: project.endDate,
+                    note: project.note,
+                }
+                
+                
+                
+                
+                let leaderData =null;
+                let membersData = [];
+                let mentorsData = [];
+                console.log(project.groupId);
+                if(project.groupId){
+                    //get mảng mentor
+                    const mentorsGroup = await GroupLecturer.findAll({
+                        where: {
+                            groupId: project.groupId,
+                        },
+                        attributes: ["lecturerId"],
+                        raw: true,
+                    });
+                    mentorsData = await Promise.all(
+                        mentorsGroup.map(async (mentor) => {
+                            return await lecturerService.getLecturerByLectureId(
+                                mentor.lecturerId
+                            );
+                        })
+                    );
+
+                    //get leader
+                    leaderData = await Student.findOne({
+                        where: {
+                            stuId: project.leaderId,
+                        },
+                        attributes: [
+                            "stuId",
+                            "stuCode",
+                            "gpa",
+                            "note",
+                            "typeCapstone",
+                            "class",
+                            "userId",
+                        ],
+                        raw: true,
+                    }).then(async (data) => {
+                        const userLeader = await User.findOne({
+                            where: {
+                                userId: data.userId,
+                            },
+                            raw: true,
+                            attributes: [
+                                "userId",
+                                "firstName",
+                                "lastName",
+                                "email",
+                                "phone",
+                            ],
+                        });
+                        return { ...data, ...userLeader };
+                    });
+
+                    //get mảng members
+                    let members = await Student.findAll({
+                        where: { groupId: project.groupId },
+                        order: [["gpa", "DESC"]],
+                        attributes: [
+                            "stuId",
+                            "stuCode",
+                            "gpa",
+                            "note",
+                            "typeCapstone",
+                            "class",
+                            "userId",
+                        ],
+                        raw: true,
+                    });
+                    members = members.filter(
+                        (stu) => stu.stuCode != leaderData.stuCode
+                    );
+                    membersData = await Promise.all(
+                        members.map(async (member) => {
+                            const memberData = await User.findOne({
+                                where: {
+                                    userId: member.userId,
+                                },
+                                raw: true,
+                                attributes: [
+                                    "userId",
+                                    "firstName",
+                                    "lastName",
+                                    "email",
+                                    "phone",
+                                ],
+                            });
+                            return { ...member, ...memberData };
+                        })
+                    );
+                }
+                else{
+                    mentorsData = await lecturerService.getLecturerByLectureId(project.lecturerId);
+                }
+                projectData.leader = leaderData;
+                projectData.member = membersData;
+                projectData.mentor = mentorsData;
+                project = projectData;
+            }
+            return project;
+        })
+    }
 }
 
 module.exports = new ProjectService();
