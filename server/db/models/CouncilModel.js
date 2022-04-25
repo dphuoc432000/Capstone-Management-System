@@ -14,9 +14,7 @@ const Council = sequelize.define("council", {
         allowNull: false
     },
     councilDesc: DataTypes.TEXT,
-    note: DataTypes.TEXT,
-    startDate: DataTypes.DATE,
-    endDate: DataTypes.DATE,
+    time: DataTypes.DATE,
     location: DataTypes.STRING(100),
 });
 
