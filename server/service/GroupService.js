@@ -157,6 +157,7 @@ class GroupService {
                     where: {
                         groupId: group.groupId
                     },
+                    raw:true,
                     order:[
                         ["gpa", "DESC"]
                     ]
@@ -185,7 +186,7 @@ class GroupService {
                 }
                 const groupInfo = {
                     groupId: group.groupId,
-                    students: students,
+                    students: Students,
                     mentors: mentors,
                     name: group.groupName,
                     note: group.groupDesc,
@@ -239,7 +240,7 @@ class GroupService {
                         }
                         const groupInfo = {
                             groupId: group.groupId,
-                            students: students,
+                            students: Students,
                             mentors: mentors,
                             name: group.groupName,
                             note: group.groupDesc,
