@@ -47,7 +47,6 @@ class DefenseController {
             res.status(500).send(err.message);
         })
     }
-
     deleteDefense = async (req,res)=>{
         await DefenseService.deleteDefense(req.params.councilId)
         .then(data=>{
@@ -66,7 +65,6 @@ class DefenseController {
             res.status(500).send(err.message);
         })
     }
-
 }
 
 module.exports = new DefenseController();

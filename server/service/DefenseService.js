@@ -269,6 +269,7 @@ class DefenseService {
         }))
     }
 
+
     deleteDefense = async(councilId)=>{
         let council = await database.Council.destroy({
             where: {councilId: councilId},
