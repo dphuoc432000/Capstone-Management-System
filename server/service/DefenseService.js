@@ -268,6 +268,62 @@ class DefenseService {
             }
         }))
     }
+
+
+    deleteDefense = async(councilId)=>{
+        let council = await database.Council.destroy({
+            where: {councilId: councilId},
+            raw: true
+        });
+
+        if(council){
+            return await database.Group.update({
+                councilId: null
+            },{
+                where: {councilId: councilId}
+            })
+        }
+        return null;
+    }
+
+    updateDefense = async (data, councilId)=>{
+        let council =await database.Council.findOne({
+            where: {councilId: councilId},
+            raw: true
+        });
+        if (council) {
+            await database.Council.update({
+                councilName: data.councilName,
+                councilDesc: data.councilDesc,
+                time: data.time,
+                location: data.location
+            }, {where: {councilId: councilId}}); 
+            await database.CouncilMember.destroy({where: {councilId: councilId}});
+            let group = await database.Group.findOne({where:{councilId: councilId}, raw:true});
+            let mentor = await database.GroupLecturer.findOne({
+                where: {
+                    groupId: group.groupId
+                },
+                attributes: ['lecturerId'],
+                raw: true
+            });    
+            let arr = data.lecturers.map(member=> member.lecturerId);
+            let isMentor = arr.includes(mentor.lecturerId);
+            if(!isMentor){
+                console.log("acb");
+                data.lecturers.map(async lecturer => {
+                    await database.CouncilMember.create({
+                        councilId: councilId,
+                        lecturerId: lecturer.lecturerId,
+                        roleId: lecturer.roleId,
+                        workUnit: lecturer.workUnit
+                    });
+                });
+            }else return null;
+            return council;
+        }
+        return null
+    }
 }
 
 module.exports = new DefenseService();

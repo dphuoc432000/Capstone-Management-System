@@ -47,7 +47,24 @@ class DefenseController {
             res.status(500).send(err.message);
         })
     }
+    deleteDefense = async (req,res)=>{
+        await DefenseService.deleteDefense(req.params.councilId)
+        .then(data=>{
+            return data?res.status(200).send("delete success"):res.status(400).send("something went wrong!");
+        }).catch(err=>{
+            res.status(500).send(err.message);
+        })
+    }
 
+    updateDefense =  async (req,res)=>{
+        await DefenseService.updateDefense( req.body,req.params.councilId)
+        .then(data=>{
+            console.log(data);
+            return data?res.status(200).send("update success"):res.status(400).send("something went wrong!");
+        }).catch(err=>{
+            res.status(500).send(err.message);
+        })
+    }
 }
 
 module.exports = new DefenseController();
