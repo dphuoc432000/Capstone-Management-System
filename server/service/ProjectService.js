@@ -13,6 +13,8 @@ const { Op } = require("sequelize");
 const { ProjectFile } = require("../db/models/ProjectFileModel");
 const LecturerService = require("./LecturerService");
 const FileStorageService = require("./FileStorageService");
+const StageService = require("./StageService");
+const EvaluateStageService = require("./EvaluateStageService");
 
 class ProjectService {
     //cập nhật topic lúc chưa bắt đầu
@@ -568,13 +570,9 @@ class ProjectService {
                     note: project.note,
                 }
                 
-                
-                
-                
                 let leaderData =null;
                 let membersData = [];
                 let mentorsData = [];
-                console.log(project.groupId);
                 if(project.groupId){
                     //get mảng mentor
                     const mentorsGroup = await GroupLecturer.findAll({
@@ -664,9 +662,21 @@ class ProjectService {
                 else{
                     mentorsData = await lecturerService.getLecturerByLectureId(project.lecturerId);
                 }
+                //get all stages
+                const stagesData = await StageService.getAllStageOfProject(project.projectId)
+                    .then(async datas =>{
+                        if(datas && datas.length > 0){
+                            datas = await Promise.all(datas.map(async stage =>{
+                                return await EvaluateStageService.getEvaluateOfStageDetail(stage.stageId);
+                            }))
+                        }
+                        return datas;
+                    })
+
+                projectData.mentor = mentorsData;
                 projectData.leader = leaderData;
                 projectData.member = membersData;
-                projectData.mentor = mentorsData;
+                projectData.stages = stagesData;
                 project = projectData;
             }
             return project;
