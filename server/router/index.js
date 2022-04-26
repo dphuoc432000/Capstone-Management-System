@@ -14,6 +14,7 @@ const stageAPI = require('./api/stageAPI');
 const listTaskAPI = require('./api/listTaskAPI');
 const taskAPI = require('./api/taskAPI');
 const taskAssignmentAPI = require('./api/taskAssignmentAPI');
+const evaluateStageAPI = require('./api/evaluateStageAPI');
 const defenseAPI = require('./api/defenseAPI');
 
 function router(server) {
@@ -33,6 +34,7 @@ function router(server) {
     server.use('/api/listTask/', listTaskAPI);
     server.use('/api/task/', taskAPI);
     server.use('/api/taskAssignment/', taskAssignmentAPI);
+    server.use('/api/evaluateStage/', evaluateStageAPI);
     server.use('/api/defense/', defenseAPI);
 }
 
