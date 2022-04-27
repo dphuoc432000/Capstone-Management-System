@@ -20,6 +20,7 @@ const { ListTask, initListTask } = require("../models/ListTaskModel");
 const { Notification, initNotification } = require('../models/NotificationModel');
 const { NotificationFile, initNotificationFile } = require('../models/NotificationFileModel');
 const { ProjectFile, initProjectFile} = require("../models/ProjectFileModel");
+const { EvaluateStage, initEvaluateStage } = require("../models/EvaluateStageModel");
 
 const initAll = async () => {
     await initDepartment()
@@ -55,6 +56,7 @@ const initAll = async () => {
             await initComment();
             await initCouncilMember();
             await initScore();
+            await initEvaluateStage();
         })
 }
 
@@ -83,5 +85,6 @@ module.exports = {
     CouncilMember,
     Score,
     Notification,
-    NotificationFile
+    NotificationFile, 
+    EvaluateStage
 };

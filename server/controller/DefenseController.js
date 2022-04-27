@@ -35,6 +35,7 @@ class DefenseController {
         })
     }
 
+
     getAllDefenseToAssign = async (req,res)=>{
         await DefenseService.getAllDefenseToAssign()
         .then(data=>{

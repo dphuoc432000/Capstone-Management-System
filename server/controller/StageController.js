@@ -15,9 +15,9 @@ class StageController {
                 if(data === "NAME DUPPLICATE")
                     return res.status(400).send("Trùng tên stage đã có. Tạo không thành công");
                 else if(data === "NO PROJECT")
-                    return res.status(400).send("Không tìm thấy proeject hoặc chưa được chấp thuận từ hệ thống.");
+                    return res.status(400).send("Không tìm thấy proeject hoặc chưa được chấp thuận từ hệ thống hoặc project này là topic template.");
                 else
-                    return res.status(200).send("Tạo stage thành công");
+                    return res.status(200).send(data);
             })
             .catch(err => {
                 return res.status(500).send(err.message);
@@ -41,7 +41,7 @@ class StageController {
                 else if(data === "NAME DUPLICATE")
                     return res.status(400).send("Lỗi trùng tên với stage khác");
                 else
-                    return res.status(200).send("Cập nhật stage thành công");
+                    return res.status(200).send(data);
             })
             .catch(err => {
                 return res.status(500).send(err.message);

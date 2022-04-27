@@ -13,5 +13,5 @@ router.get("/exportFile", projectController.exportProjectListExcelFile );
 router.get("/topicTemplate/detail/:projectId", projectController.getTopicTemplateDetail  );
 router.get("/topicTemplate/get", projectController.getAllTopicTemplate);
 router.post("/topicTemplate/delete/:lecturerId/:projectId", projectController.deleteTopicTemplate);
-
+router.get("/detail/:projectId", projectController.getProjectDetailByProjectId);
 module.exports = router;

@@ -16,7 +16,7 @@ class ListTaskService{
         if(checkStage){
             return await ListTask.create(listTask,{
                 raw: true
-            }).then(data => data? true: false);
+            });
         }
         return "NO STAGE";
     }
@@ -31,11 +31,21 @@ class ListTaskService{
                     stageId
                 },
                 raw: true,
-            }).then(async data =>{
-                if(data){
+            }).then(async listTaskData =>{
+                if(listTaskData){
                     return await ListTask.update(listTask,{
                         where: {listTaskId, stageId},
-                    }).then(data => data[0]>0?true:false);
+                    }).then(async data => {
+                        if(data[0] > 0)
+                            return ListTask.findOne({
+                                where:{
+                                    listTaskId,
+                                    stageId
+                                },
+                                raw: true,
+                            })
+                        return false;
+                    });
                 }
                 return "NO LIST TASK"
             })
@@ -46,12 +56,23 @@ class ListTaskService{
     deleteTaskList = async(stageId,listTaskId) =>{
         const checkStage = await this.checkStage(stageId);
         if(checkStage){
-            return await ListTask.destroy({
+            return ListTask.findOne({
                 where:{
-                    stageId,
-                    listTaskId
-                }
-            }).then(count => count>0?true:false)
+                    listTaskId,
+                    stageId
+                },
+                raw: true,
+            }).then(async listTaskData =>{
+                if(listTaskData)
+                    return await ListTask.destroy({
+                        where:{
+                            stageId,
+                            listTaskId
+                        }
+                    }).then(count => count>0?listTaskData.listTaskId:false)
+                return false;
+            })
+            
         }
         return "NO STAGE";
     }

@@ -11,7 +11,7 @@ class ListTaskController{
                 else if(!data)
                     return res.status(400).send("Thêm task list thất bại");
                 else  
-                    return res.status(200).send("Thêm task list thành công");
+                    return res.status(200).send(data);
             })  
             .catch(err => res.status(500).send(err.message));
     }
@@ -26,7 +26,7 @@ class ListTaskController{
                 else if(!data)
                     return res.status(400).send("Cập nhật task list thất bại");
                 else  
-                    return res.status(200).send("Cập nhật task list thành công");
+                    return res.status(200).send(data);
             })  
             .catch(err => res.status(500).send(err.message));
     }
@@ -39,7 +39,7 @@ class ListTaskController{
             else if(!data)
                 return res.status(400).send("Không tìm thấy task list");
             else
-                return res.status(200).send("Xoá task list thành công");
+                return res.status(200).send(data);
         })
         .catch(err => res.status(500).send(err.message));
     }

@@ -27,17 +27,24 @@ class TaskService {
         const checkListTask = await this.checkListTask(stageId, listTaskId);
         if(checkListTask){
             //theem task
-            return await Task.create(task)
+            return await Task.create(task, {
+                raw: true
+            })
                 .then(async data => {
                     if(data){
                         //gán member,
+                        data = data.get({plain: true})
+                        let members = [];
                         if(studentIds && studentIds.length > 0 && await this.checkTask(listTaskId, data.taskId)){
                             console.log(studentIds)
-                            await TaskAssignmentService.assignMembers(data.taskId, studentIds);
+                            members = await TaskAssignmentService.assignMembers(data.taskId, studentIds);
                         }
-                        return true;
+                        return {
+                            ...data,
+                            members
+                        };
                     }
-                    return false;
+                    return data;
                 });
         }
         return "NO TASK LIST";
@@ -47,25 +54,37 @@ class TaskService {
         const checkListTask = await this.checkListTask(stageId, listTaskId);
         if(checkListTask){
             // update task
-            await Task.update(task,{
+            const countUpdate = await Task.update(task,{
                 where:{
                     listTaskId,
                     taskId
                 }
+            }).then(async count =>{
+                return count[0];
             })
-
             //update member
-            if("studentIds" in task && task.studentIds.length > 0){
-                console.log(task)
-                if(await this.checkTask(listTaskId, taskId))
-                    await TaskAssignmentService.updateMembers(taskId, task.studentIds, []);
+            if(countUpdate > 0){
+                if("studentIds" in task && task.studentIds.length > 0){
+                    if(await this.checkTask(listTaskId, taskId))
+                        await TaskAssignmentService.updateMembers(taskId, task.studentIds, []);
+                }
+                if("deleteStudentIds" in task && task.deleteStudentIds.length > 0){
+                    // console.log(task.deleteStudentIds)
+                    if(await this.checkTask(listTaskId, taskId))
+                        await TaskAssignmentService.updateMembers(taskId, [], task.deleteStudentIds);
+                }
+                return await Task.findOne({
+                    where:{
+                        listTaskId,
+                        taskId
+                    }, raw: true
+                }).then(async data =>{
+                    return {
+                        ...data,
+                        members: await TaskAssignmentService.getAllMemberOfTask(data.taskId)
+                    }
+                });
             }
-            if("deleteStudentIds" in task && task.deleteStudentIds.length > 0){
-                // console.log(task.deleteStudentIds)
-                if(await this.checkTask(listTaskId, taskId))
-                    await TaskAssignmentService.updateMembers(taskId, [], task.deleteStudentIds);
-            }
-            return true;
         }
         return "NO TASK LIST";
     }
@@ -107,14 +126,25 @@ class TaskService {
         const checkListTask = await this.checkListTask(stageId, listTaskId);
         const checkTask = await this.checkTask(listTaskId, taskId);
         if(checkListTask && checkTask){
-            return await Task.destroy({
+            return Task.findOne({
                 where:{
                     listTaskId,
                     taskId
+                }, raw: true
+            }).then(async data =>{
+                if(data){
+                    return await Task.destroy({
+                        where:{
+                            listTaskId,
+                            taskId
+                        }
+                    }).then(count =>{
+                        return count>0?data.taskId:false;
+                    })
                 }
-            }).then(count =>{
-                return count>0?true:false;
+                return false
             })
+            
         }
         return "NO TASK LIST OR TASK";
     }

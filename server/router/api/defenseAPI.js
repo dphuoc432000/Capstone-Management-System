@@ -7,6 +7,7 @@ router.post('/assignGroup', DefenseController.assignGroupDefense);
 router.get('/getAllDefense', DefenseController.getAllDefense);
 router.get('/getAllDefenseToAssign', DefenseController.getAllDefenseToAssign);
 router.get('/getAllDefense/:lecturerId', DefenseController.getAllDefenseByLecturerId);
+router.get('/getAllDefense/:lecturerId', DefenseController.getAllDefenseByLecturerId);
 router.delete('/deleteDefense/:councilId', DefenseController.deleteDefense);
 router.put('/updateDefense/:councilId', DefenseController.updateDefense);
 
