@@ -71,6 +71,67 @@ class DefenseService {
         return null;
     }
 
+    getAllDefenseToAssign = async()=>{
+        let dataCouncils = await database.Council.findAll({raw:true})
+        .then(async councils=>{
+            var councilNoAssignGroup = [];
+            await Promise.all(councils.map(async council=>{
+                let group = await database.Group.findAll({raw:true, attributes: ['councilId']});
+                let arr = group.map(el=> el.councilId);
+
+                let isAssign = arr.includes(council.councilId);
+
+                if(!isAssign){
+                    councilNoAssignGroup.push(council);
+                }
+            }));
+            return councilNoAssignGroup;
+        })
+
+        return await Promise.all(dataCouncils.map(async council => {
+
+            let detailMembers = await database.CouncilMember.findAll({
+                where: {
+                    councilId: council.councilId
+                }
+            }).then(async members => {
+                return await Promise.all(members.map(async member => {
+                    let workUnit = member.workUnit;
+                    let memberInfo = await database.Lecturer.findOne({
+                        where: {
+                            lecturerId: member.lecturerId
+                        },
+                        raw: true
+                    }).then(async info => {
+                        return await database.User.findOne({
+                            where: {
+                                userId: info.userId
+                            },
+                            attributes: ['firstName', 'lastName']
+                        });
+                    });
+                    let roleName = await database.Role.findOne({
+                        where: {
+                            roleId: member.roleId
+                        },
+                        raw: true,
+                        attributes: ['roleName']
+                    });
+                    let dataMember = {
+                        workUnit,
+                        memberInfo,
+                        roleName
+                    }
+                    return dataMember;
+                }));
+            });
+            return {
+                council,
+                detailMembers
+            }
+        }));
+    }
+
     getAllDefense = async () => {
         return await database.Council.findAll({
                 raw: true
@@ -268,7 +329,6 @@ class DefenseService {
             }
         }))
     }
-
 
     deleteDefense = async(councilId)=>{
         let council = await database.Council.destroy({

@@ -35,6 +35,20 @@ class DefenseController {
         })
     }
 
+
+    getAllDefenseToAssign = async (req,res)=>{
+        await DefenseService.getAllDefenseToAssign()
+        .then(data=>{
+            if(data){
+               return res.status(200).send(data);
+            }
+            return res.status(400).send("something went wrong");
+        }).catch(err=>{
+            res.status(500).send(err.message);
+        })
+    }
+
+
     getAllDefenseByLecturerId = async (req,res)=>{
         await DefenseService.getAllDefenseByLecturerId(req.params.lecturerId)
         .then(data=>{
@@ -47,6 +61,7 @@ class DefenseController {
             res.status(500).send(err.message);
         })
     }
+
     deleteDefense = async (req,res)=>{
         await DefenseService.deleteDefense(req.params.councilId)
         .then(data=>{
@@ -65,6 +80,7 @@ class DefenseController {
             res.status(500).send(err.message);
         })
     }
+
 }
 
 module.exports = new DefenseController();
