@@ -1,5 +1,5 @@
 const {Role} = require("../db/postgresql/PostgreSQL");
-
+const {Op} = require("sequelize")
 
 class RoleService {
 
@@ -20,6 +20,20 @@ class RoleService {
         return role;
     }
 
+    getAllRoleCouncil = async () =>{
+        return await Role.findAll({
+            where:{
+                roleName: {
+                    [Op.in]:   ["reviewer", "president", "assistant"]
+                }
+            },
+            attributes:[
+                "roleId",
+                "roleName"
+            ]
+            , raw: true
+        }).then(data =>  data);
+    }
 }
 
 module.exports = new RoleService();

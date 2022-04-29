@@ -1,9 +1,34 @@
+const { Stage } = require("../db/models/StageModel");
 const { Student } = require("../db/models/StudentModel");
 const { TaskAssignment } = require("../db/models/TaskAssigmentModel");
 const { Task } = require("../db/models/TaskModel");
 const StudentService = require("./StudentService");
 
 class TaskAssignmentService{
+
+    //kiểm tra student có trong group không
+    //có trong group -> có trong stage
+    // checkStudentInStage = async (stageId, stuId) =>{
+    //     const stageData = await Stage.findOne({
+    //         where: {stageId},
+    //         raw: true
+    //     }).then(data => data);
+    //     if(stageData){
+    //         const projectData = await Project.findOne({
+    //             where:{
+    //                 projectId: stageData.projectId,
+    //             }, raw: true
+    //         })
+    //         console.log(projectData);
+    //         return await Student.findOne({
+    //             where:{
+    //                 stuId,
+    //                 groupId: projectData.groupId
+    //             }, raw: true
+    //         }).then(data => data?true:false);
+    //     }
+    //     return false;
+    // }
     
     checkStudent = async (stuId) =>{
         return await Student.findOne({
@@ -51,10 +76,16 @@ class TaskAssignmentService{
                 })
                 // return await TaskAssignment.bulkCreate(studentIdsNew)
                 //     .then(data => data.length > 0? true: false)
-                await TaskAssignment.bulkCreate(studentIdsNew);
+                return await TaskAssignment.bulkCreate(studentIdsNew)
+                    .then(async data => await Promise.all(data.map(async taskAss => {
+                        taskAss = taskAss.get({plain: true})
+                        return await StudentService.getStudentByStuId(taskAss.stuId);
+                    })));
             }
-            else
+            else{
                 console.log("Không có student được gán");
+                return [];
+            }
             // return "NO MEMBERS"
         // }
         // return "NO TASK";

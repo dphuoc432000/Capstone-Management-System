@@ -6,7 +6,7 @@ class RoleController {
     //Thêm role
     //POST: /add
     addRole = async (req, res, next) => {
-        const roleName = req.body.roleName;
+        const roleName = req.body.roleName.toLowerCase();
         await roleService.addRole(roleName)
             .then(data =>{
                 if(data)
@@ -34,6 +34,14 @@ class RoleController {
                 return res.status(400).json(err);
                 // next(err);
             })
+    }
+
+    getAllRoleCouncil = async (req, res, next) =>{
+        await roleService.getAllRoleCouncil()
+            .then(data =>{
+                return res.status(200).json(data);
+            })
+            .catch(err => res.status(500).json(err))
     }
 }
 

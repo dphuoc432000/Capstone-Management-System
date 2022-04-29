@@ -10,14 +10,14 @@ class TaskController{
             startDate: req.body.startDate? req.body.startDate: null,
             endDate: req.body.endDate? req.body.endDate: null
         }
-        console.log(task)
+        // console.log(task)
         const studentIds = req.body.studentIds?req.body.studentIds:null;
         await taskService.addTask(req.params.stageId, req.params.listTaskId, task, studentIds)
             .then(data =>{
                 if(data === "NO TASK LIST")
                     return res.status(400).send("Không tìm thấy taskList");
                 else 
-                    return res.status(200).send("Thêm task thành công");
+                    return res.status(200).send(data);
             })
             .catch(err => res.status(500).send(err.message));   
     }
@@ -44,7 +44,7 @@ class TaskController{
             if(data === "NO TASK LIST")
                 return res.status(400).send("Không tìm thấy taskList");
             else 
-                return res.status(200).send("Cập nhập task thành công");
+                return res.status(200).send(data);
         })
         .catch(err => res.status(500).send(err.message));   
     }
@@ -70,7 +70,7 @@ class TaskController{
                 else if(!data )
                     return res.status(400).send("Lỗi xoá task");
                 else 
-                    return res.status(200).send("Xoá task thành công");
+                    return res.status(200).send(data);
             })
         .catch(err => res.status(500).send(err.message));   
     }
