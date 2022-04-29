@@ -71,6 +71,29 @@ class DefenseService {
         return null;
     }
 
+
+    getAllDefenseToAssign = async () => {
+        let dataCouncils = await database.Council.findAll({
+                raw: true
+            })
+            .then(async councils => {
+                var councilNoAssignGroup = [];
+                await Promise.all(councils.map(async council => {
+                    let group = await database.Group.findAll({
+                        raw: true,
+                        attributes: ['councilId']
+                    });
+                    let arr = group.map(el => el.councilId);
+
+                    let isAssign = arr.includes(council.councilId);
+
+                    if (!isAssign) {
+                        councilNoAssignGroup.push(council);
+                    }
+                }));
+                return councilNoAssignGroup;
+            })
+
     getAllDefenseToAssign = async()=>{
         let dataCouncils = await database.Council.findAll({raw:true})
         .then(async councils=>{
@@ -87,6 +110,7 @@ class DefenseService {
             }));
             return councilNoAssignGroup;
         })
+
 
         return await Promise.all(dataCouncils.map(async council => {
 
@@ -185,6 +209,42 @@ class DefenseService {
 
                     let students = [];
                     let mentors = [];
+                    if (group) {
+                        let student = await database.Student.findAll({ 
+                            where: {
+                                groupId: group.groupId
+                            },
+                            order: [
+                                ["gpa", "DESC"]
+                            ],
+                            raw: true
+                        });
+                        if (student) {
+
+                            for (let i = 0; i < student.length; i++) {
+                                students.push(await StudentService.getStudent(student[i].userId));
+                            }
+                        }
+
+                        let mentor = await database.GroupLecturer.findAll({
+                            where: {
+                                groupId: group.groupId
+                            },
+                            raw: true
+                        });
+                        if (mentor) {
+                            for (let i = 0; i < mentor.length; i++) {
+                                const user = await database.Lecturer.findOne({
+                                    where: {
+                                        lecturerId: mentor[i].lecturerId
+                                    },
+                                });
+                                mentors.push(await LecturerService.getLecturerByUserId(user.userId));
+                            }
+
+
+                    let students = [];
+                    let mentors = [];
                     let student = await database.Student.findAll({
                         where: {
                             groupId: group.groupId
@@ -215,6 +275,7 @@ class DefenseService {
                                 },
                             });
                             mentors.push(await LecturerService.getLecturerByUserId(user.userId));
+
                         }
                     }
                     return {
@@ -330,6 +391,23 @@ class DefenseService {
         }))
     }
 
+
+    deleteDefense = async (councilId) => {
+        let council = await database.Council.destroy({
+            where: {
+                councilId: councilId
+            },
+            raw: true
+        });
+
+        if (council) {
+            return await database.Group.update({
+                councilId: null
+            }, {
+                where: {
+                    councilId: councilId
+                }
+
     deleteDefense = async(councilId)=>{
         let council = await database.Council.destroy({
             where: {councilId: councilId},
@@ -341,14 +419,23 @@ class DefenseService {
                 councilId: null
             },{
                 where: {councilId: councilId}
+
             })
         }
         return null;
     }
 
+
+    updateDefense = async (data, councilId) => {
+        let council = await database.Council.findOne({
+            where: {
+                councilId: councilId
+            },
+
     updateDefense = async (data, councilId)=>{
         let council =await database.Council.findOne({
             where: {councilId: councilId},
+
             raw: true
         });
         if (council) {
@@ -357,19 +444,45 @@ class DefenseService {
                 councilDesc: data.councilDesc,
                 time: data.time,
                 location: data.location
+
+            }, {
+                where: {
+                    councilId: councilId
+                }
+            });
+            await database.CouncilMember.destroy({
+                where: {
+                    councilId: councilId
+                }
+            });
+            let group = await database.Group.findOne({
+                where: {
+                    councilId: councilId
+                },
+                raw: true
+            });
+
             }, {where: {councilId: councilId}}); 
             await database.CouncilMember.destroy({where: {councilId: councilId}});
             let group = await database.Group.findOne({where:{councilId: councilId}, raw:true});
+
             let mentor = await database.GroupLecturer.findOne({
                 where: {
                     groupId: group.groupId
                 },
                 attributes: ['lecturerId'],
                 raw: true
+
+            });
+            let arr = data.lecturers.map(member => member.lecturerId);
+            let isMentor = arr.includes(mentor.lecturerId);
+            if (!isMentor) {
+
             });    
             let arr = data.lecturers.map(member=> member.lecturerId);
             let isMentor = arr.includes(mentor.lecturerId);
             if(!isMentor){
+
                 console.log("acb");
                 data.lecturers.map(async lecturer => {
                     await database.CouncilMember.create({
@@ -379,7 +492,11 @@ class DefenseService {
                         workUnit: lecturer.workUnit
                     });
                 });
+
+            } else return null;
+
             }else return null;
+
             return council;
         }
         return null
