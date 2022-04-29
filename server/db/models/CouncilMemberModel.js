@@ -29,6 +29,9 @@ const CouncilMember = sequelize.define("council_member", {
             key:"roleId" 
         },
     },
+    workUnit: {
+        type: DataTypes.STRING(50)
+    }
 });
 
 Council.belongsToMany(Lecturer, {

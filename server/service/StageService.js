@@ -19,7 +19,13 @@ class StageService {
         return await Project.findOne({
             where:{
                 projectId: stage.projectId,
-                isApproved: "approved"
+                isApproved: "approved",
+                leaderId:{
+                    [Op.not]: null,
+                },
+                groupId:{
+                    [Op.not]: null
+                }
             },
             raw: true
         }).then(async projectData =>{
@@ -36,7 +42,7 @@ class StageService {
                 let check = stageData.find(stageEle => {
                     return typeof stageEle === 'boolean';
                 })
-                return check ? check: "NAME DUPPLICATE";
+                return check ? stageData[0]: "NAME DUPPLICATE";
             }
             return "NO PROJECT"
         })
@@ -68,8 +74,15 @@ class StageService {
                                 projectId,
                                 stageId
                             }
-                        }).then(count =>{
-                            return count[0]>0?true:false
+                        }).then(async count =>{
+                            return count[0]>0?(
+                                await Stage.findOne({
+                                    where:{
+                                        projectId,
+                                        stageId,
+                                    }, raw: true
+                                })
+                            ):false
                         })
                     return "NAME DUPLICATE";
                 }
@@ -82,12 +95,21 @@ class StageService {
     deleteStage = async (projectId, stageId) =>{
         const checkProject = await this.checkProject(projectId);
         if(checkProject){
-            return await Stage.destroy({
+            return await Stage.findOne({
                 where:{
                     stageId,
                     projectId
-                }
-            }).then(count => count>0?true:false);
+                }, raw: true
+            }).then(async data =>{
+                if(data)
+                    return await Stage.destroy({
+                        where:{
+                            stageId,
+                            projectId
+                        }
+                    }).then(count => count>0?data.stageId:false);
+                return false;
+            })
         }
         return "NO PROJECT";
     }
