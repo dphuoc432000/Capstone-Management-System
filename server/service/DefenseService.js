@@ -158,12 +158,12 @@ class DefenseService {
                                     where: {
                                         userId: info.userId
                                     },
-                                    attributes: ['firstName', 'lastName'],
                                     raw: true
                                 });
                             });
                             let firstName = memberInfo.firstName;
                             let lastName = memberInfo.lastName;
+                            let lecturerId = memberInfo.lecturerId;
                             let role = await database.Role.findOne({
                                 where: {
                                     roleId: member.roleId
@@ -173,6 +173,7 @@ class DefenseService {
                             let roleName = role.roleName;
                             let roleId = role.roleId;
                             let dataMember = {
+                                lecturerId,
                                 workUnit,
                                 firstName,
                                 lastName,
