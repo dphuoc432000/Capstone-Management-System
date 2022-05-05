@@ -143,7 +143,7 @@ class DefenseService {
                     }).then(async members => {
                         return await Promise.all(members.map(async member => {
                             let workUnit = member.workUnit;
-                            let memberInfo = await database.Lecturer.findOne({
+                            var memberInfo = await database.Lecturer.findOne({
                                 where: {
                                     lecturerId: member.lecturerId
                                 },
@@ -153,19 +153,24 @@ class DefenseService {
                                     where: {
                                         userId: info.userId
                                     },
-                                    attributes: ['firstName', 'lastName']
+                                    attributes: ['firstName', 'lastName'],
+                                    raw:true
                                 });
                             });
-                            let roleName = await database.Role.findOne({
+                            let firstName = memberInfo.firstName;
+                            let lastName = memberInfo.lastName;
+                            let role = await database.Role.findOne({
                                 where: {
                                     roleId: member.roleId
                                 },
                                 raw: true,
                                 attributes: ['roleName']
                             });
+                            let roleName = role.roleName;
                             let dataMember = {
                                 workUnit,
-                                memberInfo,
+                                firstName,
+                                lastName,
                                 roleName
                             }
                             return dataMember;
@@ -177,9 +182,7 @@ class DefenseService {
                             councilId: council.councilId
                         },
                         raw: true,
-                        attributes: ['groupId']
                     });
-
                     let students = [];
                     let mentors = [];
                     let student = await database.Student.findAll({
@@ -214,11 +217,19 @@ class DefenseService {
                             mentors.push(await LecturerService.getLecturerByUserId(user.userId));
                         }
                     }
+                    console.log({
+                        council,
+                        students,
+                        mentors,
+                        detailMembers,
+                        group   
+                    });
                     return {
                         council,
                         students,
                         mentors,
-                        detailMembers
+                        detailMembers,
+                        group   
                     }
                 }))
             })
