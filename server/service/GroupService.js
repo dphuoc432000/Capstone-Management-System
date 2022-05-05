@@ -102,7 +102,7 @@ class GroupService {
                     mentors: mentors,
                     name: group.groupName,
                     note: group.groupDesc,
-                    group: group.councilId,
+                    councilId: group.councilId,
                     typeCapstone: group.typeCapstone,
                     isScientificGroup: group.isScientificGroup
                 }
