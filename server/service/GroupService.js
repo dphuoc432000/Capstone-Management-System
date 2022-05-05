@@ -62,7 +62,7 @@ class GroupService {
 
     getAllGroup = async()=> {
         return await database.Group.findAll().then(async groups => {
-            const Groups = Promise.all(groups.map(async group => {
+            var Groups = Promise.all(groups.map(async group => {
                 var students = [];
                 var mentors = [];
                 const student = await database.Student.findAll({
@@ -78,7 +78,7 @@ class GroupService {
                     for (let i = 0; i < student.length; i++) {
                         students.push(await StudentService.getStudent(student[i].userId));
                     }
-                }
+                }else return null
     
                 const mentor = await database.GroupLecturer.findAll({
                     where: {
@@ -95,7 +95,7 @@ class GroupService {
                         });
                         mentors.push(await LecturerService.getLecturerByUserId(user.userId));
                     }
-                }
+                }else return null
                 const groupInfo = {
                     groupId: group.groupId,
                     students: students,
@@ -105,9 +105,14 @@ class GroupService {
                     typeCapstone: group.typeCapstone,
                     isScientificGroup: group.isScientificGroup
                 }
-                return await groupInfo
+                if(groupInfo.students.length !== 0 ||groupInfo.mentors.length !== 0){
+                    return await groupInfo
+                }
+                return null;
             }));
-            return Groups;
+            return  (await Groups).filter(function (el) {
+                return el != null;
+              });
         });
     }
     getMembersGroup = async (groupId) =>{
@@ -128,6 +133,7 @@ class GroupService {
                         userId: student.userId,
                         stuCode: student.stuCode,
                         note: student.note,
+                        councilId: group.councilId,
                         groupId: student.groupId,
                         class: student.class,
                         firstName: userData.firstName,
@@ -190,6 +196,7 @@ class GroupService {
                     mentors: mentors,
                     name: group.groupName,
                     note: group.groupDesc,
+                    councilId: group.councilId,
                     typeCapstone: group.typeCapstone,
                     isScientificGroup: group.isScientificGroup
                 }
@@ -244,6 +251,7 @@ class GroupService {
                             mentors: mentors,
                             name: group.groupName,
                             note: group.groupDesc,
+                            councilId: group.councilId,
                             typeCapstone: group.typeCapstone,
                             isScientificGroup: group.isScientificGroup
                         }
