@@ -66,6 +66,38 @@ class DefenseService {
                     groupId: data.groupId
                 },
 
+            })
+            //phuoc Update
+            .then(async count =>{
+                //nếu như cập nhật thành công thì
+                if(count[0] > 0){
+                    //update councilId bên bảng score
+                    await database.Group.findOne({
+                        where:{
+                            groupId: data.groupId,
+                        }, raw: true
+                    }).then(async groupData =>{
+                        if(groupData){
+                            //get stuIds của group 
+                            const stuIdsArr = await database.Student.findAll({
+                                where:{
+                                    groupId: data.groupId
+                                }, raw: true
+                            }).then(datas => datas.map(student => student.stuId));
+                            
+                            if(stuIdsArr.length > 0)
+                                await database.Score.update({
+                                    councilId: groupData.councilId,
+                                },{
+                                    where:{
+                                        stuId: stuIdsArr
+                                    }
+                                })
+                        }
+                    })
+                }
+                return count;
+                //đến đây
             });
         }
         return null;

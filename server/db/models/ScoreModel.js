@@ -17,7 +17,8 @@ const Score = sequelize.define("score", {
         references: {
             model: Council,
             key: 'councilId',
-        }
+        },
+        allowNull: true
     },
     stuId: {
         type: DataTypes.UUID,
@@ -25,18 +26,18 @@ const Score = sequelize.define("score", {
             model: Student,
             key: 'stuId',
         },
-        unique: true,
     },
     lecturerId: {
         type: DataTypes.UUID,
         references: {
             model: Lecturer,
             key:'lecturerId'
-        }
+        }, 
+        allowNull: true
     },
     mentorScore: DataTypes.FLOAT(1, 2),
-    councilChefScore: DataTypes.FLOAT(1, 2),
-    secretaryScore: DataTypes.FLOAT(1, 2),
+    presidentScore: DataTypes.FLOAT(1, 2),
+    assistantScore: DataTypes.FLOAT(1, 2),
     reviewerScore: DataTypes.FLOAT(1, 2),
 });
 

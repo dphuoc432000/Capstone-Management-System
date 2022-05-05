@@ -34,6 +34,15 @@ class RoleService {
             , raw: true
         }).then(data =>  data);
     }
+
+    getLecturerRoleInCouncilDetail = async (roleId) =>{
+        return await Role.findOne({
+            where:{
+                roleId
+            }, 
+            raw: true,
+        }).then(data => data);
+    }
 }
 
 module.exports = new RoleService();

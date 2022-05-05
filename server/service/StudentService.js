@@ -187,6 +187,13 @@ class StudentService {
 
                 }
                 await sendEmailUser(sendInfo, studentEmail);
+
+                //Phuoc update
+                // tạo record score
+                await database.Score.create({
+                    stuId: studId
+                })
+                //đến đây
                 return countRow;
             }
 
