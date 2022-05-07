@@ -195,7 +195,8 @@ class DefenseService {
                             });
                             let firstName = memberInfo.firstName;
                             let lastName = memberInfo.lastName;
-                            let lecturerId = memberInfo.lecturerId;
+                            let lecturerId = member.lecturerId;
+                            console.log(lecturerId);
                             let role = await database.Role.findOne({
                                 where: {
                                     roleId: member.roleId
