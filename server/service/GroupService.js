@@ -38,6 +38,7 @@ class GroupService {
     assignMentor = async (data)=>{
         const isMentored = await database.Lecturer.findOne({
             where: {lecturerId: data.lecturerId},
+            raw: true
         });
         if(isMentored){
             var datas = await data.groups.map(async groupId => {
@@ -45,13 +46,66 @@ class GroupService {
                     {
                     where: {
                         groupId: groupId,
-                    }
+                    }, raw: true
                 });
                 if(isGrouped){
                     const groupLecturer = await database.GroupLecturer.create({
                         groupId: groupId,
                         lecturerId: data.lecturerId,
-                    });
+                    }); 
+                    
+                    //phuoc update 
+                    //Lấy tất cả stuId của group
+                    const stuIdArr = await database.Student.findAll({
+                        where:{
+                            groupId
+                        }, raw: true
+                    }).then(dataArr =>{
+                        return dataArr.map(student => student.stuId);
+                    })
+                    //lọc qua từng stuId
+                    for (const stuId of stuIdArr) {
+                        //update lectureId trong bảng điểm của từng stuId
+                        //có 2 trường hợp ở đây:
+                        //nếu chỉ có 1 mentor => chỉ cần update lectuerId của student đó
+                        //điều kiện record có 1 mentor : stuId, lectuerId: null
+                        await database.Score.findOne({
+                            where:{
+                                stuId, 
+                                lecturerId: null
+                            }, raw: true
+                        }).then(async scoreData =>{
+                            //nếu có data => đã có record nhưng lectureId null
+                            if(scoreData){
+                                await database.Score.update({
+                                    lecturerId: data.lecturerId
+                                }, {
+                                    where:{
+                                        stuId,
+                                        lecturerId: null
+                                    }
+                                })
+                            }
+                            //hai mentor
+                            //nếu không có data => data chưa được tạo hoặc đã có lecture được gán trước đó
+                            else{
+                                await database.Score.findOne({
+                                    where:{
+                                        stuId,
+                                        lecturerId: data.lecturerId
+                                    }, raw: true
+                                }).then(async scoreData =>{
+                                    if(!scoreData){
+                                        await database.Score.create({
+                                            stuId,
+                                            lecturerId: data.lecturerId
+                                        })
+                                    }
+                                })
+                            }
+                        })
+                    }
+                   //đến đây
                     return groupLecturer;
                 }
             });
