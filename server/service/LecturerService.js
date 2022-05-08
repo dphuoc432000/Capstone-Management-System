@@ -255,15 +255,15 @@ class LecturerService {
             };
         });
         try {
-            let url = `${path}/users.xlsx`;
-            let fileName = "users.xlsx";
+            let url = `${path}/Lecturers.xlsx`;
+            let fileName = "Lecturers.xlsx";
             let type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             database.FileStorage.create({
                 fileName: fileName,
                 type:type,
                 path: url
             });
-            let data = await workbook.xlsx.writeFile(`${path}/users.xlsx`);
+            let data = await workbook.xlsx.writeFile(`${path}/Lecturers.xlsx`);
             return data;
         } catch (err) {
             return "ERROR EXPORT FILE"

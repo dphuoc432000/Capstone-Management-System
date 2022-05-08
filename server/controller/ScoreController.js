@@ -23,6 +23,7 @@ class ScoreController{
     }
 
     getScoreOfGroup = async (req, res, next) =>{
+        console.log(await ScoreService.getScoreOfGroup(req.params.groupId));
         await ScoreService.getScoreOfGroup(req.params.groupId)
             .then(data =>{
                 if(data)

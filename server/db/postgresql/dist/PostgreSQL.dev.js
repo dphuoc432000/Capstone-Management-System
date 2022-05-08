@@ -88,6 +88,10 @@ var _require22 = require("../models/ProjectFileModel"),
     ProjectFile = _require22.ProjectFile,
     initProjectFile = _require22.initProjectFile;
 
+var _require23 = require("../models/EvaluateStageModel"),
+    EvaluateStage = _require23.EvaluateStage,
+    initEvaluateStage = _require23.initEvaluateStage;
+
 var initAll = function initAll() {
   return regeneratorRuntime.async(function initAll$(_context10) {
     while (1) {
@@ -263,6 +267,10 @@ var initAll = function initAll() {
                     return regeneratorRuntime.awrap(initScore());
 
                   case 8:
+                    _context9.next = 10;
+                    return regeneratorRuntime.awrap(initEvaluateStage());
+
+                  case 10:
                   case "end":
                     return _context9.stop();
                 }
@@ -301,5 +309,6 @@ module.exports = {
   CouncilMember: CouncilMember,
   Score: Score,
   Notification: Notification,
-  NotificationFile: NotificationFile
+  NotificationFile: NotificationFile,
+  EvaluateStage: EvaluateStage
 };

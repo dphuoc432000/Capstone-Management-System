@@ -1,6 +1,7 @@
 const database = require("../db/postgresql/PostgreSQL");
 const LecturerService = require("./LecturerService");
 const StudentService = require("./StudentService");
+const exceljs = require("exceljs");
 /*
 Defense
 add defense bao gom council and councilMember
@@ -196,7 +197,6 @@ class DefenseService {
                             let firstName = memberInfo.firstName;
                             let lastName = memberInfo.lastName;
                             let lecturerId = member.lecturerId;
-                            console.log(lecturerId);
                             let role = await database.Role.findOne({
                                 where: {
                                     roleId: member.roleId
@@ -260,13 +260,6 @@ class DefenseService {
                         }
                     } else return null;
 
-                    // console.log({
-                    //     council,
-                    //     students,
-                    //     mentors,
-                    //     detailMembers,
-                    //     group
-                    // });
                     return {
                         council,
                         students,
@@ -280,6 +273,13 @@ class DefenseService {
                 return el != null;
               }); 
 
+    }
+
+    getAllDefenseOfCap = async (typeOfCap)=>{
+        const defense = await this.getAllDefense();
+        return  defense.filter( (el)=>
+              el.group.typeCapstone == typeOfCap
+          ); 
     }
 
     getAllDefenseByLecturerId = async (lecturerId) => {
@@ -386,21 +386,24 @@ class DefenseService {
     }
 
     deleteDefense = async (councilId) => {
-        let council = await database.Council.destroy({
-            where: {
-                councilId: councilId
-            },
-            raw: true
+        const defense = database.Council.findOne({
+            where:{councilId}
         });
-
-        if (council) {
-            return await database.Group.update({
+        if(defense){
+            await database.Group.update({
                 councilId: null
             }, {
                 where: {
                     councilId: councilId
                 }
             })
+            await database.Council.destroy({
+                where: {
+                    councilId: councilId
+                },
+                raw: true
+            });
+            return defense;
         }
         return null;
     }
@@ -458,6 +461,60 @@ class DefenseService {
         }
         return null
     }
+
+    // exportDefense = async()=>{
+    //     const workbook = new exceljs.Workbook();
+    //     const capstone1_worksheet = workbook.addWorksheet("Defense Capstone 1");
+    //     const capstone2_worksheet = workbook.addWorksheet("Defense Capstone 2");
+    //     const path = "./files";
+
+    //     const columnsWorksheet = [
+    //         {
+    //             header: "Defense",
+    //             key: "councilName",
+    //         },
+    //         {
+    //             header: "Last Name",
+    //             key: "councilName",
+    //         },
+    //         {
+    //             header: "First Name",
+    //             key: "councilName",
+    //         },
+    //         {
+    //             header: "Work unit",
+    //             key: "workUnit",
+    //         },
+    //         {
+    //             header: "Role",
+    //             key: "roleName",
+    //         },
+    //         {
+    //             header: "Role",
+    //             key: "roleName",
+    //         },
+    //         {
+    //             header: "Time",
+    //             key: "time",
+    //         },
+    //         {
+    //             header: "Student",
+    //             key: "student",
+    //         },
+    //         {
+    //             header: "Student Code",
+    //             key: "stuCode",
+    //         },
+    //         {
+    //             header: "Mentor",
+    //             key: "mentor",
+    //         },
+    //     ]
+    //     capstone1_worksheet.columns = columnsWorksheet;
+    //     capstone2_worksheet.columns = columnsWorksheet;
+
+
+    // }
 }
 
 module.exports = new DefenseService();

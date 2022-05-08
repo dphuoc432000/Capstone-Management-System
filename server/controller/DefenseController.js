@@ -34,6 +34,18 @@ class DefenseController {
             res.status(500).send(err.message);
         })
     }
+    
+    getAllDefenseOfCap = async (req,res)=>{
+        await DefenseService.getAllDefenseOfCap(req.params.typeOfCap)
+        .then(data=>{
+            if(data){
+               return res.status(200).send(data);
+            }
+            return res.status(400).send("something went wrong");
+        }).catch(err=>{
+            res.status(500).send(err.message);
+        })
+    }
 
 
     getAllDefenseToAssign = async (req,res)=>{
