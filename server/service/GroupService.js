@@ -188,7 +188,7 @@ class GroupService {
                         userId: student.userId,
                         stuCode: student.stuCode,
                         note: student.note,
-                        councilId: group.councilId,
+                        // councilId: group.councilId,
                         groupId: student.groupId,
                         class: student.class,
                         firstName: userData.firstName,
@@ -321,15 +321,11 @@ class GroupService {
             where:{groupId: groupId}
         });
         if(Group){
-            await database.GroupLecturer.destroy({
-                where:{groupId:groupId}
-            });
             await database.Student.update({
                 groupId: null
             },{
                 where:{groupId: groupId}
             });
-
             await database.Group.destroy({
                 where:{groupId:groupId}
             });
