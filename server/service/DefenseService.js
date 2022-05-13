@@ -57,46 +57,48 @@ class DefenseService {
 
         if (!isMentor) {
             return database.Group.update({
-                councilId: data.councilId
-            }, {
-                where: {
-                    councilId: null,
-                    groupId: data.groupId
-                },
+                    councilId: data.councilId
+                }, {
+                    where: {
+                        councilId: null,
+                        groupId: data.groupId
+                    },
 
-            })
-            //phuoc Update
-            .then(async count =>{
-                //nếu như cập nhật thành công thì
-                if(count[0] > 0){
-                    //update councilId bên bảng score
-                    await database.Group.findOne({
-                        where:{
-                            groupId: data.groupId,
-                        }, raw: true
-                    }).then(async groupData =>{
-                        if(groupData){
-                            //get stuIds của group 
-                            const stuIdsArr = await database.Student.findAll({
-                                where:{
-                                    groupId: data.groupId
-                                }, raw: true
-                            }).then(datas => datas.map(student => student.stuId));
-                            
-                            if(stuIdsArr.length > 0)
-                                await database.Score.update({
-                                    councilId: groupData.councilId,
-                                },{
-                                    where:{
-                                        stuId: stuIdsArr
-                                    }
-                                })
-                        }
-                    })
-                }
-                return count;
-                //đến đây
-            });
+                })
+                //phuoc Update
+                .then(async count => {
+                    //nếu như cập nhật thành công thì
+                    if (count[0] > 0) {
+                        //update councilId bên bảng score
+                        await database.Group.findOne({
+                            where: {
+                                groupId: data.groupId,
+                            },
+                            raw: true
+                        }).then(async groupData => {
+                            if (groupData) {
+                                //get stuIds của group 
+                                const stuIdsArr = await database.Student.findAll({
+                                    where: {
+                                        groupId: data.groupId
+                                    },
+                                    raw: true
+                                }).then(datas => datas.map(student => student.stuId));
+
+                                if (stuIdsArr.length > 0)
+                                    await database.Score.update({
+                                        councilId: groupData.councilId,
+                                    }, {
+                                        where: {
+                                            stuId: stuIdsArr
+                                        }
+                                    })
+                            }
+                        })
+                    }
+                    return count;
+                    //đến đây
+                });
         }
         return null;
     }
@@ -145,17 +147,115 @@ class DefenseService {
                             attributes: ['firstName', 'lastName']
                         });
                     });
-                    let roleName = await database.Role.findOne({
-                        where: {
-                            roleId: member.roleId
-                        },
-                        raw: true,
-                        attributes: ['roleName']
-                    });
-                    let dataMember = {
-                        workUnit,
-                        memberInfo,
-                        roleName
+                    getAllDefenseByLecturerId = async (lecturerId) => {
+                        let dataCouncil = await database.CouncilMember.findAll({
+                            where: {
+                                lecturerId: lecturerId
+                            },
+                            raw: true,
+                        }).then(async datas => {
+                            return await Promise.all(datas.map(async data => {
+                                return await database.Council.findOne({
+                                    where: {
+                                        councilId: data.councilId
+                                    }
+                                });
+                            }));
+                        })
+                        return await Promise.all(dataCouncil.map(async council => {
+                            let detailMembers = await database.CouncilMember.findAll({
+                                where: {
+                                    councilId: council.councilId
+                                }
+                            }).then(async members => {
+                                return await Promise.all(members.map(async member => {
+                                    let workUnit = member.workUnit;
+                                    let memberInfo = await database.Lecturer.findOne({
+                                        where: {
+                                            lecturerId: member.lecturerId
+                                        },
+                                        raw: true
+                                    }).then(async info => {
+                                        return await database.User.findOne({
+                                            where: {
+                                                userId: info.userId
+                                            },
+                                            attributes: ['firstName', 'lastName']
+                                        });
+                                    });
+                                    let firstName = memberInfo.firstName;
+                                    let lastName = memberInfo.lastName;
+                                    let lecturerId = member.lecturerId;
+                                    let role = await database.Role.findOne({
+                                        where: {
+                                            roleId: member.roleId
+                                        },
+                                        raw: true,
+                                    });
+                                    let roleName = role.roleName;
+                                    let roleId = role.roleId;
+                                    let dataMember = {
+                                        lecturerId,
+                                        workUnit,
+                                        firstName,
+                                        lastName,
+                                        roleId,
+                                        roleName
+                                    }
+                
+                                    return dataMember;
+                                }));
+                            });
+                
+                            var group = await database.Group.findOne({
+                                where: {
+                                    councilId: council.councilId
+                                },
+                                raw: true,
+                                attributes: ['groupId']
+                            });
+                
+                            let students = [];
+                            let mentors = [];
+                            let student = await database.Student.findAll({
+                                where: {
+                                    groupId: group.groupId
+                                },
+                                order: [
+                                    ["gpa", "DESC"]
+                                ],
+                                raw: true
+                            });
+                            if (student) {
+                
+                                for (let i = 0; i < student.length; i++) {
+                                    students.push(await StudentService.getStudent(student[i].userId));
+                                }
+                            }
+                
+                            let mentor = await database.GroupLecturer.findAll({
+                                where: {
+                                    groupId: group.groupId
+                                },
+                                raw: true
+                            });
+                            if (mentor) {
+                                for (let i = 0; i < mentor.length; i++) {
+                                    const user = await database.Lecturer.findOne({
+                                        where: {
+                                            lecturerId: mentor[i].lecturerId
+                                        },
+                                    });
+                                    mentors.push(await LecturerService.getLecturerByUserId(user.userId));
+                                }
+                            }
+                            return {
+                                council,
+                                students,
+                                mentors,
+                                detailMembers
+                            }
+                        }))
                     }
                     return dataMember;
                 }));
@@ -269,17 +369,17 @@ class DefenseService {
                     }
                 }))
             });
-            return  (await dataCouncil).filter(function (el) {
-                return el != null;
-              }); 
+        return (await dataCouncil).filter(function (el) {
+            return el != null;
+        });
 
     }
 
-    getAllDefenseOfCap = async (typeOfCap)=>{
+    getAllDefenseOfCap = async (typeOfCap) => {
         const defense = await this.getAllDefense();
-        return  defense.filter( (el)=>
-              el.group.typeCapstone == typeOfCap
-          ); 
+        return defense.filter((el) =>
+            el.group.typeCapstone == typeOfCap
+        );
     }
 
     getAllDefenseByLecturerId = async (lecturerId) => {
@@ -318,18 +418,26 @@ class DefenseService {
                             attributes: ['firstName', 'lastName']
                         });
                     });
-                    let roleName = await database.Role.findOne({
+                    let firstName = memberInfo.firstName;
+                    let lastName = memberInfo.lastName;
+                    let lecturerId = member.lecturerId;
+                    let role = await database.Role.findOne({
                         where: {
                             roleId: member.roleId
                         },
                         raw: true,
-                        attributes: ['roleName']
                     });
+                    let roleName = role.roleName;
+                    let roleId = role.roleId;
                     let dataMember = {
+                        lecturerId,
                         workUnit,
-                        memberInfo,
+                        firstName,
+                        lastName,
+                        roleId,
                         roleName
                     }
+
                     return dataMember;
                 }));
             });
@@ -387,9 +495,11 @@ class DefenseService {
 
     deleteDefense = async (councilId) => {
         const defense = database.Council.findOne({
-            where:{councilId}
+            where: {
+                councilId
+            }
         });
-        if(defense){
+        if (defense) {
             await database.Group.update({
                 councilId: null
             }, {
@@ -512,7 +622,19 @@ class DefenseService {
     //     ]
     //     capstone1_worksheet.columns = columnsWorksheet;
     //     capstone2_worksheet.columns = columnsWorksheet;
+    //     await this.getAllDefense()
+    //     .then(async defenses =>{
+    //         let dataRow = [];
+    //         for (const defense of defenses) {
+    //             let objectData = {};
+    //             for (let evaluator of defense.detailMembers) {
+    //                delete evaluator.roleId;
+    //                delete evaluator.lecturerId
+    //                objectData = {...objectData, evaluator}
+    //             }
 
+    //         }
+    //     })
 
     // }
 }
