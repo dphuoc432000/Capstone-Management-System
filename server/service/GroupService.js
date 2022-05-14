@@ -188,7 +188,7 @@ class GroupService {
                         userId: student.userId,
                         stuCode: student.stuCode,
                         note: student.note,
-                        councilId: group.councilId,
+                        // councilId: group.councilId,
                         groupId: student.groupId,
                         class: student.class,
                         firstName: userData.firstName,
