@@ -15,6 +15,7 @@ const LecturerService = require("./LecturerService");
 const FileStorageService = require("./FileStorageService");
 const StageService = require("./StageService");
 const EvaluateStageService = require("./EvaluateStageService");
+const defineExcel = require("../helper/defineExcel");
 
 class ProjectService {
     //cập nhật topic lúc chưa bắt đầu
@@ -278,6 +279,8 @@ class ProjectService {
     };
 
     exportProjectListExcelFile = async () => {
+        const megerCellsArray = ['F', 'G', 'H','I'];
+        const cellsArray = ['A','B','C','D','E','F','G','H',"I"];
         const workbook = new exceljs.Workbook();
         const capstone1_worksheet = workbook.addWorksheet("Capstone 1");
         const capstone2_worksheet = workbook.addWorksheet("Capstone 2");
@@ -287,52 +290,86 @@ class ProjectService {
             {
                 header: "No.",
                 key: "count",
+                width: 5,
+                style: defineExcel.styleColums,
             },
             {
                 header: "Student Code",
                 key: "stuCode",
+                width: 15,
+                style: defineExcel.styleColums,
             },
             {
                 header: "First name",
                 key: "firstName",
+                width: 20,
+                style: defineExcel.styleColums,
             },
             {
                 header: "Last name",
                 key: "lastName",
+                width: 15,
+                style: defineExcel.styleColums,
             },
             {
                 header: "Class",
                 key: "class",
+                width: 15,
+                style: defineExcel.styleColums,
             },
             {
                 header: "Group",
                 key: "groupName",
+                width: 10,
+                style: defineExcel.styleColums,
+            },
+            {
+                header: "Mentor",
+                key: "mentor",
+                width: 30,
+                style: defineExcel.styleColums,
             },
             {
                 header: "Topic",
                 key: "projectName",
+                width: 50,
+                style: defineExcel.styleColums,
             },
             {
                 header: "Description",
                 key: "projectDesc",
+                width: 75,
+                style: defineExcel.styleColums,
             },
         ];
 
         capstone1_worksheet.columns = columnsWorksheet;
         capstone2_worksheet.columns = columnsWorksheet;
+        for (const col of cellsArray) {
+            capstone1_worksheet.getCell(`${col}1`).font= defineExcel.header.font;
+            capstone1_worksheet.getCell(`${col}1`).border= defineExcel.header.border;
+            capstone1_worksheet.getCell(`${col}1`).alignment= defineExcel.header.alignment;
+            
+            capstone2_worksheet.getCell(`${col}1`).font= defineExcel.header.font;
+            capstone2_worksheet.getCell(`${col}1`).border= defineExcel.header.border;
+            capstone2_worksheet.getCell(`${col}1`).alignment= defineExcel.header.alignment;
+        }
 
         //add row capstone1
         let counter = 1;
         await this.getAllProjectByTypeCapstone(1)
             .then(async (getAllProjectByTypeCapstone1) => {
-                let rowDataCapstone1 = [];
+                // let rowDataCapstone1 = [];
                 for (const projectByType1 of getAllProjectByTypeCapstone1) {
                     //lặp qua từng row sinh vien trong group
                     await groupService
                         .getMembersGroup(projectByType1.groupId)
                         .then(async (membersGroup) => {
                             //lặp qua từng member để add voà mang rowDataCapstone1
+                            //đếm row để merge
+                            let countRowMerge = 0;
                             for (const member of membersGroup) {
+                                countRowMerge++;
                                 const major =
                                     await MajorService.getMajorByMajorId(
                                         member.majorId
@@ -341,42 +378,67 @@ class ProjectService {
                                     await DepartmentService.getDepartmentByDepId(
                                         major.depId
                                     );
-                                rowDataCapstone1.push({
+                                const merge = {
                                     count: counter,
                                     stuCode: member.stuCode,
                                     firstName: member.firstName,
                                     lastName: member.lastName,
                                     class: `${department.depCode}-${major.majorCode}`,
                                     groupName: projectByType1.groupName,
+                                    mentor: projectByType1.mentor.map(obj =>{
+                                        return `${obj.firstName} ${obj.lastName}`
+                                    }).toString(),
                                     projectName: projectByType1.project
                                         ? projectByType1.project.projectName
                                         : " ",
                                     projectDesc: projectByType1.project
                                         ? projectByType1.project.projectDesc
                                         : " ",
-                                });
+                                }
+                                // rowDataCapstone1.push(merge);
                                 counter++;
+
+                                //đổi style từng ô
+                                capstone1_worksheet.addRow(merge);
+                                for (const col of cellsArray) {
+                                    capstone1_worksheet.getCell(`${col}${counter}`).border= defineExcel.header.border;
+                                }
+                            }
+                            //merge nhiều ô thành 1 ô
+                            if(countRowMerge > 1){
+                                for (const col of megerCellsArray) {
+                                    capstone1_worksheet.mergeCells(`${col}${counter - countRowMerge + 1}`, `${col}${counter}`);
+                                    capstone1_worksheet.getCell(`${col}${counter - countRowMerge + 1}:${col}${counter}`).alignment={
+                                        horizontal: 'left',
+                                        vertical:'middle',
+                                        wrapText: true
+                                    }
+                                }
                             }
                         });
                 }
-                return rowDataCapstone1;
-            })
-            .then((data) => {
+                // return rowDataCapstone1;
                 counter = 1;
-                capstone1_worksheet.addRows(data);
-            });
+            })
+            // .then((data) => {
+            //     counter = 1;
+            //     // capstone1_worksheet.addRows(data);
+            // });
 
         //add row capstone2
         await this.getAllProjectByTypeCapstone(2)
             .then(async (getAllProjectByTypeCapstone2) => {
-                let rowDataCapstone2 = [];
+                console.log(counter);
+                // let rowDataCapstone2 = [];
                 for (const projectByType2 of getAllProjectByTypeCapstone2) {
                     //lặp qua từng row sinh vien trong group
                     await groupService
                         .getMembersGroup(projectByType2.groupId)
                         .then(async (membersGroup) => {
                             //lặp qua từng member để add voà mang rowDataCapstone2
+                            let countRowMerge = 0;
                             for (const member of membersGroup) {
+                                countRowMerge++;
                                 const major =
                                     await MajorService.getMajorByMajorId(
                                         member.majorId
@@ -385,30 +447,52 @@ class ProjectService {
                                     await DepartmentService.getDepartmentByDepId(
                                         major.depId
                                     );
-                                rowDataCapstone2.push({
+                                const merge = {
                                     count: counter,
                                     stuCode: member.stuCode,
                                     firstName: member.firstName,
                                     lastName: member.lastName,
                                     class: `${department.depCode}-${major.majorCode}`,
                                     groupName: projectByType2.groupName,
+                                    mentor: projectByType2.mentor.map(obj =>{
+                                        return `${obj.firstName} ${obj.lastName}`
+                                    }).toString(),
                                     projectName: projectByType2.project
                                         ? projectByType2.project.projectName
                                         : " ",
                                     projectDesc: projectByType2.project
                                         ? projectByType2.project.projectDesc
                                         : " ",
-                                });
+                                };
+                                // rowDataCapstone2.push(merge);
                                 counter++;
+
+                                //đổi style từng ô
+                                capstone2_worksheet.addRow(merge);
+                                for (const col of cellsArray) {
+                                    capstone2_worksheet.getCell(`${col}${counter}`).border= defineExcel.header.border;
+                                }
+                            }
+                            //merge nhiều ô thành 1 ô
+                            if(countRowMerge > 1){
+                                for (const col of megerCellsArray) {
+                                    capstone2_worksheet.mergeCells(`${col}${counter - countRowMerge + 1}`, `${col}${counter}`);
+                                    capstone2_worksheet.getCell(`${col}${counter - countRowMerge + 1}:${col}${counter}`).alignment={
+                                        horizontal: 'left',
+                                        vertical:'middle',
+                                        wrapText: true
+                                    }
+                                }
                             }
                         });
                 }
-                return rowDataCapstone2;
-            })
-            .then((data) => {
                 counter = 1;
-                capstone2_worksheet.addRows(data);
-            });
+                // return rowDataCapstone2;
+            })
+            // .then((data) => {
+            //     counter = 1;
+            //     // capstone2_worksheet.addRows(data);
+            // });
 
         try {
             let url = `${path}/Danh_sach_de_tai_cac_nhom.xlsx`;
