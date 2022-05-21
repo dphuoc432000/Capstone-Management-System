@@ -5,10 +5,10 @@ const LectureMail = (user) => {
     return {
         from: mailer_config.CMS_USERNAME, // sender address
         to: user.email, // list of receivers
-        subject: `CMS - Cung cấp mật khẩu`, // Subject line
+        subject: `SPMS - Cung cấp mật khẩu`, // Subject line
         html: `
             Chào bạn,
-            <p>Chúng tôi là hệ thống CMS từ Trường Đại học Duy Tân. Cung cấp tài khoản đăng nhập đến bạn: </p>
+            <p>Chúng tôi là hệ thống SPMS từ Trường Đại học Duy Tân. Cung cấp tài khoản đăng nhập đến bạn: </p>
             <span><nobr>+ Email: <h4>${user.email}</h4></nobr></span>
             <span><nobr>+ Password: <h4>${user.password}</h4></nobr><span>
             <br>
@@ -29,10 +29,10 @@ const studentEmail = (user) => {
     return {
         from: mailer_config.CMS_USERNAME, // sender address
         to: user.email, // list of receivers
-        subject: `CMS - Cung Cấp Mật Khẩu`, // Subject line
+        subject: `SPMS - Cung Cấp Mật Khẩu`, // Subject line
         html: `
             Chào ${user.firstName},
-            <p>Chúng tôi là hệ thống CMS từ Trường Đại học Duy Tân. Cung cấp tài khoản đăng nhập đến bạn: </p>
+            <p>Chúng tôi là hệ thống SPMS từ Trường Đại học Duy Tân. Cung cấp tài khoản đăng nhập đến bạn: </p>
             <span><nobr>+ Email: <h4>${user.email}</h4></nobr></span>
             <span><nobr>+ Password: <h4>${user.password}</h4></nobr><span>
             <br>
