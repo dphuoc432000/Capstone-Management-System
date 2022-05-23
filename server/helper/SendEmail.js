@@ -26,6 +26,7 @@ const LectureMail = (user) => {
 
 
 const studentEmail = (user) => {
+    console.log("Đã gửi mail");
     return {
         from: mailer_config.CMS_USERNAME, // sender address
         to: user.email, // list of receivers
