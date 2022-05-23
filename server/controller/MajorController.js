@@ -35,6 +35,16 @@ class MajorController {
             })
     }
 
+    getAllMajor = async(req, res, next) =>{
+        await majorService.getAllMajor()
+            .then(data =>{
+                return res.status(200).json(data)
+            })
+            .catch(err =>{
+                return res.status(400).json(err);
+            })
+    }
+
 }
 
 module.exports = new MajorController();

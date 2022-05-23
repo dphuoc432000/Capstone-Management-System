@@ -26,6 +26,14 @@ class MajorService {
             raw: true
         })
     }
+    getAllMajor = async () =>{
+        return await Major.findAll({
+            raw: true
+        }).then(data =>{
+            console.log(data);
+            return data
+        })
+    }
 }
 
 module.exports = new MajorService();
