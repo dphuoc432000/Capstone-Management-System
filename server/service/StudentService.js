@@ -93,7 +93,7 @@ class StudentService {
     }
 
     getAllStudent = async () => {
-        return await database.Student.findAll({where:{isApproved: true}}).then(async datas => {
+        return await database.Student.findAll().then(async datas => {
             return await Promise.all(datas.map(async data => {
                 const user = database.User.findOne({
                     where: {

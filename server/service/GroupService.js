@@ -96,9 +96,32 @@ class GroupService {
                                     }, raw: true
                                 }).then(async scoreData =>{
                                     if(!scoreData){
-                                        await database.Score.create({
-                                            stuId,
-                                            lecturerId: data.lecturerId
+                                        //tìm kiếm data của stuId đã có chưa
+                                        await database.Score.findOne({
+                                            where:{
+                                                stuId
+                                            }, raw: true
+                                        }).then(async stuScoreData =>{
+                                            // nếu có
+                                            //update
+                                            if(stuScoreData){
+                                                await database.Score.update({
+                                                    lecturerId: data.lecturerId
+                                                },
+                                                {
+                                                    where:{
+                                                        scoreId: stuScoreData.scoreId,
+                                                        stuId
+                                                    }
+                                                })
+                                            }
+                                            //ngược lại nếu không có
+                                            else{
+                                                await database.Score.create({
+                                                    stuId,
+                                                    lecturerId: data.lecturerId
+                                                })
+                                            }
                                         })
                                     }
                                 })

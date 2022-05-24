@@ -268,7 +268,7 @@ class DefenseService {
                                 mentors.push(await LecturerService.getLecturerByUserId(user.userId));
                             }
                         }
-                    } else return null;
+                    }
 
                     return {
                         council,
@@ -359,39 +359,40 @@ class DefenseService {
                 raw: true,
                 attributes: ['groupId']
             });
-
             let students = [];
             let mentors = [];
-            let student = await database.Student.findAll({
-                where: {
-                    groupId: group.groupId
-                },
-                order: [
-                    ["gpa", "DESC"]
-                ],
-                raw: true
-            });
-            if (student) {
-
-                for (let i = 0; i < student.length; i++) {
-                    students.push(await StudentService.getStudent(student[i].userId));
+            if(group){
+                let student = await database.Student.findAll({
+                    where: {
+                        groupId: group.groupId
+                    },
+                    order: [
+                        ["gpa", "DESC"]
+                    ],
+                    raw: true
+                });
+                if (student) {
+    
+                    for (let i = 0; i < student.length; i++) {
+                        students.push(await StudentService.getStudent(student[i].userId));
+                    }
                 }
-            }
-
-            let mentor = await database.GroupLecturer.findAll({
-                where: {
-                    groupId: group.groupId
-                },
-                raw: true
-            });
-            if (mentor) {
-                for (let i = 0; i < mentor.length; i++) {
-                    const user = await database.Lecturer.findOne({
-                        where: {
-                            lecturerId: mentor[i].lecturerId
-                        },
-                    });
-                    mentors.push(await LecturerService.getLecturerByUserId(user.userId));
+    
+                let mentor = await database.GroupLecturer.findAll({
+                    where: {
+                        groupId: group.groupId
+                    },
+                    raw: true
+                });
+                if (mentor) {
+                    for (let i = 0; i < mentor.length; i++) {
+                        const user = await database.Lecturer.findOne({
+                            where: {
+                                lecturerId: mentor[i].lecturerId
+                            },
+                        });
+                        mentors.push(await LecturerService.getLecturerByUserId(user.userId));
+                    }
                 }
             }
             return {
