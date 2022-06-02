@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <title>Document</title>
+    <style>
+        p {
+            color: rgba(0, 0, 0, 0.295);
+        }
+    </style>
+</head>
+
+<body>
+    <form id="councils">
+    </form>
+
+    <script>
+
+        function doLecturerHaveCouncil(councils, lecturer, time) {
+            for (const council of councils) {
+                let doLecturerHad = false;
+                let councilTime = new Date(council.time);
+                let newCouncilTime = new Date(time);
+
+                for (const lecturerInCouncil of council.lecturers) {
+                    if (newCouncilTime.getFullYear() === councilTime.getFullYear()
+                        && newCouncilTime.getMonth() === councilTime.getMonth()
+                        && newCouncilTime.getDate() === councilTime.getDate()
+                        && newCouncilTime.getHours() === councilTime.getHours()
+                        && lecturerInCouncil.userId === lecturer.userId) {
+                        doLecturerHad = true;
+                    }
+                }
+
+                if (doLecturerHad) return true;
+            }
+            return false
+        }
+
+        function findLocation(councils)
+        {
+            const locations = ["101 Nguyen Van Linh","102 Nguyen Van Linh","103 Nguyen Van Linh","104 Nguyen Van Linh","105 Nguyen Van Linh"];
+            const min = [];
+
+            for (const location of locations)
+                min.push({location,number:0});
+
+            for (const council of councils) {
+                let index = min.findIndex((info) => info.location === council.location);
+                if(index >= 0) min[index].number++;
+            }
+
+            min.sort((a,b) => a.number > b.number);
+
+            return min;
+        }
+
+        function findTime(councils) {
+            let recentTime = new Date("2022-05-03T06:00:00.156Z");
+            for (let i = 0; i < councils.length; i++) {
+                const council = councils[i];
+                let councilTime = new Date(council.time);
+                if (recentTime.getFullYear() === councilTime.getFullYear() && recentTime.getMonth() === councilTime.getMonth()) {
+                    if (recentTime.getDate() === councilTime.getDate()) {
+                        if (recentTime.getHours() === councilTime.getHours()) {
+                            if (councilTime.getHours() === 7) recentTime.setHours(13);
+                            else if (councilTime.getHours() === 13) recentTime.setHours(17);
+                            else if (councilTime.getHours() === 17) {
+                                recentTime.setHours(7);
+                                recentTime.setDate(recentTime.getDate() + 1);
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            return recentTime;
+        }
+
+        function findRecentTime(councils) {
+            let min = 0;
+            for (let index = 1; index < councils.length; index++) {
+                let council = councils[index];
+                let councilTime = new Date(council.time);
+                let minTime = new Date(councils[min].time);
+                if (minTime.getTime() > councilTime.getTime()) min = index;
+            }
+            return min;
+        }
+
+        function findLecturer(councils, lecturers) {
+            let min = [];
+            for (const lecturer of lecturers)
+                min.push({ ...lecturer, number: 0 });
+
+            for (const council of councils) {
+                for (const lecturer of council.lecturers) {
+                    let index = min.findIndex((user) => user.userId === lecturer.userId);
+                    if (index >= 0) min[index].number++;
+                }
+            }
+
+            min.sort((a, b) => a.number > b.number);
+
+            return min;
+        }
+
+        function generateRandomCouncil() {
+            let councils = [
+                {
+                    councilName: "Council CS1.SE 01",
+                    time: "2022-05-03T00:00:00.156Z",
+                    location: "101 Nguyen Van Linh",
+                    lecturers: [
+                        {
+                            userId: "1",
+                            firstName:"Nguyen"
+                        }
+                    ]
+                },
+                {
+                    councilName: "Council CS1.SE 02",
+                    time: "2022-05-03T06:00:00.156Z",
+                    location: "105 Nguyen Van Linh",
+                    lecturers: [
+                        {
+                            userId: "1",
+                            firstName:"Nguyen"
+                        }
+                    ]
+                },
+                {
+                    councilName: "Council CS1.SE 03",
+                    time: "2022-05-04T00:00:00.156Z",
+                    location: "102 Nguyen Van Linh",
+                    lecturers: [
+                        {
+                            userId: "2",
+                            firstName:"Viet"
+                        }
+                    ]
+                },
+                {
+                    councilName: "Council CS1.SE 04",
+                    time: "2022-05-04T06:00:00.156Z",
+                    location: "101 Nguyen Van Linh",
+                    lecturers: [
+                        {
+                            userId: "1",
+                            firstName:"Nguyen"
+                        }
+                    ]
+                },
+            ];
+            let defaultCouncils = [...councils];
+            const lecturers = [
+                {
+                    userId: "1",
+                    firstName: "Nguyen",
+                },
+                {
+                    userId: "2",
+                    firstName: "Viet",
+                },
+                {
+                    userId: "3",
+                    firstName: "Tien",
+                },
+                {
+                    userId: "4",
+                    firstName: "Huy",
+                },
+                {
+                    userId: "5",
+                    firstName: "Hieu",
+                },
+                {
+                    userId: "6",
+                    firstName: "Van Viet",
+                },
+
+            ];
+            
+            let newCouncils = [];
+            let groups = [
+                {
+                    groupId: "1",
+                    groupName: "CS1.SE 01",
+                },
+                {
+                    groupId: "2",
+                    groupName: "CS1.SE 02",
+                },
+                {
+                    groupId: "3",
+                    groupName: "CS1.SE 03",
+                },
+                {
+                    groupId: "4",
+                    groupName: "CS1.SE 04",
+                }
+            ]
+            while (groups.length) {
+                let groupInCouncil = groups.filter((group,groupIndex) => groupIndex < 1);
+
+                let newTime = findTime(councils).toISOString();
+                let newCouncil = {
+                    councilName: `Council Capstone ${councils.length + 1}`,
+                    time: newTime,
+                    location: "",
+                    lecturers: [],
+                    groups: groupInCouncil
+                }
+                let currentLecturer = [];
+                let minLecturers = findLecturer(councils, lecturers);
+                for (let i = 0; i < minLecturers.length; i++) {
+                    let l = minLecturers[i];
+                    currentLecturer.push(l.userId);
+                    let doLecturerHad = doLecturerHaveCouncil(councils, l, newTime);
+
+                    if (!doLecturerHad) newCouncil.lecturers.push(l);
+                    if(newCouncil.lecturers.length === 4) break;
+                }
+
+                councils.push(newCouncil);
+                councils.sort((a, b) => a.time > b.time);
+                newCouncils.push(newCouncil);
+                groups = groups.filter((group,groupIndex) => groupIndex >= 1);
+            }
+
+            newCouncils = newCouncils.map((council,index) => {
+                let locations = findLocation(councils);
+                councils[councils.length- newCouncils.length + index].location = locations[0].location;
+                council.location = locations[0].location;
+                return council;
+            });
+
+            newCouncils.forEach((council) => {
+                document.getElementById("councils").innerHTML += `<div class="form-group"><label class="mr-5">${council.councilName}</label><label for="exampleInputEmail1">${new Date(council.time).toLocaleString()}</label><label class="ml-5">${council.location}</label></div>`
+               
+                council.lecturers.forEach((l) => {
+                    document.getElementById("councils").innerHTML += `<p>${l.firstName}</p>`
+                });
+
+                council.groups.forEach((l) => {
+                    document.getElementById("councils").innerHTML += `<p>${l.groupName}</p>`
+                });
+            });
+
+            console.log(newCouncils);
+            return newCouncils;
+        }
+        
+        generateRandomCouncil();
+
+    </script>
+</body>
+
+</html>

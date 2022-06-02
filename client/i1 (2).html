@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <title>Document</title>
+    <style>
+        p {
+            color: rgba(0, 0, 0, 0.295);
+        }
+    </style>
+</head>
+
+<body>
+    <form id="groups">
+    </form>
+    <script>
+        // let students = [
+        //     {
+        //         userId: "1",
+        //         firstName: "Nguyen",
+        //         lastName: "Long",
+        //         gpa: 3,
+        //     },
+        //     {
+        //         userId: "2",
+        //         firstName: "Nguyen",
+        //         lastName: "Viet",
+        //         gpa: 3,
+        //     },
+        //     {
+        //         userId: "3",
+        //         firstName: "Le",
+        //         lastName: "Quoc",
+        //         gpa: 2.8,
+        //     },
+        //     {
+        //         userId: "4",
+        //         firstName: "Nguyen",
+        //         lastName: "Huy",
+        //         gpa: 3.2,
+        //     },
+        //     {
+        //         userId: "5",
+        //         firstName: "Truong",
+        //         lastName: "Hieu",
+        //         gpa: 2.5,
+        //     },
+        //     {
+        //         userId: "6",
+        //         firstName: "Truong",
+        //         lastName: "Van",
+        //         gpa: 2.8,
+        //     },
+        //     {
+        //         userId: "7",
+        //         firstName: "Phung",
+        //         lastName: "Cuong",
+        //         gpa: 3.1,
+        //     },
+        //     {
+        //         userId: "8",
+        //         firstName: "Le",
+        //         lastName: "Hieu",
+        //         gpa: 3.2,
+        //     },
+        //     {
+        //         userId: "9",
+        //         firstName: "Le",
+        //         lastName: "Thanh",
+        //         gpa: 3.3,
+        //     },
+        //     {
+        //         userId: "10",
+        //         firstName: "Nguyen",
+        //         lastName: "Long",
+        //         gpa: 3.5,
+        //     },
+        // ];
+
+        const groupCondition = [
+            {
+                level: "excellent",
+                from: 3.2,
+                to: 4,
+                levelCode: 1,
+            },
+            {
+                level: "good",
+                from: 3,
+                to: 3.2,
+                levelCode: 2,
+            },
+            {
+                level: "average",
+                from: 2.5,
+                to: 3,
+                levelCode: 3,
+            },
+        ];
+
+        function typeOfGPA(gpa) {
+            let condition = groupCondition.find((condition) => gpa >= condition.from && gpa < condition.to);
+
+            return condition.levelCode;
+        }
+
+        function isValidMemberInGroup(groupMember, students) {
+            let isGroupValid = false;
+            for (let condition of groupCondition) {
+                isGroupValid = groupMember.some((userId) => {
+                    let student = students.find((stu) => stu.userId === userId);
+                    return student.gpa >= condition.from && student.gpa < condition.to;
+                });
+                if (!isGroupValid) return isGroupValid;
+            }
+            return isGroupValid;
+        }
+
+        function permutationRecursion(arr, result, amount, groups) {
+            if (result.length === amount) groups.push(result);
+            else {
+                for (let i = 0; i < arr.length; i++) {
+                    let rem = arr.filter((s, index) => index < i);
+                    rem = rem.concat(arr.filter((s, index) => index >= i + 1));
+                    permutationRecursion(rem, result.concat(arr[i]), amount, groups);
+                }
+            }
+        };
+
+        function permutation(arr, amount) {
+            let groups = [];
+            permutationRecursion(arr, [], amount, groups);
+
+            groups = groups.filter((groupIndexes, index) => {
+                let isSame = false;
+                for (let groupIndex of groupIndexes) {
+                    for (let i in groups) {
+                        var g = groups[i];
+                        if (parseInt(index) !== parseInt(i)) {
+                            if (g.includes(groupIndex)) isSame = true;
+                            else isSame = false;
+                        }
+                    }
+                }
+                return isSame;
+            });
+
+            return groups;
+        };
+
+        function toValidGroupMembers(groupMembers, students) {
+            let newGroupMembers = [...groupMembers];
+            if (newGroupMembers.length > 1) {
+                newGroupMembers = newGroupMembers.filter((groupMember) => isValidMemberInGroup(groupMember, students));
+                if (newGroupMembers.length) return newGroupMembers;
+                else return groupMembers;
+            }
+            else return newGroupMembers;
+        }
+
+        function findBestGPA(firstStudentId, groupMembers, students) {
+            let firstStudent = students.find((student) => student.userId === firstStudentId);
+            let listAverageGPA = [];
+            let i = 0;
+            for (const groupMember of groupMembers) {
+                let sum = firstStudent.gpa;
+                for (const userId of groupMember) {
+                    let student = students.find((student) => student.userId === userId);
+                    sum += student.gpa;
+                }
+                listAverageGPA.push({
+                    groupIndex: i,
+                    average: sum / 3
+                });
+                i++;
+            }
+
+            listAverageGPA.sort((a, b) => a.average > b.average);
+
+            let bestIndex = 0;
+
+            // let bestIndex = parseInt(listAverageGPA.length / 2);
+            // if (bestIndex + 1 < listAverageGPA.length) bestIndex = bestIndex + 1;
+
+            return listAverageGPA[bestIndex];
+        }
+
+        function sortGroupByGPA(groups, isASC) {
+            let sortedGroup = [...groups];
+
+            sortedGroup.sort((a, b) => {
+                let x = 0, y = 0;
+
+                a.members.forEach((member) => {
+                    x += member.gpa;
+                });
+
+                b.members.forEach((member) => {
+                    y += member.gpa;
+                });
+
+                return isASC ? x > y : x < y;
+            });
+
+            return sortedGroup;
+        }
+
+        function findGroupForGPAStudent(groups, groupMembers) {
+            for (const student of groupMembers) {
+                let typeGPA = typeOfGPA(student.gpa);
+
+                if (typeGPA === 1) {
+                    let sortedGroup = sortGroupByGPA(groups, false);
+                    let index = sortedGroup.findIndex((group) => group.members.length < 4);
+
+                    if (index >= 0) groups[index].members.push(student);
+                    else {
+                        for (const group of sortedGroup) {
+                            if (group.members.length < 5) {
+                                group.members.push(student);
+                                break;
+                            }
+                        }
+                    }
+                }
+                else {
+                    let sortedGroup = sortGroupByGPA(groups, true);
+                    let index = sortedGroup.findIndex((group) => group.members.length < 4);
+
+                    if (index >= 0) groups[index].members.push(student);
+                    else {
+                        for (const group of sortedGroup) {
+                            if (group.members.length < 5) {
+                                group.members.push(student);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        function generateGroup() {
+            let students = [
+                {
+                    userId: "1",
+                    lastName: "Long",
+                    gpa: 2.5,
+                },
+                {
+                    userId: "2",
+                    lastName: "Viet",
+                    gpa: 2.5,
+                },
+                {
+                    userId: "3",
+                    lastName: "Quoc",
+                    gpa: 2.8,
+                },
+                {
+                    userId: "4",
+                    lastName: "Huy",
+                    gpa: 3.1,
+                },
+                {
+                    userId: "5",
+                    lastName: "Hieu",
+                    gpa: 2.7,
+                },
+                {
+                    userId: "6",
+                    lastName: "Van Hieu",
+                    gpa: 2.5,
+                },
+                {
+                    userId: "7",
+                    lastName: "Hieu",
+                    gpa: 2.5,
+                },
+                {
+                    userId: "8",
+                    lastName: "Van Viet",
+                    gpa: 3,
+                },
+                {
+                    userId: "9",
+                    lastName: "Truong Huy",
+                    gpa: 2.5,
+                },
+                {
+                    userId: "10",
+                    lastName: "Tien",
+                    gpa: 3.3,
+                },
+            ];
+
+
+            let listStudentId = students.map((student) => student.userId);
+            let groups = [];
+            while (listStudentId.length !== 0) {
+                let firstStudentId = listStudentId.shift();
+
+                let amount = 3;
+                if (listStudentId.length === 5) amount = 2;
+                if (listStudentId.length <= 4) amount = listStudentId.length;
+
+                let groupMembers = permutation(listStudentId, amount);
+                groupMembers = toValidGroupMembers(groupMembers, students);
+
+                let bestGroup = [];
+                let bestGroupIndex = findBestGPA(firstStudentId, groupMembers, students);
+                bestGroup = groupMembers[bestGroupIndex.groupIndex];
+                bestGroup.push(firstStudentId);
+
+                listStudentId = listStudentId.filter((student) => !bestGroup.includes(student));
+
+                bestGroup = bestGroup.map((userId) => {
+                    let student = students.find((stu) => stu.userId === userId);
+                    return student;
+                });
+
+                groups.push({
+                    groupName: `CS1.SE ${groups.length + 1}`,
+                    members: bestGroup
+                });
+
+                console.log({
+                    groupName: `CS1.SE ${groups.length + 1}`,
+                    members: bestGroup
+                });
+
+            }
+
+            groups.forEach((group) => {
+                document.getElementById("groups").innerHTML += `<div class="form-group"><label class="mr-5">${group.groupName}</label></div>`
+
+                group.members.forEach((member) => {
+                    document.getElementById("groups").innerHTML += `<p>${member.lastName} ${member.gpa}</p>`
+                });
+            });
+
+            console.log(groups);
+
+        }
+
+        generateGroup();
+    </script>
+</body>
+
+</html>
